@@ -1,5 +1,5 @@
 #!/bin/bash
-NUM_CPUS=6  # set to your no. of cores
+NUM_CPUS=10  # set to your no. of cores
 
 LOC_OMNET=https://github.com/omnetpp/omnetpp/releases/download/omnetpp-5.6.2/omnetpp-5.6.2-src-linux.tgz
 LOC_INET=https://github.com/eltayebmusab/inet/archive/refs/tags/v4.2.5.tar.gz

@@ -7,7 +7,7 @@
 #SBATCH --constraint=OS8
 
 # Execute simulation
-make bc-mac-aloha-25 NUM_CPUS=12
+make sh-mac-aloha-75 NUM_CPUS=12
 
 # Exit job
 exit

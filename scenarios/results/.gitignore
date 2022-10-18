@@ -1,2 +1,5 @@
 _imgs/
 _data/
+slurm*.out
+Makefile.*
+__pycache__/

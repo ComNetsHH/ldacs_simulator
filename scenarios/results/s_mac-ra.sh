@@ -7,7 +7,7 @@
 #SBATCH --constraint=OS8
 
 # Execute simulation
-make bc-mac-ra NUM_CPUS=16
+make sh-mac-ra NUM_CPUS=16
 
 # Exit job
 exit

@@ -7,7 +7,7 @@
 #SBATCH --constraint=OS8
 
 # Execute simulation
-make bc-mac-ra-slotadv NUM_CPUS=16
+make sh-mac-ra-slotadv NUM_CPUS=16
 
 # Exit job
 exit
