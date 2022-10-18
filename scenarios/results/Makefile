@@ -248,6 +248,7 @@ pp-link-estbl-test_clean:
 # PP VOICE
 PP_VOICE_NAIVE_CONFIGNAME = PPVoice
 PP_VOICE_TIME_SLOT_DURATION = 24
+PP_VOICE_NUM_CONTENDERS = 30
 pp-voice_sim:
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../link_establishment.ini -c $(PP_VOICE_NAIVE_CONFIGNAME) $(INCL)
 
@@ -256,7 +257,7 @@ pp-voice_parse:
 	./convert-vec-omnet-csv.sh simresults/$(PP_VOICE_NAIVE_CONFIGNAME)
 
 pp-voice_plot:
-	python3 eval_pp_voice.py --dir simresults/$(PP_VOICE_NAIVE_CONFIGNAME) --filename pp_voice_n_10 --time_slot_duration $(PP_VOICE_TIME_SLOT_DURATION) $(SUFFIX)
+	python3 eval_pp_voice.py --dir simresults/$(PP_VOICE_NAIVE_CONFIGNAME) --filename pp_voice_n_$(PP_VOICE_NUM_CONTENDERS) --time_slot_duration $(PP_VOICE_TIME_SLOT_DURATION) $(SUFFIX)
 
 pp-voice: pp-voice_sim pp-voice_parse pp-voice_plot
 
