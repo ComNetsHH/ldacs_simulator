@@ -2,12 +2,12 @@
 #SBATCH -p smp
 #SBATCH --ntasks 1
 #SBATCH --cpus-per-task 16
-#SBATCH --mem-per-cpu 2G
+#SBATCH --mem-per-cpu 3G
 #SBATCH --time 0-12:00:00
 #SBATCH --constraint=OS8
 
 # Execute simulation
-make sh-mac-aloha-50 NUM_CPUS=16
+make sh-mac-mcsotdma-25 NUM_CPUS=16
 
 # Exit job
 exit

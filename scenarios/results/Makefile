@@ -99,127 +99,128 @@ sanity-check:
 	python3 eval.py --dir simresults/SanityCheck --filename sanity_check --sending_interval_start $(SANITY_CHECK_SEND_INT_START) --sending_interval_stop $(SANITY_CHECK_SEND_INT_END) --sending_interval_step $(SANITY_CHECK_SEND_INT_INCR) --num_reps $(SANITY_CHECK_NUM_REPS) --n $(SANITY_CHECK_NUM_USERS) $(SUFFIX)
 
 # RANDOM ACCESS
-SH_MAC_RA_NUM_REPS = 40
+SH_MAC_RA_NUM_REPS = 20
 SH_MAC_RA_NUM_USERS = 1 2 3 4 5 10 15 20 25 30
 SH_MAC_RA_NUM_CANDIDATE_SLOTS = 5 10 20 30 40 60
 SH_MAC_RA_TIME_SLOT_DURATION = 24 #ms
 SH_MAC_RA_CONFIGNAME = RandomAccess
-sh-mac-ra_sim:	
+sh-mac-aloha_sim:	
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_RA_CONFIGNAME) $(INCL)
 
-sh-mac-ra_parse:
+sh-mac-aloha_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_RA_CONFIGNAME)
 
-sh-mac-ra_plot:
+sh-mac-aloha_plot:
 	python3 eval_random_access.py --dir simresults/$(SH_MAC_RA_CONFIGNAME) --filename sh_mac_ra --n $(SH_MAC_RA_NUM_USERS) --c $(SH_MAC_RA_NUM_CANDIDATE_SLOTS) --num_reps $(SH_MAC_RA_NUM_REPS) --time_slot_duration $(SH_MAC_RA_TIME_SLOT_DURATION) $(SUFFIX)
 
-sh-mac-ra: sh-mac-ra_sim sh-mac-ra_parse sh-mac-ra_plot
+sh-mac-aloha: sh-mac-aloha_sim sh-mac-aloha_parse sh-mac-aloha_plot
 
 
 SH_MAC_RA_SLOT_ADV_CONFIGNAME = RandomAccessSlotAdv
-sh-mac-ra-slotadv_sim:
+sh-mac-sotdma_sim:
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_RA_SLOT_ADV_CONFIGNAME) $(INCL)
 
-sh-mac-ra-slotadv_parse:
+sh-mac-sotdma_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_RA_SLOT_ADV_CONFIGNAME)
 
-sh-mac-ra-slotadv_plot:
+sh-mac-sotdma_plot:
 	python3 eval_random_access.py --dir simresults/$(SH_MAC_RA_SLOT_ADV_CONFIGNAME) --filename sh_mac_ra_slotadv --n $(SH_MAC_RA_NUM_USERS) --c $(SH_MAC_RA_NUM_CANDIDATE_SLOTS) --num_reps $(SH_MAC_RA_NUM_REPS) --time_slot_duration $(SH_MAC_RA_TIME_SLOT_DURATION) $(SUFFIX)
 
-sh-mac-ra-slotadv: sh-mac-ra-slotadv_sim sh-mac-ra-slotadv_parse sh-mac-ra-slotadv_plot
+sh-mac-sotdma: sh-mac-sotdma_sim sh-mac-sotdma_parse sh-mac-sotdma_plot
 
 
 # RANDOMIZED SLOTTED ALOHA
-SH_MAC_ALOHA_NUM_REPS = 40
+SH_MAC_ALOHA_NUM_REPS = 20
 SH_MAC_ALOHA_NUM_USERS = 1 2 3 4 5 10 15 20 25 30
 SH_MAC_ALOHA_CONFIGNAME_95 = RandomizedSlottedAloha95
 SH_MAC_ALOHA_TARGET_RECEPTION_RATE_95 = 95
 SH_MAC_ALOHA_TIME_SLOT_DURATION = 24 #ms
 SH_MAC_ALOHA_DELAY_MAX_VAL = 8000
-sh-mac-aloha-95_sim:	
+sh-mac-mcsotdma-95_sim:	
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_ALOHA_CONFIGNAME_95) $(INCL)
 
-sh-mac-aloha-95_parse:
+sh-mac-mcsotdma-95_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_ALOHA_CONFIGNAME_95)
 
-sh-mac-aloha-95_plot:
-	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_ALOHA_CONFIGNAME_95) --filename sh_mac_aloha_95 --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --target_reception_rate $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_95) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_ALOHA_DELAY_MAX_VAL) $(SUFFIX)
+sh-mac-mcsotdma-95_plot:
+	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_ALOHA_CONFIGNAME_95) --filename sh_mac_mcsotdma_95 --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --target_reception_rate $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_95) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_ALOHA_DELAY_MAX_VAL) $(SUFFIX)
 
-sh-mac-aloha-95: sh-mac-aloha-95_sim sh-mac-aloha-95_parse sh-mac-aloha-95_plot
+sh-mac-mcsotdma-95: sh-mac-mcsotdma-95_sim sh-mac-mcsotdma-95_parse sh-mac-mcsotdma-95_plot
 
-sh-mac-aloha-95_clean:
+sh-mac-mcsotdma-95_clean:
 	rm simresults/$(SH_MAC_ALOHA_CONFIGNAME_95)/*
 
 SH_MAC_ALOHA_CONFIGNAME_75 = RandomizedSlottedAloha75
 SH_MAC_ALOHA_TARGET_RECEPTION_RATE_75 = 75
-sh-mac-aloha-75_sim:	
+sh-mac-mcsotdma-75_sim:	
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_ALOHA_CONFIGNAME_75) $(INCL)
 
-sh-mac-aloha-75_parse:
+sh-mac-mcsotdma-75_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_ALOHA_CONFIGNAME_75)
 
-sh-mac-aloha-75_plot:
-	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_ALOHA_CONFIGNAME_75) --filename sh_mac_aloha_75 --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --target_reception_rate $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_75) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_ALOHA_DELAY_MAX_VAL) $(SUFFIX)
+sh-mac-mcsotdma-75_plot:
+	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_ALOHA_CONFIGNAME_75) --filename sh_mac_mcsotdma_75 --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --target_reception_rate $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_75) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_ALOHA_DELAY_MAX_VAL) $(SUFFIX)
 
-sh-mac-aloha-75: sh-mac-aloha-75_sim sh-mac-aloha-75_parse sh-mac-aloha-75_plot
+sh-mac-mcsotdma-75: sh-mac-mcsotdma-75_sim sh-mac-mcsotdma-75_parse sh-mac-mcsotdma-75_plot
 
-sh-mac-aloha-75_clean:
+sh-mac-mcsotdma-75_clean:
 	rm simresults/$(SH_MAC_ALOHA_CONFIGNAME_75)/*
 
 SH_MAC_ALOHA_CONFIGNAME_50 = RandomizedSlottedAloha50
 SH_MAC_ALOHA_TARGET_RECEPTION_RATE_50 = 50
-sh-mac-aloha-50_sim:	
+sh-mac-mcsotdma-50_sim:	
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_ALOHA_CONFIGNAME_50) $(INCL)
 
-sh-mac-aloha-50_parse:
+sh-mac-mcsotdma-50_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_ALOHA_CONFIGNAME_50); \
 	./convert-vec-omnet-csv.sh simresults/$(SH_MAC_ALOHA_CONFIGNAME_50)
 
-sh-mac-aloha-50_plot:
-	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_ALOHA_CONFIGNAME_50) --filename sh_mac_aloha_50 --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --target_reception_rate $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_50) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_ALOHA_DELAY_MAX_VAL) $(SUFFIX); \
-	python3 eval_randomized_slotted_aloha_delays.py --dir simresults/$(SH_MAC_ALOHA_CONFIGNAME_50) --filename sh_mac_aloha_50_delays --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) $(SUFFIX)
+sh-mac-mcsotdma-50_plot:
+	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_ALOHA_CONFIGNAME_50) --filename sh_mac_mcsotdma_50 --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --target_reception_rate $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_50) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_ALOHA_DELAY_MAX_VAL) $(SUFFIX); \
+	python3 eval_randomized_slotted_aloha_delays.py --dir simresults/$(SH_MAC_ALOHA_CONFIGNAME_50) --filename sh_mac_mcsotdma_50_delays --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) $(SUFFIX)
 
-sh-mac-aloha-50: sh-mac-aloha-50_sim sh-mac-aloha-50_parse sh-mac-aloha-50_plot
+sh-mac-mcsotdma-50: sh-mac-mcsotdma-50_sim sh-mac-mcsotdma-50_parse sh-mac-mcsotdma-50_plot
 
-sh-mac-aloha-50_clean:
+sh-mac-mcsotdma-50_clean:
 	rm simresults/$(SH_MAC_ALOHA_CONFIGNAME_50)/*
 
 
 SH_MAC_ALOHA_CONFIGNAME_OPT = RandomizedSlottedAlohaOptimal
 SH_MAC_ALOHA_TARGET_RECEPTION_RATE_OPT = 37
-sh-mac-aloha-opt_sim:
+sh-mac-mcsotdma-opt_sim:
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_ALOHA_CONFIGNAME_OPT) $(INCL)
 
-sh-mac-aloha-opt_parse:
+sh-mac-mcsotdma-opt_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_ALOHA_CONFIGNAME_OPT); \
 	./convert-vec-omnet-csv.sh simresults/$(SH_MAC_ALOHA_CONFIGNAME_OPT)
 
-sh-mac-aloha-opt_plot:
-	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_ALOHA_CONFIGNAME_OPT) --filename sh_mac_aloha_opt --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --target_reception_rate $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_OPT) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_ALOHA_DELAY_MAX_VAL) $(SUFFIX); \
-	python3 eval_randomized_slotted_aloha_delays.py --dir simresults/$(SH_MAC_ALOHA_CONFIGNAME_OPT) --filename sh_mac_aloha_opt_delays --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) $(SUFFIX)
+sh-mac-mcsotdma-opt_plot:
+	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_ALOHA_CONFIGNAME_OPT) --filename sh_mac_mcsotdma_opt --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --target_reception_rate $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_OPT) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_ALOHA_DELAY_MAX_VAL) $(SUFFIX); \
+	python3 eval_randomized_slotted_aloha_delays.py --dir simresults/$(SH_MAC_ALOHA_CONFIGNAME_OPT) --filename sh_mac_mcsotdma_opt_delays --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) $(SUFFIX)
 
-sh-mac-aloha-opt: sh-mac-aloha-opt_sim sh-mac-aloha-opt_parse sh-mac-aloha-opt_plot
+sh-mac-mcsotdma-opt: sh-mac-mcsotdma-opt_sim sh-mac-mcsotdma-opt_parse sh-mac-mcsotdma-opt_plot
 
-sh-mac-aloha-opt_clean:
+sh-mac-mcsotdma-opt_clean:
 	rm simresults/$(SH_MAC_ALOHA_CONFIGNAME_OPT)/*
 
 SH_MAC_ALOHA_CONFIGNAME_25 = RandomizedSlottedAloha25
 SH_MAC_ALOHA_TARGET_RECEPTION_RATE_25 = 25
-sh-mac-aloha-25_sim:	
+sh-mac-mcsotdma-25_sim:	
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_ALOHA_CONFIGNAME_25) $(INCL)
 
-sh-mac-aloha-25_parse:
+sh-mac-mcsotdma-25_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_ALOHA_CONFIGNAME_25)
 
-sh-mac-aloha-25_plot:
-	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_ALOHA_CONFIGNAME_25) --filename sh_mac_aloha_25 --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --target_reception_rate $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_25) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_ALOHA_DELAY_MAX_VAL) $(SUFFIX)
+sh-mac-mcsotdma-25_plot:
+	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_ALOHA_CONFIGNAME_25) --filename sh_mac_mcsotdma_25 --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --target_reception_rate $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_25) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_ALOHA_DELAY_MAX_VAL) $(SUFFIX)
 
-sh-mac-aloha-25: sh-mac-aloha-25_sim sh-mac-aloha-25_parse sh-mac-aloha-25_plot
+sh-mac-mcsotdma-25: sh-mac-mcsotdma-25_sim sh-mac-mcsotdma-25_parse sh-mac-mcsotdma-25_plot
 
-sh-mac-aloha-all_plot:
-	python3 eval_randomized_slotted_aloha_aggregate.py --dirs simresults/$(SH_MAC_ALOHA_CONFIGNAME_95) simresults/$(SH_MAC_ALOHA_CONFIGNAME_75) simresults/$(SH_MAC_ALOHA_CONFIGNAME_50) simresults/$(SH_MAC_ALOHA_CONFIGNAME_OPT) --filename sh_mac_aloha_all --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --target_reception_rates $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_95) $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_75) $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_50) $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_OPT) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) $(SUFFIX)
+# AGGREGATE RESULTS INTO ONE GRAPH
+sh-mac-mcsotdma-all_plot:
+	python3 eval_randomized_slotted_aloha_aggregate.py --dirs simresults/$(SH_MAC_ALOHA_CONFIGNAME_95) simresults/$(SH_MAC_ALOHA_CONFIGNAME_75) simresults/$(SH_MAC_ALOHA_CONFIGNAME_50) simresults/$(SH_MAC_ALOHA_CONFIGNAME_OPT) --filename sh_mac_mcsotdma_all --n $(SH_MAC_ALOHA_NUM_USERS) --num_reps $(SH_MAC_ALOHA_NUM_REPS) --target_reception_rates $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_95) $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_75) $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_50) $(SH_MAC_ALOHA_TARGET_RECEPTION_RATE_OPT) --time_slot_duration $(SH_MAC_ALOHA_TIME_SLOT_DURATION) $(SUFFIX)
 
-sh-mac-aloha-all_clean: sh-mac-aloha-95_clean sh-mac-aloha-75_clean sh-mac-aloha-50_clean sh-mac-aloha-opt_clean	
+sh-mac-mcsotdma-all_clean: sh-mac-mcsotdma-95_clean sh-mac-mcsotdma-75_clean sh-mac-mcsotdma-50_clean sh-mac-mcsotdma-opt_clean	
 
 # OPTIMAL COLLISION PROBABILITY
 sh-mac-opt: 

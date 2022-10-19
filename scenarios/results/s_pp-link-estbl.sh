@@ -2,7 +2,7 @@
 #SBATCH -p smp
 #SBATCH --ntasks 1
 #SBATCH --cpus-per-task 16
-#SBATCH --mem-per-cpu 5G
+#SBATCH --mem-per-cpu 2G
 #SBATCH --time 5-00:00:00
 #SBATCH --constraint=OS8
 
