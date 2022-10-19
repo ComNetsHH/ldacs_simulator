@@ -65,9 +65,9 @@ def parse(dir, num_nodes_vec, num_broadcast_nodes_vec, num_reps, json_filename):
 						results_vec_broadcast_mac_delay = results_vec_broadcast_mac_delay['vecvalue']
 						results_vec_broadcast_mac_delay = [float(s) for s in results_vec_broadcast_mac_delay.values[0].split(' ')]
 
-						# pick first link establishment
-						establishment_time_vec[node] = results_vec_link_estbl_time[0]
-						broadcast_mac_delay_vec[node] = results_vec_broadcast_mac_delay[0]
+						# compute means
+						establishment_time_vec[node] = np.mean(results_vec_link_estbl_time)
+						broadcast_mac_delay_vec[node] = np.mean(results_vec_broadcast_mac_delay)
 					link_estbl_time_mat[i, j, rep] = np.mean(establishment_time_vec)
 					broadcast_mac_delay_mat[i, j, rep] = np.mean(broadcast_mac_delay_vec)
 					
