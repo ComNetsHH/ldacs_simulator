@@ -129,8 +129,8 @@ sh-mac-sotdma_plot:
 sh-mac-sotdma: sh-mac-sotdma_sim sh-mac-sotdma_parse sh-mac-sotdma_plot
 
 # MCSOTDMA 
-SH_MAC_MCSTODMA_NUM_REPS = 4 #10
-SH_MAC_MCSTODMA_NUM_USERS = 1 5 10 20 30 #40 50
+SH_MAC_MCSTODMA_NUM_REPS = 10
+SH_MAC_MCSTODMA_NUM_USERS = 1 5 10 20 30 40 50
 SH_MAC_MCSTODMA_TIME_SLOT_DURATION = 24 #ms
 SH_MAC_MCSTODMA_DELAY_MAX_VAL = 8000
 # 95% target reception probability = 5% target collision probability
