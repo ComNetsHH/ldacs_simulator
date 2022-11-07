@@ -21,6 +21,10 @@ The reason for this splitting is the amount of data that is parsed: when you jus
 So, in summary, the toolchain is: Makefile -> execute OMNeT++ Simulator -> parse OMNeT++ result files into CSV -> parse CSV into JSON -> read JSON and generate PDF graph.
 Since each step is easily executed in isolation, you can modify and test without having to execute all the other steps.
 
+# Parallel simulations
+The `Makefile` passes along the `NUM_CPUS` variable that you can provide when calling a target.
+So, for example, to run the SOTDMA simulations in parallel using 14 cores, run `make sh-mac-sotdma NUM_CPUS=14`.
+
 # SLURM Script Files
 All `s_<something>.sh` files are SLURM script files, which allow the execution of our simulations on a SLURM-controlled server cluster. 
 If you happen to have access to a SLURM system, feel free to modify and use these files.
@@ -29,5 +33,9 @@ If you happen to have access to a SLURM system, feel free to modify and use thes
 Please be aware that conducting all simulations requires substantial simulation time.
 We have run these simulations in a highly parallelized fashion on the High Performance Computing (HPC) Cluster of the Hamburg University of Technology.
 The HPC has a large number of servers available, equipped with Intel Xeon E5-2680 CPUs of different versions, ranging from 2.4GHz to 3.3GHz.
-When each target is run by 14 cores in parallel (where applicable), allow a simulation time of roughly ten hours per target.
-Scale according to the hardware that you have available, and bring a lot of coffee (or let it run over night(s)).
+When each target is run by 14 cores in parallel (where applicable), allow a simulation time of up to three hours per target.
+Scale according to the hardware that you have available, and bring a lot of coffee (or let it run over night).
+
+# tl;dr (too long; didn't read)
+The ten graphs in the paper are associated to ten SLURM files.
+Open each file, copy&paste the `make` commands therein, and execute them to generate all graphs in the paper.

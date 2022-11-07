@@ -111,7 +111,7 @@ sh-mac-aloha_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_RA_CONFIGNAME)
 
 sh-mac-aloha_plot:
-	python3 eval_random_access.py --dir simresults/$(SH_MAC_RA_CONFIGNAME) --filename sh_mac_ra --n $(SH_MAC_RA_NUM_USERS) --c $(SH_MAC_RA_NUM_CANDIDATE_SLOTS) --num_reps $(SH_MAC_RA_NUM_REPS) --time_slot_duration $(SH_MAC_RA_TIME_SLOT_DURATION) $(SUFFIX)
+	python3 eval_random_access.py --dir simresults/$(SH_MAC_RA_CONFIGNAME) --filename mac_ra --n $(SH_MAC_RA_NUM_USERS) --c $(SH_MAC_RA_NUM_CANDIDATE_SLOTS) --num_reps $(SH_MAC_RA_NUM_REPS) --time_slot_duration $(SH_MAC_RA_TIME_SLOT_DURATION) $(SUFFIX)
 
 sh-mac-aloha: sh-mac-aloha_sim sh-mac-aloha_parse sh-mac-aloha_plot
 
@@ -124,7 +124,7 @@ sh-mac-sotdma_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_SOTDMA_CONFIGNAME)
 
 sh-mac-sotdma_plot:
-	python3 eval_random_access.py --dir simresults/$(SH_MAC_SOTDMA_CONFIGNAME) --filename sh_mac_ra_slotadv --n $(SH_MAC_RA_NUM_USERS) --c $(SH_MAC_RA_NUM_CANDIDATE_SLOTS) --num_reps $(SH_MAC_RA_NUM_REPS) --time_slot_duration $(SH_MAC_RA_TIME_SLOT_DURATION) $(SUFFIX)
+	python3 eval_random_access.py --dir simresults/$(SH_MAC_SOTDMA_CONFIGNAME) --filename mac_sotdma --n $(SH_MAC_RA_NUM_USERS) --c $(SH_MAC_RA_NUM_CANDIDATE_SLOTS) --num_reps $(SH_MAC_RA_NUM_REPS) --time_slot_duration $(SH_MAC_RA_TIME_SLOT_DURATION) $(SUFFIX)
 
 sh-mac-sotdma: sh-mac-sotdma_sim sh-mac-sotdma_parse sh-mac-sotdma_plot
 
@@ -142,7 +142,7 @@ sh-mac-mcsotdma-95_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_95)
 
 sh-mac-mcsotdma-95_plot:
-	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_95) --filename sh_mac_mcsotdma_95 --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rate $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_95) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_MCSTODMA_DELAY_MAX_VAL) $(SUFFIX)
+	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_95) --filename mac_mcsotdma_95 --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rate $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_95) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_MCSTODMA_DELAY_MAX_VAL) $(SUFFIX)
 
 sh-mac-mcsotdma-95: sh-mac-mcsotdma-95_sim sh-mac-mcsotdma-95_parse sh-mac-mcsotdma-95_plot
 
@@ -158,7 +158,7 @@ sh-mac-mcsotdma-75_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_75)
 
 sh-mac-mcsotdma-75_plot:
-	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_75) --filename sh_mac_mcsotdma_75 --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rate $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_75) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_MCSTODMA_DELAY_MAX_VAL) $(SUFFIX)
+	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_75) --filename mac_mcsotdma_75 --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rate $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_75) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_MCSTODMA_DELAY_MAX_VAL) $(SUFFIX)
 
 sh-mac-mcsotdma-75: sh-mac-mcsotdma-75_sim sh-mac-mcsotdma-75_parse sh-mac-mcsotdma-75_plot
 
@@ -175,8 +175,8 @@ sh-mac-mcsotdma-50_parse:
 	./convert-vec-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_50)
 
 sh-mac-mcsotdma-50_plot:
-	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_50) --filename sh_mac_mcsotdma_50 --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rate $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_50) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_MCSTODMA_DELAY_MAX_VAL) $(SUFFIX); \
-	python3 eval_randomized_slotted_aloha_delays.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_50) --filename sh_mac_mcsotdma_50_delays --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) $(SUFFIX)
+	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_50) --filename mac_mcsotdma_50 --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rate $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_50) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_MCSTODMA_DELAY_MAX_VAL) $(SUFFIX); \
+	python3 eval_randomized_slotted_aloha_delays.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_50) --filename mac_mcsotdma_50_delays --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) $(SUFFIX)
 
 sh-mac-mcsotdma-50: sh-mac-mcsotdma-50_sim sh-mac-mcsotdma-50_parse sh-mac-mcsotdma-50_plot
 
@@ -194,8 +194,8 @@ sh-mac-mcsotdma-opt_parse:
 	./convert-vec-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_OPT)
 
 sh-mac-mcsotdma-opt_plot:
-	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_OPT) --filename sh_mac_mcsotdma_opt --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rate $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_OPT) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_MCSTODMA_DELAY_MAX_VAL) $(SUFFIX); \
-	python3 eval_randomized_slotted_aloha_delays.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_OPT) --filename sh_mac_mcsotdma_opt_delays --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) $(SUFFIX)
+	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_OPT) --filename mac_mcsotdma_opt --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rate $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_OPT) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_MCSTODMA_DELAY_MAX_VAL) $(SUFFIX); \
+	python3 eval_randomized_slotted_aloha_delays.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_OPT) --filename mac_mcsotdma_opt_delays --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) $(SUFFIX)
 
 sh-mac-mcsotdma-opt: sh-mac-mcsotdma-opt_sim sh-mac-mcsotdma-opt_parse sh-mac-mcsotdma-opt_plot
 
@@ -211,13 +211,13 @@ sh-mac-mcsotdma-25_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_25)
 
 sh-mac-mcsotdma-25_plot:
-	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_25) --filename sh_mac_mcsotdma_25 --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rate $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_25) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_MCSTODMA_DELAY_MAX_VAL) $(SUFFIX)
+	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_25) --filename mac_mcsotdma_25 --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rate $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_25) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_MCSTODMA_DELAY_MAX_VAL) $(SUFFIX)
 
 sh-mac-mcsotdma-25: sh-mac-mcsotdma-25_sim sh-mac-mcsotdma-25_parse sh-mac-mcsotdma-25_plot
 
 # AGGREGATE RESULTS INTO ONE GRAPH
 sh-mac-mcsotdma-all_plot:
-	python3 eval_randomized_slotted_aloha_aggregate.py --dirs simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_95) simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_75) simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_50) simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_OPT) --filename sh_mac_mcsotdma_all --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rates $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_95) $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_75) $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_50) $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_OPT) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) $(SUFFIX)
+	python3 eval_randomized_slotted_aloha_aggregate.py --dirs simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_95) simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_75) simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_OPT) simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_25) --filename mac_mcsotdma_all --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rates $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_95) $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_75) $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_OPT) $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_25) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) $(SUFFIX)
 
 sh-mac-mcsotdma-all_clean: sh-mac-mcsotdma-95_clean sh-mac-mcsotdma-75_clean sh-mac-mcsotdma-50_clean sh-mac-mcsotdma-opt_clean	
 
@@ -227,7 +227,7 @@ sh-mac-opt:
 
 # LINK ESTABLISHMENT TIMES
 PP_LINK_ESTBL_TEST_CONFIGNAME = PPLinkEstablishmentTimes
-PP_LINK_ESTBL_TEST_NUM_REPS = 10
+PP_LINK_ESTBL_TEST_NUM_REPS = 50
 PP_LINK_ESTBL_TEST_NUM_PAIRS = 1
 PP_LINK_ESTBL_TEST_NUM_BROADCAST_USERS = 0 5 10 15 20 25 30
 pp-link-estbl-test_sim:
@@ -248,7 +248,7 @@ pp-link-estbl-test_clean:
 # PP VOICE
 PP_VOICE_NAIVE_CONFIGNAME = PPVoice
 PP_VOICE_TIME_SLOT_DURATION = 24
-PP_VOICE_NUM_CONTENDERS = 30
+PP_VOICE_NUM_CONTENDERS = 10
 pp-voice_sim:
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../link_establishment.ini -c $(PP_VOICE_NAIVE_CONFIGNAME) $(INCL)
 

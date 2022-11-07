@@ -53,7 +53,9 @@ def parse(dirs, num_users_vec, num_reps, json_filename):
 					delay_vec = np.zeros(n)					
 					for transmitter in range(n):											
 						num_broadcasts += int(results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_num_broadcasts_sent:last') & (results.module=='NW_TX_RX.txNodes[' + str(transmitter) + '].wlan[0].linkLayer')].value)					
-						delay_vec[transmitter] = results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_broadcast_mac_delay:mean') & (results.module=='NW_TX_RX.txNodes[' + str(transmitter) + '].wlan[0].linkLayer')].value						
+						#delay_vec[transmitter] = results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_broadcast_mac_delay:mean') & (results.module=='NW_TX_RX.txNodes[' + str(transmitter) + '].wlan[0].linkLayer')].value						
+						print(results[(results.type=='scalar') & (results.name=='endToEndDelay:histogram') & (results.module=='NW_TX_RX.rxNode.app[0]')])
+						delay_vec[transmitter] = results[(results.type=='scalar') & (results.name=='endToEndDelay:mean') & (results.module=='NW_TX_RX.rxNode.app[0]')].value						
 					# take the number of received broadcasts at the RX node
 					broadcast_reception_rate_mat[j][i][rep] = int(results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_num_broadcasts_received:last') & (results.module=='NW_TX_RX.rxNode.wlan[0].linkLayer')].value)
 					# divide by all broadcasts to get the reception rate
@@ -109,13 +111,18 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 		})
 		# 1st graph: delay		
 		fig = plt.figure()		
+		colors = ['tab:purple', 'tab:brown', 'tab:olive', 'tab:cyan']
 		for j in range(n):
-			line = plt.errorbar(num_users_vec, broadcast_delays_means[j]*time_slot_duration, broadcast_delays_err[j]*time_slot_duration, alpha=0.5, fmt='o', label='$q=' + str((100-target_reception_rates[j])/100) + '$')
-			plt.plot(num_users_vec, broadcast_delays_means[j]*time_slot_duration, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.5)				
+			# line = plt.errorbar(num_users_vec, broadcast_delays_means[j]*time_slot_duration, broadcast_delays_err[j]*time_slot_duration, alpha=0.75, fmt='o', label='$q=' + str((100-target_reception_rates[j])/100) + '$', color=colors[j])
+			line = plt.errorbar(num_users_vec, broadcast_delays_means[j], broadcast_delays_err[j], alpha=0.75, fmt='o', label='$q=' + str((100-target_reception_rates[j])/100) + '$', color=colors[j])
+			# plt.plot(num_users_vec, broadcast_delays_means[j]*time_slot_duration, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.5)				
+			plt.plot(num_users_vec, broadcast_delays_means[j], linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.5)				
 		plt.ylabel('Packet delays [ms]')		
-		plt.xlabel('Number of transmitters $n$')		
+		plt.xlabel('Number of users $n$')		
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
 		plt.yscale('log')
+		plt.ylim([3*10**2-50, 10**4])
+		plt.axhline(y=10**3, color='gray', linestyle='--', alpha=0.5, linewidth=.5)
 		fig.tight_layout()
 		settings.init()
 		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
@@ -126,13 +133,14 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 		# 2nd graph: reception rate		
 		fig = plt.figure()				
 		for j in range(n):			
-			line = plt.errorbar(num_users_vec, broadcast_reception_rate_means[j]*100, broadcast_reception_rate_err[j]*100, alpha=0.5, fmt='o', label='$q=' + str((100-target_reception_rates[j])/100) + '$')
-			plt.plot(num_users_vec, broadcast_reception_rate_means[j]*100, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=0.5)
-			plt.axhline(y=target_reception_rates[j], linestyle='--', linewidth=.5, color = 'gray')
+			line = plt.errorbar(num_users_vec, broadcast_reception_rate_means[j]*100, broadcast_reception_rate_err[j]*100, alpha=0.75, fmt='o', label='$q=' + str((100-target_reception_rates[j])/100) + '$', color=colors[j])
+			plt.plot(num_users_vec, broadcast_reception_rate_means[j]*100, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=0.75)
+			plt.axhline(y=target_reception_rates[j], linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=0.5)
 		plt.ylabel('Reception rate [\%]')				
-		plt.yticks(target_reception_rates)
-		plt.xlabel('Number of transmitters $n$')				
+		plt.yticks(target_reception_rates + [0])
+		plt.xlabel('Number of users $n$')				
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
+		plt.ylim([0, 100])
 		fig.tight_layout()
 		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
 		fig.savefig(graph_filename_reception, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
