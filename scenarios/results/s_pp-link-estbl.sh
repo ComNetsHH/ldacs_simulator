@@ -7,11 +7,7 @@
 #SBATCH --constraint=OS8
 
 # Execute simulation
-<<<<<<< HEAD
-make pp-link-estbl-test NUM_CPUS=14
-=======
-make pp-link-estbl NUM_CPUS=16
->>>>>>> 9ea4578dae665e606e7158c0ef069f99e7b86916
+make pp-link-estbl NUM_CPUS=14
 
 # Exit job
 exit
