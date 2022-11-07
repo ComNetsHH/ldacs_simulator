@@ -7,7 +7,7 @@
 #SBATCH --constraint=OS8
 
 # Execute simulation
-make sh-mac-mcsotdma-75 NUM_CPUS=14
+make sh-mac-mcsotdma-opt-slotadv NUM_CPUS=14
 
 # Exit job
 exit
