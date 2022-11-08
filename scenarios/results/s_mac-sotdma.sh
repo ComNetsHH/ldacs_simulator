@@ -1,13 +1,13 @@
 #!/bin/bash -l
 #SBATCH -p smp
 #SBATCH --ntasks 1
-#SBATCH --cpus-per-task 14
-#SBATCH --mem-per-cpu 6G
-#SBATCH --time 5-00:00:00
+#SBATCH --cpus-per-task 8
+#SBATCH --mem-per-cpu 8G
+#SBATCH --time 0-12:00:00
 #SBATCH --constraint=OS8
 
 # Execute simulation
-make sh-mac-sotdma NUM_CPUS=14
+make sh-mac-sotdma NUM_CPUS=8
 
 # Exit job
 exit
