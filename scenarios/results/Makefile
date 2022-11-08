@@ -211,8 +211,7 @@ sh-mac-mcsotdma-opt_sim:
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_OPT) $(INCL)
 
 sh-mac-mcsotdma-opt_parse:
-	./convert-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_OPT); \
-	./convert-vec-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_OPT)
+	./convert-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_OPT)
 
 sh-mac-mcsotdma-opt_plot:
 	python3 eval_randomized_slotted_aloha.py --dir simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_OPT) --filename mac_mcsotdma_opt --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rate $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_OPT) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) --delay_max_val $(SH_MAC_MCSTODMA_DELAY_MAX_VAL) $(SUFFIX)
