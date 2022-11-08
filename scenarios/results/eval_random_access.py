@@ -55,11 +55,11 @@ def parse(dir, num_users_vec, num_candidate_slots_vec, num_reps, json_filename):
 					delay_vec = np.zeros(n)
 					num_candidate_slots_per_transmitter = np.zeros(n)
 					selected_slot_per_transmitter = np.zeros(n)
-					for transmitter in range(n):											
-						num_broadcasts += int(results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_num_broadcasts_sent:last') & (results.module=='NW_TX_RX.txNodes[' + str(transmitter) + '].wlan[0].linkLayer')].value)					
-						delay_vec[transmitter] = results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_broadcast_mac_delay:mean') & (results.module=='NW_TX_RX.txNodes[' + str(transmitter) + '].wlan[0].linkLayer')].value
-						num_candidate_slots_per_transmitter[transmitter] = results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_broadcast_candidate_slots:mean') & (results.module=='NW_TX_RX.txNodes[' + str(transmitter) + '].wlan[0].linkLayer')].value					
-						selected_slot_per_transmitter[transmitter] = results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_broadcast_selected_candidate_slot:mean') & (results.module=='NW_TX_RX.txNodes[' + str(transmitter) + '].wlan[0].linkLayer')].value											
+					for user in range(n):											
+						num_broadcasts += int(results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_num_broadcasts_sent:last') & (results.module=='NW_TX_RX.txNodes[' + str(user) + '].wlan[0].linkLayer')].value)					
+						delay_vec[user] = results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_broadcast_mac_delay:mean') & (results.module=='NW_TX_RX.txNodes[' + str(user) + '].wlan[0].linkLayer')].value
+						num_candidate_slots_per_transmitter[user] = results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_broadcast_candidate_slots:mean') & (results.module=='NW_TX_RX.txNodes[' + str(user) + '].wlan[0].linkLayer')].value					
+						selected_slot_per_transmitter[user] = results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_broadcast_selected_candidate_slot:mean') & (results.module=='NW_TX_RX.txNodes[' + str(user) + '].wlan[0].linkLayer')].value											
 					# take the number of received broadcasts at the RX node
 					broadcast_reception_rate_mat[i][j][rep] = int(results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_num_broadcasts_received:last') & (results.module=='NW_TX_RX.rxNode.wlan[0].linkLayer')].value)
 					# divide by all broadcasts to get the reception rate
@@ -137,8 +137,12 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, graph_f
 		plt.xlabel('Number of users $n$')		
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
 		plt.yscale('log')
-		plt.ylim([3*10**2-50, 2*10**3])
-		plt.axhline(y=10**3, color='gray', linestyle='--', alpha=0.5, linewidth=.5)
+		plt.ylim([10**3, 2.6*10**3])
+		plt.xticks(num_users_vec)		
+		plt.gca().yaxis.grid(True)
+		plt.gca().grid(which='major', alpha=.0)
+		plt.gca().grid(which='minor', alpha=.5, linewidth=.25, linestyle='-')		
+		# plt.axhline(y=10**3, color='gray', linestyle='-', alpha=0.5, linewidth=.5)
 		if max_delay is not None:
 			plt.ylim([0, max_delay])
 		fig.tight_layout()
