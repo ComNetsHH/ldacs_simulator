@@ -99,7 +99,7 @@ sanity-check:
 	python3 eval.py --dir simresults/SanityCheck --filename sanity_check --sending_interval_start $(SANITY_CHECK_SEND_INT_START) --sending_interval_stop $(SANITY_CHECK_SEND_INT_END) --sending_interval_step $(SANITY_CHECK_SEND_INT_INCR) --num_reps $(SANITY_CHECK_NUM_REPS) --n $(SANITY_CHECK_NUM_USERS) $(SUFFIX)
 
 # RANDOMIZED SLOTTED ALOHA
-SH_MAC_RA_NUM_REPS = 10
+SH_MAC_RA_NUM_REPS = 5
 SH_MAC_RA_NUM_USERS = 1 5 10 20 30 40 50 60
 SH_MAC_RA_NUM_CANDIDATE_SLOTS = 2 5 10 40
 SH_MAC_RA_TIME_SLOT_DURATION = 24 #ms
@@ -129,7 +129,7 @@ sh-mac-sotdma_plot:
 sh-mac-sotdma: sh-mac-sotdma_sim sh-mac-sotdma_parse sh-mac-sotdma_plot
 
 # MCSOTDMA 
-SH_MAC_MCSTODMA_NUM_REPS = 10
+SH_MAC_MCSTODMA_NUM_REPS = 5
 SH_MAC_MCSTODMA_NUM_USERS = 1 5 10 20 30 40 50 60
 SH_MAC_MCSTODMA_TIME_SLOT_DURATION = 24 #ms
 SH_MAC_MCSTODMA_DELAY_MAX_VAL = 8000
@@ -273,6 +273,9 @@ sh-mac-mcsotdma-05-slotadv_clean:
 # AGGREGATE RESULTS INTO ONE GRAPH
 sh-mac-mcsotdma-all_plot:
 	python3 eval_randomized_slotted_aloha_aggregate.py --dirs simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_95) simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_75) simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_OPT) simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_05) --filename mac_mcsotdma_all --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rates $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_95) $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_75) $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_OPT) $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_05) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) $(SUFFIX)
+
+sh-mac-mcsotdma-all-slotadv_plot:
+	python3 eval_randomized_slotted_aloha_aggregate.py --dirs simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_95) simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_75) simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_OPT) simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_05) --filename mac_mcsotdma_all_slotadv --n $(SH_MAC_MCSTODMA_NUM_USERS) --num_reps $(SH_MAC_MCSTODMA_NUM_REPS) --target_reception_rates $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_95) $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_75) $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_OPT) $(SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_05) --time_slot_duration $(SH_MAC_MCSTODMA_TIME_SLOT_DURATION) $(SUFFIX)	
 
 sh-mac-mcsotdma-all_clean: sh-mac-mcsotdma-95_clean sh-mac-mcsotdma-75_clean sh-mac-mcsotdma-50_clean sh-mac-mcsotdma-opt_clean	
 
