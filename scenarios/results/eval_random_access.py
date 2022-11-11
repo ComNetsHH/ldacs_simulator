@@ -88,7 +88,7 @@ def parse(dir, num_users_vec, num_candidate_slots_vec, num_reps, json_filename):
 	print("Saved parsed results in '" + json_filename + "'.")    	
 
 
-def plot(json_filename, graph_filename_delays, graph_filename_reception, graph_filename_no_of_candidate_slots, graph_filename_selected_slot, time_slot_duration, max_delay):
+def plot(json_filename, graph_filename_delays, graph_filename_reception, graph_filename_no_of_candidate_slots, graph_filename_selected_slot, time_slot_duration, ylim1, ylim2):
 	"""
 	Reads 'json_filename' and plots the values to 'graph_filename'.
 	"""
@@ -133,18 +133,17 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, graph_f
 		for i in range(len(num_candidate_slots_vec)):
 			line = plt.errorbar(num_users_vec, broadcast_delays_means[:,i]*time_slot_duration, broadcast_delays_err[:,i], fmt='o', label='$k=' + str(num_candidate_slots_vec[i]) + '$', alpha=.75)
 			plt.plot(num_users_vec, broadcast_delays_means[:,i]*time_slot_duration, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.75)		
-		plt.ylabel('Packet delays [ms]')		
+		plt.ylabel('MAC delays [ms]')		
 		plt.xlabel('Number of users $n$')		
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
 		plt.yscale('log')
-		plt.ylim([10**3, 2.6*10**3])
+		if ylim1 is not None and ylim2 is not None:
+			plt.ylim([ylim1, ylim2])
 		plt.xticks(num_users_vec)		
 		plt.gca().yaxis.grid(True)
 		plt.gca().grid(which='major', alpha=.0)
 		plt.gca().grid(which='minor', alpha=.5, linewidth=.25, linestyle='-')		
-		# plt.axhline(y=10**3, color='gray', linestyle='-', alpha=0.5, linewidth=.5)
-		if max_delay is not None:
-			plt.ylim([0, max_delay])
+		# plt.axhline(y=10**3, color='gray', linestyle='-', alpha=0.5, linewidth=.5)		
 		fig.tight_layout()
 		settings.init()
 		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
@@ -160,7 +159,11 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, graph_f
 		plt.ylabel('Reception rate [\%]')		
 		plt.ylim([0, 105])
 		plt.xlabel('Number of users $n$')		
+		plt.xticks(num_users_vec)
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
+		plt.gca().yaxis.grid(True)
+		plt.gca().grid(which='major', alpha=.0)
+		plt.gca().grid(which='minor', alpha=.5, linewidth=.25, linestyle='-')		
 		fig.tight_layout()
 		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
 		fig.savefig(graph_filename_reception, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
@@ -174,7 +177,11 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, graph_f
 			plt.plot(num_users_vec, broadcast_mean_num_candidate_slots_mat_means[:,i], linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.75)
 		plt.ylabel('No. of candidate slots')		
 		plt.xlabel('Number of users $n$')		
+		plt.xticks(num_users_vec)
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
+		plt.gca().yaxis.grid(True)
+		plt.gca().grid(which='major', alpha=.0)
+		plt.gca().grid(which='minor', alpha=.5, linewidth=.25, linestyle='-')		
 		fig.tight_layout()
 		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
 		fig.savefig(graph_filename_no_of_candidate_slots, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
@@ -188,7 +195,11 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, graph_f
 			plt.plot(num_users_vec, broadcast_mean_selected_slots_mat_means[:,i], linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.75)
 		plt.ylabel('Mean selected slot')		
 		plt.xlabel('Number of users $n$')		
+		plt.xticks(num_users_vec)
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
+		plt.gca().yaxis.grid(True)
+		plt.gca().grid(which='major', alpha=.0)
+		plt.gca().grid(which='minor', alpha=.5, linewidth=.25, linestyle='-')		
 		fig.tight_layout()
 		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
 		fig.savefig(graph_filename_selected_slot, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
@@ -205,10 +216,15 @@ if __name__ == "__main__":
 	parser.add_argument('--n', type=int, nargs='+', help='Number of users.', default=[5])	
 	parser.add_argument('--c', type=int, nargs='+', help='Number of candidate slots.', default=[3])	
 	parser.add_argument('--num_reps', type=int, help='Number of repetitions that should be considered.', default=1)
-	parser.add_argument('--time_slot_duration', type=int, help='Duration of a time slot in milliseconds.', default=24)	
-	parser.add_argument('--max_delay', type=int, help='Maximum y-limit for delay plots.', default=None)	
+	parser.add_argument('--time_slot_duration', type=int, help='Duration of a time slot in milliseconds.', default=24)		
+	parser.add_argument('--ylim1', type=int, help='Minimum y-limit for delay plots.', default=None)	
+	parser.add_argument('--ylim2', type=int, help='Maximum y-limit for delay plots.', default=None)	
 
 	args = parser.parse_args()	
+
+	if ((args.ylim1 is not None and args.ylim2 is None) or (args.ylim2 is not None and args.ylim1 is None)):
+		raise RuntimeError('If you set one ylim, you have to set the other, too!')
+		exit(1)
  
 	expected_dirs = ['_imgs', '_data']
 	for dir in expected_dirs:
@@ -224,5 +240,5 @@ if __name__ == "__main__":
 	if not args.no_parse:		
 		parse(args.dir, args.n, args.c, args.num_reps, json_filename)
 	if not args.no_plot:
-		plot(json_filename, graph_filename_delays, graph_filename_reception, graph_filename_no_of_candidate_slots, graph_filename_selected_slot, args.time_slot_duration, args.max_delay) 
+		plot(json_filename, graph_filename_delays, graph_filename_reception, graph_filename_no_of_candidate_slots, graph_filename_selected_slot, args.time_slot_duration, args.ylim1, args.ylim2) 
     

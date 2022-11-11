@@ -87,7 +87,7 @@ def parse(dirs, num_users_vec, num_reps, json_filename):
 	print("Saved parsed results in '" + json_filename + "'.")    	
 
 
-def plot(json_filename, graph_filename_delays, graph_filename_reception, time_slot_duration, target_reception_rates):
+def plot(json_filename, graph_filename_delays, graph_filename_reception, time_slot_duration, target_reception_rates, ylim1, ylim2):
 	"""
 	Reads 'json_filename' and plots the values to 'graph_filename'.
 	"""
@@ -129,16 +129,20 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 		line.remove()
 		for j in range(n):
 			line = plt.errorbar(num_users_vec, broadcast_delays_means[j]*time_slot_duration, broadcast_delays_err[j]*time_slot_duration, alpha=0.75, fmt='o', color=colors[j])			
-			plt.plot(num_users_vec, broadcast_delays_means[j]*time_slot_duration, linestyle='--', linewidth=1, color=line[0].get_color(), alpha=0.75, label='$q=' + str((100-target_reception_rates[j])/100) + '$')							
+			plt.plot(num_users_vec, broadcast_delays_means[j]*time_slot_duration, linestyle='--', linewidth=1, color=line[0].get_color(), alpha=0.75, label=('$q=' + str((100-target_reception_rates[j])/100) + '$' if target_reception_rates[j] != 37 else '$q=1-\\frac{1}{e}$'))							
 		for j in range(n):
 			line = plt.errorbar(num_users_vec, avg_beacon_rx_mat_means[j]*time_slot_duration, avg_beacon_rx_mat_err[j]*time_slot_duration, alpha=0.75, fmt='x', color=colors[j])
 			plt.plot(num_users_vec, avg_beacon_rx_mat_means[j]*time_slot_duration, linestyle=':', linewidth=1, color=line[0].get_color(), alpha=.75)		
-		plt.ylabel('Delay [ms]')				
+		plt.ylabel('Delays [ms]')				
 		plt.xlabel('Number of users $n$')		
-		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.3, 1.4), ncol=3, columnspacing=0.5)				
+		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.4, 1.4), ncol=3, columnspacing=0.5)				
 		plt.yscale('log')		
-		# plt.ylim([10**3, 10**4])
-		# plt.xlim([0, max(num_users_vec)+1])
+		plt.gca().yaxis.grid(True)
+		plt.gca().grid(which='major', alpha=.0)
+		plt.gca().grid(which='minor', alpha=.5, linewidth=.25, linestyle='-')		
+		if ylim1 is not None and ylim2 is not None:
+			plt.ylim([ylim1, ylim2])
+		plt.xticks(num_users_vec)	
 		plt.axhline(y=10**3, color='gray', linestyle='--', alpha=0.75, linewidth=.5)
 		fig.tight_layout()
 		settings.init()
@@ -155,6 +159,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 			plt.axhline(y=target_reception_rates[j], linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=0.75)
 		plt.ylabel('Reception rate [\%]')				
 		plt.yticks(target_reception_rates + [0])
+		plt.xticks(num_users_vec)	
 		plt.xlabel('Number of users $n$')				
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
 		plt.ylim([0, 100])
@@ -175,8 +180,14 @@ if __name__ == "__main__":
 	parser.add_argument('--num_reps', type=int, help='Number of repetitions that should be considered.', default=1)
 	parser.add_argument('--time_slot_duration', type=int, help='Duration of a time slot in milliseconds.', default=24)	
 	parser.add_argument('--target_reception_rates', nargs='+', type=int, help='Target reception rate as an integer between 0 and 100.', default=[95])	
+	parser.add_argument('--ylim1', type=int, help='Minimum y-limit for delay plots.', default=None)	
+	parser.add_argument('--ylim2', type=int, help='Maximum y-limit for delay plots.', default=None)	
 
 	args = parser.parse_args()	
+
+	if ((args.ylim1 is not None and args.ylim2 is None) or (args.ylim2 is not None and args.ylim1 is None)):
+		raise RuntimeError('If you set one ylim, you have to set the other, too!')
+		exit(1)
  
 	expected_dirs = ['_imgs', '_data']
 	for dir in expected_dirs:
@@ -190,5 +201,5 @@ if __name__ == "__main__":
 	if not args.no_parse:		
 		parse(args.dirs, args.n, args.num_reps, json_filename)
 	if not args.no_plot:
-		plot(json_filename, graph_filename_delays, graph_filename_reception, args.time_slot_duration, args.target_reception_rates) 
+		plot(json_filename, graph_filename_delays, graph_filename_reception, args.time_slot_duration, args.target_reception_rates, args.ylim1, args.ylim2) 
     

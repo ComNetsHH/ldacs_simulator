@@ -106,7 +106,7 @@ def parse(dir, num_users_vec, num_reps, json_filename):
 	print("Saved parsed results in '" + json_filename + "'.")    	
 
 
-def plot(json_filename, graph_filename_delays, graph_filename_beacon_delays, graph_filename_reception, graph_filename_no_of_candidate_slots, graph_filename_selected_slot, graph_filename_collisions, graph_filename_duty_cycle, time_slot_duration, target_reception_rate, target_duty_cycle, delay_max_val):
+def plot(json_filename, graph_filename_delays, graph_filename_beacon_delays, graph_filename_reception, graph_filename_no_of_candidate_slots, graph_filename_selected_slot, graph_filename_collisions, graph_filename_duty_cycle, time_slot_duration, target_reception_rate, target_duty_cycle, ylim1, ylim2):
 	"""
 	Reads 'json_filename' and plots the values to 'graph_filename'.
 	"""
@@ -162,7 +162,11 @@ def plot(json_filename, graph_filename_delays, graph_filename_beacon_delays, gra
 		plt.plot(num_users_vec, avg_beacon_rx_mat_means*time_slot_duration, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.5)				
 		plt.ylabel('Beacon reception delays [ms]')		
 		plt.xlabel('Number of users $n$')		
+		plt.yscale('log')
 		# plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.5), ncol=3)		
+		if ylim1 is not None and ylim2 is not None:
+			plt.ylim([ylim1, ylim2])
+		plt.xticks(num_users_vec)	
 		fig.tight_layout()
 		settings.init()
 		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
@@ -174,8 +178,10 @@ def plot(json_filename, graph_filename_delays, graph_filename_beacon_delays, gra
 		fig = plt.figure()		
 		line = plt.errorbar(num_users_vec, broadcast_delays_means*time_slot_duration, broadcast_delays_err*time_slot_duration, alpha=0.75, fmt='o')
 		plt.plot(num_users_vec, broadcast_delays_means*time_slot_duration, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.5)		
-		# if delay_max_val is not None:
-		# 	plt.ylim([0, delay_max_val])
+		plt.yscale('log')
+		if ylim1 is not None and ylim2 is not None:
+			plt.ylim([ylim1, ylim2])
+		plt.xticks(num_users_vec)	
 		plt.ylabel('MAC delays [ms]')		
 		plt.xlabel('Number of users $n$')		
 		# plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.5), ncol=3)		
@@ -193,6 +199,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_beacon_delays, gra
 		plt.axhline(y=target_reception_rate, label='target', linestyle='--', linewidth=.75, color = 'k')
 		plt.ylabel('Reception rate [\%]')		
 		plt.ylim([0, 105])
+		plt.xticks(num_users_vec)	
 		plt.xlabel('Number of users $n$')		
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.15), ncol=3)		
 		fig.tight_layout()
@@ -208,6 +215,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_beacon_delays, gra
 		plt.ylabel('No. of candidate slots')		
 		plt.xlabel('Number of users $n$')		
 		# plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.5), ncol=3)		
+		plt.xticks(num_users_vec)	
 		fig.tight_layout()
 		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
 		fig.savefig(graph_filename_no_of_candidate_slots, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
@@ -220,6 +228,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_beacon_delays, gra
 		plt.plot(num_users_vec, broadcast_mean_selected_slots_mat_means, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=0.75)
 		plt.ylabel('Mean selected slot')		
 		plt.xlabel('Number of users $n$')		
+		plt.xticks(num_users_vec)	
 		# plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.5), ncol=3)		
 		fig.tight_layout()
 		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
@@ -235,6 +244,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_beacon_delays, gra
 		plt.ylabel('Collision Rate [\%]')		
 		plt.ylim([0, 105])
 		plt.xlabel('Number of users $n$')		
+		plt.xticks(num_users_vec)	
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.15), ncol=3)		
 		fig.tight_layout()
 		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
@@ -247,6 +257,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_beacon_delays, gra
 		line = plt.errorbar(num_users_vec, duty_cycle_mat_means*100, duty_cycle_mat_err*100, alpha=0.75, fmt='o', label='simulation')
 		plt.plot(num_users_vec, duty_cycle_mat_means*100, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=0.75)		
 		plt.axhline(y=target_duty_cycle, label='target', linestyle='--', linewidth=.75, color = 'k')
+		plt.xticks(num_users_vec)	
 		plt.ylabel('Duty Cycle [\%]')		
 		plt.ylim([0, 105])
 		plt.yticks([0, target_duty_cycle, 25, 50, 75, 100])
@@ -270,9 +281,14 @@ if __name__ == "__main__":
 	parser.add_argument('--time_slot_duration', type=int, help='Duration of a time slot in milliseconds.', default=24)	
 	parser.add_argument('--target_reception_rate', type=int, help='Target reception rate as an integer between 0 and 100.', default=95)	
 	parser.add_argument('--target_duty_cycle', type=int, help='Target duty cycle an integer between 0 and 100.', default=10)	
-	parser.add_argument('--delay_max_val', type=int, help='Optionally set to have the same limits on the delay graphs.', default=None)	
+	parser.add_argument('--ylim1', type=int, help='Minimum y-limit for delay plots.', default=None)	
+	parser.add_argument('--ylim2', type=int, help='Maximum y-limit for delay plots.', default=None)	
 
 	args = parser.parse_args()	
+
+	if ((args.ylim1 is not None and args.ylim2 is None) or (args.ylim2 is not None and args.ylim1 is None)):
+		raise RuntimeError('If you set one ylim, you have to set the other, too!')
+		exit(1)
  
 	expected_dirs = ['_imgs', '_data']
 	for dir in expected_dirs:
@@ -291,5 +307,5 @@ if __name__ == "__main__":
 	if not args.no_parse:		
 		parse(args.dir, args.n, args.num_reps, json_filename)
 	if not args.no_plot:
-		plot(json_filename, graph_filename_delays, graph_filename_beacon_delays, graph_filename_reception, graph_filename_no_of_candidate_slots, graph_filename_selected_slot, graph_filename_collisions, graph_filename_duty_cycle, args.time_slot_duration, args.target_reception_rate, args.target_duty_cycle, args.delay_max_val) 
+		plot(json_filename, graph_filename_delays, graph_filename_beacon_delays, graph_filename_reception, graph_filename_no_of_candidate_slots, graph_filename_selected_slot, graph_filename_collisions, graph_filename_duty_cycle, args.time_slot_duration, args.target_reception_rate, args.target_duty_cycle, args.ylim1, args.ylim2) 
     
