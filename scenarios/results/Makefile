@@ -99,7 +99,7 @@ sanity-check:
 	python3 eval.py --dir simresults/SanityCheck --filename sanity_check --sending_interval_start $(SANITY_CHECK_SEND_INT_START) --sending_interval_stop $(SANITY_CHECK_SEND_INT_END) --sending_interval_step $(SANITY_CHECK_SEND_INT_INCR) --num_reps $(SANITY_CHECK_NUM_REPS) --n $(SANITY_CHECK_NUM_USERS) $(SUFFIX)
 
 # RANDOMIZED SLOTTED ALOHA
-SH_MAC_RA_NUM_REPS = 5
+SH_MAC_RA_NUM_REPS = 20
 SH_MAC_RA_NUM_USERS = 1 5 10 20 30 40 50 60
 SH_MAC_RA_NUM_CANDIDATE_SLOTS = 2 5 10 40
 SH_MAC_RA_TIME_SLOT_DURATION = 24 #ms
@@ -131,7 +131,7 @@ sh-mac-sotdma_plot:
 sh-mac-sotdma: sh-mac-sotdma_sim sh-mac-sotdma_parse sh-mac-sotdma_plot
 
 # MCSOTDMA 
-SH_MAC_MCSTODMA_NUM_REPS = 5
+SH_MAC_MCSTODMA_NUM_REPS = 20
 SH_MAC_MCSTODMA_NUM_USERS = 1 5 10 20 30 40 50 60
 SH_MAC_MCSTODMA_TIME_SLOT_DURATION = 24 #ms
 SH_MAC_MCSTODMA_DELAY_MAX_VAL = 8000
