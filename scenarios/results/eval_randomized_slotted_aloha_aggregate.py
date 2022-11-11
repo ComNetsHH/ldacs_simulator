@@ -121,7 +121,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 		})
 		# 1st graph: delay		
 		fig = plt.figure()				
-		colors = ['tab:purple', 'tab:brown', 'tab:olive', 'tab:cyan']
+		colors = ['tab:purple', 'tab:brown', 'tab:cyan', 'tab:olive']
 		# two fake data points to add entries to the legend
 		line = plt.errorbar(min(num_users_vec), 0, 0, label='MAC Delay', color='k', fmt='o', alpha=.5)
 		line.remove()
