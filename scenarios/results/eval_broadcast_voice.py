@@ -14,7 +14,9 @@ json_label_reps = 'num_reps'
 json_label_num_users = 'num_users_mat'
 json_label_channel_err = 'channel_err_vec'
 json_label_reception_rate_mat = 'reception_rate_mat'
-json_label_delay_mat = 'delay_mat'
+json_label_delay_mat = 'mac_delay_mat'
+json_label_beacon_rx_time_means = 'beacon_rx_time_means'
+json_label_beacon_rx_time_err = 'beacon_rx_time_err'
 
 
 def calculate_confidence_interval(data, confidence):
@@ -27,7 +29,8 @@ def calculate_confidence_interval(data, confidence):
 def parse(dir, num_users_vec, channel_err_vec, num_reps, json_filename):		
 	reception_rate_mat = np.zeros((len(num_users_vec), len(channel_err_vec), num_reps))	
 	delay_mat = np.zeros((len(num_users_vec), len(channel_err_vec), num_reps))	
-	# broadcast_delay_mat = np.zeros((len(num_users_vec), len(channel_err_vec), num_reps))	
+	avg_beacon_rx_mat_means = np.zeros((len(num_users_vec), len(channel_err_vec)))
+	avg_beacon_rx_mat_err = np.zeros(((len(num_users_vec), len(channel_err_vec))))			
 	bar_max_i = len(num_users_vec) * len(channel_err_vec) * num_reps
 	bar_i = 0
 	print('parsing ' + str(bar_max_i) + ' result files')
@@ -38,7 +41,7 @@ def parse(dir, num_users_vec, channel_err_vec, num_reps, json_filename):
 		n = num_users_vec[i]		
 		for j in range(len(channel_err_vec)):
 			e = channel_err_vec[j]
-			# mean_delays_per_transmitter = np.zeros((num_reps, n))
+			beacon_rx_time_mat = np.zeros(num_reps)
 			# for each repetition
 			for rep in range(num_reps):
 				try:	
@@ -46,19 +49,16 @@ def parse(dir, num_users_vec, channel_err_vec, num_reps, json_filename):
 					if e < .1:
 						filename = dir + '/n=' + str(n) + ',e=' + str(e) + '-#' + str(rep) + '.sca.csv'
 					else:
-						filename = dir + '/n=' + str(n) + ',e=' + str("%.2f" % round(e,2)) + '-#' + str(rep) + '.sca.csv'
-					print(filename)
+						filename = dir + '/n=' + str(n) + ',e=' + str("%.2f" % round(e,2)) + '-#' + str(rep) + '.sca.csv'					
 					results = pd.read_csv(filename)	
-
-					#mcsotdma_statistic_num_broadcasts_*:vector
-
 					# get the mean delay
 					mean_delay_per_transmitter = np.zeros(n)
 					# get the total number of transmitted broadcasts
 					num_broadcasts_sent = 0					
-					for transmitter in range(n):
-						num_broadcasts_sent += int(results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_num_broadcasts_sent:last') & (results.module=='NW_TX_RX.txNodes[' + str(transmitter) + '].wlan[0].linkLayer')].value)												
-						mean_delay_per_transmitter[transmitter] = results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_broadcast_mac_delay:mean') & (results.module=='NW_TX_RX.txNodes[' + str(transmitter) + '].wlan[0].linkLayer')].value
+					for user in range(n):
+						num_broadcasts_sent += int(results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_num_broadcasts_sent:last') & (results.module=='NW_TX_RX.txNodes[' + str(user) + '].wlan[0].linkLayer')].value)												
+						mean_delay_per_transmitter[user] = results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_broadcast_mac_delay:mean') & (results.module=='NW_TX_RX.txNodes[' + str(user) + '].wlan[0].linkLayer')].value
+					beacon_rx_time_mat[rep] = results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_first_neighbor_beacon_rx_delay:mean') & (results.module=='NW_TX_RX.rxNode.wlan[0].linkLayer')].value
 					# take the number of received broadcasts at the RX node
 					reception_rate_mat[i][j][rep] = int(results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_num_broadcasts_received:last') & (results.module=='NW_TX_RX.rxNode.wlan[0].linkLayer')].value)										
 					# divide by all broadcasts to get the reception rate
@@ -69,7 +69,9 @@ def parse(dir, num_users_vec, channel_err_vec, num_reps, json_filename):
 					bar_i += 1
 					bar.update(bar_i)
 				except FileNotFoundError as err:
-					print(err)			
+					print(err)	
+			avg_beacon_rx_mat_means[i,j], _, plus = calculate_confidence_interval(beacon_rx_time_mat, confidence=.95)												
+			avg_beacon_rx_mat_err[i,j] = plus - avg_beacon_rx_mat_means[i,j]
 	bar.finish()			
 
 	# Save to JSON.
@@ -77,6 +79,8 @@ def parse(dir, num_users_vec, channel_err_vec, num_reps, json_filename):
 	json_data[json_label_reps] = num_reps
 	json_data[json_label_num_users] = np.array(num_users_vec).tolist()
 	json_data[json_label_channel_err] = np.array(channel_err_vec).tolist()
+	json_data[json_label_beacon_rx_time_means] = avg_beacon_rx_mat_means.tolist()		
+	json_data[json_label_beacon_rx_time_err] = avg_beacon_rx_mat_err.tolist()		
 	json_data[json_label_reception_rate_mat] = reception_rate_mat.tolist()		
 	json_data[json_label_delay_mat] = delay_mat.tolist()
 	with open(json_filename, 'w') as outfile:
@@ -96,6 +100,8 @@ def plot(json_filename, graph_filename_reception_rate, graph_filename_delay, tar
 		num_users_vec = np.array(json_data[json_label_num_users])
 		reception_rate_mat = np.array(json_data[json_label_reception_rate_mat])			
 		delay_mat = np.array(json_data[json_label_delay_mat])
+		avg_beacon_rx_mat_means = np.array(json_data[json_label_beacon_rx_time_means])
+		avg_beacon_rx_mat_err = np.array(json_data[json_label_beacon_rx_time_err])		
 		
 		# Calculate confidence intervals
 		broadcast_reception_rate_means = np.zeros((len(num_users_vec), len(channel_err_vec)))
@@ -116,6 +122,7 @@ def plot(json_filename, graph_filename_reception_rate, graph_filename_delay, tar
 			'text.usetex': True,
 			'pgf.rcfonts': False
 		})
+		# 1st graph: reception rate
 		fig = plt.figure()		
 		for i in range(len(channel_err_vec)):
 			line = plt.errorbar(num_users_vec, broadcast_reception_rate_means[:,i]*100, broadcast_reception_rate_err[:,i]*100, alpha=0.5, fmt='o', label='$e=' + str(channel_err_vec[i]) + '$')
@@ -135,13 +142,26 @@ def plot(json_filename, graph_filename_reception_rate, graph_filename_delay, tar
 		print("Graph saved to " + graph_filename_reception_rate)    
 		plt.close()
 
+		# 2nd graph: delays		
 		fig = plt.figure()		
+		colors = []
 		for i in range(len(channel_err_vec)):
 			line = plt.errorbar(num_users_vec, delay_means[:,i]*time_slot_duration, delay_err[:,i]*time_slot_duration, alpha=0.5, fmt='o', label='$e=' + str(channel_err_vec[i]) + '$')
 			plt.plot(num_users_vec, delay_means[:,i]*time_slot_duration, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=0.5)
-		plt.ylabel('Packet delay [ms]')				
+			colors.append(line[0].get_color())				
+		for i in range(len(channel_err_vec)):
+			line = plt.errorbar(num_users_vec, avg_beacon_rx_mat_means[:,i]*time_slot_duration, avg_beacon_rx_mat_err[:,i]*time_slot_duration, color=colors[i], fmt='x', alpha=.75)
+			plt.plot(num_users_vec, avg_beacon_rx_mat_means[:,i]*time_slot_duration, linestyle=':', linewidth=1, color=line[0].get_color(), alpha=.75)
+		# two fake data points to add entries to the legend
+		line = plt.errorbar(min(num_users_vec), min(avg_beacon_rx_mat_means[:,0]*time_slot_duration), 0, label='MAC Delay', color='k', fmt='o', alpha=.5)
+		line.remove()
+		line = plt.errorbar(min(num_users_vec), min(avg_beacon_rx_mat_means[:,0]*time_slot_duration), 0, label='E2E Delay', color='k', fmt='x', alpha=.5)
+		line.remove()
+		
+		
+		plt.ylabel('Delay [ms]')				
 		plt.xlabel('No. of neighbors $n$')		
-		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)				
+		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=3)				
 		fig.tight_layout()
 		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
 		fig.savefig(graph_filename_delay, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
