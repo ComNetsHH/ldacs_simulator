@@ -64,7 +64,7 @@ def parse(max_num_pp_links, dir, json_filename):
 				json_data[json_label_unicast_delay_vecs[i]] = delay_mat_4
 				json_data[json_label_unicast_delay_vec_times[i]] = delay_time_4
 			else:
-				print('This script currently supports up only to four values for l.')
+				print('This script currently supports only up to four values for l.')
 				exit(-1)
 			bar_i += 1
 			bar.update(bar_i)
@@ -87,8 +87,7 @@ def plot(json_filename, graph_filename, time_slot_duration):
 		# Load JSON
 		json_data = json.load(json_file)		
 		max_num_pp_links = np.array(json_data[json_label_max_num_pp_links])
-		
-   				
+		   				
 		plt.rcParams.update({
 			'font.family': 'serif',
 			"font.serif": 'Times',
@@ -102,17 +101,16 @@ def plot(json_filename, graph_filename, time_slot_duration):
 			l = max_num_pp_links[i]
 			delay_mat = np.array(json_data[json_label_unicast_delay_vecs[i]])		
 			delay_time = np.array(json_data[json_label_unicast_delay_vec_times[i]])		
-			plt.scatter(delay_time, delay_mat*time_slot_duration, alpha=.75, label='l=$' + str(l) + '$')		
+			plt.scatter(delay_time, delay_mat*time_slot_duration, alpha=.75, label='$l=' + str(l) + '$')		
 			plt.axhline(max(set(delay_mat), key=list(delay_mat).count)*time_slot_duration, color='k', linestyle='--', linewidth=0.75)			
 			yticks.append(max(set(delay_mat), key=list(delay_mat).count)*time_slot_duration)
 			if i == len(max_num_pp_links) - 1:
 				yticks.append(max(delay_mat)/2*time_slot_duration)
 				yticks.append(max(delay_mat)*time_slot_duration)
-		print(yticks)
 		plt.yticks(yticks, fontsize=7)
 		plt.xlabel('Simulation Time [s]')
 		plt.ylabel('MAC Delay [ms]')		
-		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.3), ncol=2)		
+		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
 		fig.tight_layout()
 		settings.init()
 		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
