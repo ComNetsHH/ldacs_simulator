@@ -161,9 +161,9 @@ def plot(json_filename, graph_filename_reception_rate, graph_filename_delay, tar
 		
 		plt.ylabel('Delay [ms]')				
 		plt.xlabel('No. of neighbors $n$')		
-		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=3)				
+		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=3, columnspacing=0.5)				
 		fig.tight_layout()
-		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
+		fig.set_size_inches((settings.fig_width, settings.fig_height*1.15), forward=False)
 		fig.savefig(graph_filename_delay, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
 		print("Graph saved to " + graph_filename_delay)    
 		plt.close()
