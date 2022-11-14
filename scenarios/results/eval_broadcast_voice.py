@@ -131,6 +131,7 @@ def plot(json_filename, graph_filename_reception_rate, graph_filename_delay, tar
 		plt.ylabel('Reception rate [\%]')				
 		plt.ylim([0, 105])
 		plt.xlabel('No. of neighbors $n$')		
+		plt.xticks(num_users_vec)
 		if target_reception_rate is not None:
 			plt.axhline(target_reception_rate*100, linestyle='--', linewidth=.5, color='k')
 			plt.yticks([0, target_reception_rate*100, 100])
@@ -156,11 +157,10 @@ def plot(json_filename, graph_filename_reception_rate, graph_filename_delay, tar
 		line = plt.errorbar(min(num_users_vec), min(avg_beacon_rx_mat_means[:,0]*time_slot_duration), 0, label='MAC Delay', color='k', fmt='o', alpha=.5)
 		line.remove()
 		line = plt.errorbar(min(num_users_vec), min(avg_beacon_rx_mat_means[:,0]*time_slot_duration), 0, label='E2E Delay', color='k', fmt='x', alpha=.5)
-		line.remove()
-		
-		
+		line.remove()				
 		plt.ylabel('Delay [ms]')				
 		plt.xlabel('No. of neighbors $n$')		
+		plt.xticks(num_users_vec)
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=3, columnspacing=0.5)				
 		fig.tight_layout()
 		fig.set_size_inches((settings.fig_width, settings.fig_height*1.15), forward=False)
