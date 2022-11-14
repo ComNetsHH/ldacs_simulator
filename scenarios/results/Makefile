@@ -285,43 +285,28 @@ sh-mac-mcsotdma-all_clean: sh-mac-mcsotdma-95_clean sh-mac-mcsotdma-75_clean sh-
 sh-mac-opt: 
 	python optimize_target_collsion_rate.py 
 
+
 # LINK ESTABLISHMENT TIMES
-PP_LINK_ESTBL_TEST_CONFIGNAME = PPLinkEstablishmentTimes
-PP_LINK_ESTBL_TEST_NUM_REPS = 50
-PP_LINK_ESTBL_TEST_NUM_PAIRS = 1
-PP_LINK_ESTBL_TEST_NUM_BROADCAST_USERS = 0 5 10 15 20 25 30
+PP_LINK_ESTBL_CONFIGNAME = PPLinkEstablishmentTimes
+PP_LINK_ESTBL_NUM_REPS = 50
+PP_LINK_ESTBL_NUM_PAIRS = 1
+PP_LINK_ESTBL_NUM_BROADCAST_USERS = 0 5 10 15 20 25 30 35 40 45 50 55 60
+PP_LINK_ESTBL_MAX_NUM_LINKS = 1 2 3 4
 pp-link-estbl_sim:
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../point_to_point_channel.ini -c $(PP_LINK_ESTBL_TEST_CONFIGNAME) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../point_to_point_channel.ini -c $(PP_LINK_ESTBL_CONFIGNAME) $(INCL)
 
 pp-link-estbl_parse:
-	./convert-omnet-csv.sh simresults/$(PP_LINK_ESTBL_TEST_CONFIGNAME); \
-	./convert-vec-omnet-csv.sh simresults/$(PP_LINK_ESTBL_TEST_CONFIGNAME)
+	./convert-omnet-csv.sh simresults/$(PP_LINK_ESTBL_CONFIGNAME); \
+	./convert-vec-omnet-csv.sh simresults/$(PP_LINK_ESTBL_CONFIGNAME)
 
 pp-link-estbl_plot:
-	python3 eval_link_estbl_time.py --dir simresults/$(PP_LINK_ESTBL_TEST_CONFIGNAME) --filename link_estbl_time --num_reps $(PP_LINK_ESTBL_TEST_NUM_REPS) --n $(PP_LINK_ESTBL_TEST_NUM_PAIRS) --m $(PP_LINK_ESTBL_TEST_NUM_BROADCAST_USERS) $(SUFFIX)
+	python3 eval_link_estbl_time.py --dir simresults/$(PP_LINK_ESTBL_CONFIGNAME) --filename link_estbl_time --num_reps $(PP_LINK_ESTBL_NUM_REPS) --n $(PP_LINK_ESTBL_NUM_PAIRS) --m $(PP_LINK_ESTBL_NUM_BROADCAST_USERS) --max_num_links $(PP_LINK_ESTBL_MAX_NUM_LINKS) $(SUFFIX)
 
 pp-link-estbl: pp-link-estbl_sim pp-link-estbl_parse pp-link-estbl_plot
 
 pp-link-estbl_clean:
-	rm simresults/$(PP_LINK_ESTBL_TEST_CONFIGNAME)/*
+	rm simresults/$(PP_LINK_ESTBL_CONFIGNAME)/*
 
-# LINK ESTABLISHMENT TIMES W/O SLOT ADVERTISEMENT
-WORST_CASE_LINK_ESTBL_CONFIGNAME = WorstCaseLinkEstbl
-WORST_CASE_LINK_ESTBL_NUM_REPS = 50
-WORST_CASE_LINK_ESTBL_CHANNEL_ERROR = 0.0 0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 0.1
-worst-case-link-estbl_sim:
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../point_to_point_channel.ini -c $(WORST_CASE_LINK_ESTBL_CONFIGNAME) $(INCL)
-
-worst-case-link-estbl_parse:
-	./convert-omnet-csv.sh simresults/$(WORST_CASE_LINK_ESTBL_CONFIGNAME)
-
-worst-case-link-estbl_plot:
-	python3 eval_worst_case_link_estbl_time.py --dir simresults/$(WORST_CASE_LINK_ESTBL_CONFIGNAME) --filename worst_case_link_estbl_time --num_reps $(WORST_CASE_LINK_ESTBL_NUM_REPS) --e $(WORST_CASE_LINK_ESTBL_CHANNEL_ERROR) $(SUFFIX)
-
-worst-case-link-estbl: worst-case-link-estbl_sim worst-case-link-estbl_parse worst-case-link-estbl_plot
-
-worst-case-link-estbl_clean:
-	rm simresults/$(WORST_CASE_LINK_ESTBL_CONFIGNAME)/*
 
 # PP VOICE
 PP_VOICE_NAIVE_CONFIGNAME = PPVoice
