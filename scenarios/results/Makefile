@@ -107,7 +107,7 @@ SH_MAC_RA_CONFIGNAME = RandomizedSlottedAloha
 SH_MAC_YLIM1 = 20
 SH_MAC_YLIM2 = 20000
 sh-mac-aloha_sim:	
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_RA_CONFIGNAME) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(SH_MAC_RA_CONFIGNAME) $(INCL)
 
 sh-mac-aloha_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_RA_CONFIGNAME)
@@ -120,7 +120,7 @@ sh-mac-aloha: sh-mac-aloha_sim sh-mac-aloha_parse sh-mac-aloha_plot
 # SOTDMA
 SH_MAC_SOTDMA_CONFIGNAME = SOTDMA
 sh-mac-sotdma_sim:
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_SOTDMA_CONFIGNAME) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(SH_MAC_SOTDMA_CONFIGNAME) $(INCL)
 
 sh-mac-sotdma_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_SOTDMA_CONFIGNAME)
@@ -140,7 +140,7 @@ SH_MAC_MCSTODMA_DELAY_MAX_VAL = 8000
 SH_MAC_MCSTODMA_CONFIGNAME_95 = MCSOTDMA95  
 SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_95 = 95
 sh-mac-mcsotdma-95_sim:	
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_95) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_95) $(INCL)
 
 sh-mac-mcsotdma-95_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_95)
@@ -156,7 +156,7 @@ sh-mac-mcsotdma-95_clean:
 # with slot advertisement
 SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_95 = MCSOTDMA95SlotAdv  
 sh-mac-mcsotdma-95-slotadv_sim:	
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_95) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_95) $(INCL)
 
 sh-mac-mcsotdma-95-slotadv_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_95)
@@ -175,7 +175,7 @@ sh-mac-mcsotdma-95-slotadv_clean:
 SH_MAC_MCSTODMA_CONFIGNAME_75 = MCSOTDMA75
 SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_75 = 75
 sh-mac-mcsotdma-75_sim:	
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_75) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_75) $(INCL)
 
 sh-mac-mcsotdma-75_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_75)
@@ -191,7 +191,7 @@ sh-mac-mcsotdma-75_clean:
 # with slot advertisement
 SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_75 = MCSOTDMA75SlotAdv  
 sh-mac-mcsotdma-75-slotadv_sim:	
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_75) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_75) $(INCL)
 
 sh-mac-mcsotdma-75-slotadv_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_75)
@@ -210,7 +210,7 @@ sh-mac-mcsotdma-75-slotadv_clean:
 SH_MAC_MCSTODMA_CONFIGNAME_OPT = MCSOTDMAOptimal
 SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_OPT = 37
 sh-mac-mcsotdma-opt_sim:
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_OPT) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_OPT) $(INCL)
 
 sh-mac-mcsotdma-opt_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_OPT)
@@ -226,7 +226,7 @@ sh-mac-mcsotdma-opt_clean:
 # with slot advertisement
 SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_OPT = MCSOTDMAOptimalSlotAdv  
 sh-mac-mcsotdma-opt-slotadv_sim:	
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_OPT) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_OPT) $(INCL)
 
 sh-mac-mcsotdma-opt-slotadv_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_OPT)
@@ -245,7 +245,7 @@ sh-mac-mcsotdma-opt-slotadv_clean:
 SH_MAC_MCSTODMA_CONFIGNAME_05 = MCSOTDMA05
 SH_MAC_MCSTODMA_TARGET_RECEPTION_RATE_05 = 5
 sh-mac-mcsotdma-05_sim:	
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_05) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_05) $(INCL)
 
 sh-mac-mcsotdma-05_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_05)
@@ -258,7 +258,7 @@ sh-mac-mcsotdma-05: sh-mac-mcsotdma-05_sim sh-mac-mcsotdma-05_parse sh-mac-mcsot
 # with slot advertisement
 SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_05 = MCSOTDMA05SlotAdv
 sh-mac-mcsotdma-05-slotadv_sim:	
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_05) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_05) $(INCL)
 
 sh-mac-mcsotdma-05-slotadv_parse:
 	./convert-omnet-csv.sh simresults/$(SH_MAC_MCSTODMA_CONFIGNAME_SLOTADV_05)
@@ -291,7 +291,7 @@ PP_LINK_ESTBL_TEST_NUM_REPS = 50
 PP_LINK_ESTBL_TEST_NUM_PAIRS = 1
 PP_LINK_ESTBL_TEST_NUM_BROADCAST_USERS = 0 5 10 15 20 25 30
 pp-link-estbl_sim:
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../link_establishment.ini -c $(PP_LINK_ESTBL_TEST_CONFIGNAME) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../point_to_point_channel.ini -c $(PP_LINK_ESTBL_TEST_CONFIGNAME) $(INCL)
 
 pp-link-estbl_parse:
 	./convert-omnet-csv.sh simresults/$(PP_LINK_ESTBL_TEST_CONFIGNAME); \
@@ -310,7 +310,7 @@ WORST_CASE_LINK_ESTBL_CONFIGNAME = WorstCaseLinkEstbl
 WORST_CASE_LINK_ESTBL_NUM_REPS = 50
 WORST_CASE_LINK_ESTBL_CHANNEL_ERROR = 0.0 0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 0.1
 worst-case-link-estbl_sim:
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../link_establishment.ini -c $(WORST_CASE_LINK_ESTBL_CONFIGNAME) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../point_to_point_channel.ini -c $(WORST_CASE_LINK_ESTBL_CONFIGNAME) $(INCL)
 
 worst-case-link-estbl_parse:
 	./convert-omnet-csv.sh simresults/$(WORST_CASE_LINK_ESTBL_CONFIGNAME)
@@ -328,7 +328,7 @@ PP_VOICE_NAIVE_CONFIGNAME = PPVoice
 PP_VOICE_TIME_SLOT_DURATION = 24
 PP_VOICE_NUM_CONTENDERS = 10
 pp-voice_sim:
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../link_establishment.ini -c $(PP_VOICE_NAIVE_CONFIGNAME) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../point_to_point_channel.ini -c $(PP_VOICE_NAIVE_CONFIGNAME) $(INCL)
 
 pp-voice_parse:
 	./convert-omnet-csv.sh simresults/$(PP_VOICE_NAIVE_CONFIGNAME); \
@@ -350,7 +350,7 @@ BROADCAST_VOICE_NUM_USERS = 1 5 10 15 20 25 30
 BROADCAST_VOICE_CHANNEL_ERROR = 0 0.05 0.10 0.15
 BROADCAST_VOICE_TIME_SLOT_DURATION = 24
 broadcast-voice_sim:
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../random_access.ini -c $(BROADCAST_VOICE_CONFIGNAME) $(INCL)
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(BROADCAST_VOICE_CONFIGNAME) $(INCL)
 
 broadcast-voice_parse:
 	./convert-omnet-csv.sh simresults/$(BROADCAST_VOICE_CONFIGNAME)
