@@ -188,7 +188,7 @@ if __name__ == "__main__":
 		if not os.path.exists(dir):
 			os.makedirs(dir)
 		
-	output_filename_base = args.filename + "_e-" + str(args.channel_errors) + "-rep" + str(args.num_reps)
+	output_filename_base = args.filename + "_e-" + str(args.channel_errors) + "_n-" + str(args.num_users) + "-rep" + str(args.num_reps)
 	json_filename = "_data/" + output_filename_base + ".json"
 	graph_filename_reception_rate = "_imgs/" + output_filename_base + "_reception_rate.pdf"	
 	graph_filename_delay_delay = "_imgs/" + output_filename_base + "_delay.pdf"	
