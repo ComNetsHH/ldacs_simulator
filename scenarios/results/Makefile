@@ -131,7 +131,7 @@ sh-mac-sotdma_plot:
 sh-mac-sotdma: sh-mac-sotdma_sim sh-mac-sotdma_parse sh-mac-sotdma_plot
 
 # MCSOTDMA 
-SH_MAC_MCSTODMA_NUM_REPS = 10
+SH_MAC_MCSTODMA_NUM_REPS = 20
 SH_MAC_MCSTODMA_NUM_USERS = 1 5 10 20 30 40 50 60
 SH_MAC_MCSTODMA_TIME_SLOT_DURATION = 24 #ms
 
