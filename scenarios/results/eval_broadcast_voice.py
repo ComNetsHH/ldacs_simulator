@@ -125,7 +125,7 @@ def plot(json_filename, graph_filename_reception_rate, graph_filename_delay, tar
 		# 1st graph: reception rate
 		fig = plt.figure()		
 		for i in range(len(channel_err_vec)):
-			line = plt.errorbar(num_users_vec, broadcast_reception_rate_means[:,i]*100, broadcast_reception_rate_err[:,i]*100, alpha=0.5, fmt='o', label='$e=' + str(channel_err_vec[i]) + '$')
+			line = plt.errorbar(num_users_vec, broadcast_reception_rate_means[:,i]*100, broadcast_reception_rate_err[:,i]*100, alpha=0.5, fmt='o', label='$r=' + str(channel_err_vec[i]) + '$')
 			plt.plot(num_users_vec, broadcast_reception_rate_means[:,i]*100, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=0.5)
 			plt.axhline((1.0-channel_err_vec[i])*100, linestyle='--', linewidth=.5, color='k')
 		plt.ylabel('Reception rate [\%]')				
@@ -147,7 +147,7 @@ def plot(json_filename, graph_filename_reception_rate, graph_filename_delay, tar
 		fig = plt.figure()		
 		colors = []
 		for i in range(len(channel_err_vec)):
-			line = plt.errorbar(num_users_vec, delay_means[:,i]*time_slot_duration, delay_err[:,i]*time_slot_duration, alpha=0.5, fmt='o', label='$e=' + str(channel_err_vec[i]) + '$')
+			line = plt.errorbar(num_users_vec, delay_means[:,i]*time_slot_duration, delay_err[:,i]*time_slot_duration, alpha=0.5, fmt='o', label='$r=' + str(channel_err_vec[i]) + '$')
 			plt.plot(num_users_vec, delay_means[:,i]*time_slot_duration, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=0.5)
 			colors.append(line[0].get_color())				
 		for i in range(len(channel_err_vec)):
