@@ -159,8 +159,8 @@ make MODE=release -j$NUM_CPUS
 
 cd ../../..
 
-# Install python dependencies, TODO: create requirements.txt
-echo -e "\n\nInstall python packages"
-pip install --user progressbar2 pandas numpy scipy
+cd ../../scenarios/results
+echo -e "\n\nInstall python packages into local pipenv environment"
+make install-python-env
 echo -e "\n\nAll done! Try it by running the following commands:\ncd scenarios/results\nmake sanity-check\nThis should start simulations and create graphs in the scenarios/results/_imgs/ directory."
 

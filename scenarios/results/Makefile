@@ -31,6 +31,10 @@ update-sim-model:
 # UPDATE pulls all changes from the currently selected branches of all repositories
 update: update-arq update-rlc update-glue update-wrapper update-radio update-mcsotdma update-intairnet-gpsr update-traceBasedUdpApp update-sim-model
 
+# create a virtual Python environment to install all packages that are required for plotting results
+install-python-env:
+	pipenv install
+
 NUM_CPUS = 1 # number of CPUs to allow OMNeT++ to use
 SUFFIX = 
 
