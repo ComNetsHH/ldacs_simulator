@@ -114,7 +114,8 @@ def plot(json_filename, graph_filename_delays, graph_filename_distribution, time
 			y = [float(s) for s in next(reader)]
 		fig = plt.figure()
 		all_vals = [value*time_slot_duration for sublist in beacon_rx_vals_mat for value in sublist]
-		plt.hist(all_vals, density=True, cumulative=True, histtype='step', label='empirical')
+		bin_width = 50
+		plt.hist(all_vals, density=True, cumulative=True, histtype='step', label='empirical', bins=range(0, int(max(all_vals)), bin_width))
 		plt.plot(x, y, '--', label='analytical')
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='lower center')
 		plt.xlabel('Delay $x$ [ms]')
