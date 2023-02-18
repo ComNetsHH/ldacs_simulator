@@ -135,7 +135,7 @@ sh-mac-sotdma_plot:
 sh-mac-sotdma: sh-mac-sotdma_sim sh-mac-sotdma_parse sh-mac-sotdma_plot
 
 # MCSOTDMA 
-SH_MAC_MCSTODMA_NUM_REPS = 20
+SH_MAC_MCSTODMA_NUM_REPS = 10
 SH_MAC_MCSTODMA_NUM_USERS = 1 5 10 20 30 40 50 60
 SH_MAC_MCSTODMA_TIME_SLOT_DURATION = 24 #ms
 
@@ -352,3 +352,28 @@ broadcast-voice: broadcast-voice_sim broadcast-voice_parse broadcast-voice_plot
 
 broadcast-voice_clean:
 	rm simresults/$(BROADCAST_VOICE_CONFIGNAME)/*
+
+
+# SIGNAL FLOW GRAPH COMPARISON
+SFG_COMPARISON_NUM_REPS = 40
+SFG_COMPARISON_NUM_USERS_1 = 5
+SFG_COMPARISON_SFG_CSV_FILE_1 = sfg_mat_5.csv
+SFG_COMPARISON_NUM_USERS_2 = 30
+SFG_COMPARISON_SFG_CSV_FILE_2 = sfg_mat_30.csv
+SFG_COMPARISON_TIME_SLOT_DURATION = 24 #ms
+SFG_COMPARISON_CONFIGNAME = SignalFlowGraphComparison
+sh-sfg-comparison_sim:	
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(SFG_COMPARISON_CONFIGNAME) $(INCL)
+
+sh-sfg-comparison_parse:
+	./convert-omnet-csv.sh simresults/$(SFG_COMPARISON_CONFIGNAME); \
+	./convert-vec-omnet-csv.sh simresults/$(SFG_COMPARISON_CONFIGNAME)
+
+sh-sfg-comparison_plot:
+	pipenv run python3 eval_sh_sfg_comparison.py --sfg_csv_file $(SFG_COMPARISON_SFG_CSV_FILE_1) --dir simresults/$(SFG_COMPARISON_CONFIGNAME) --filename sfg_comparison --n $(SFG_COMPARISON_NUM_USERS_1) --num_reps $(SFG_COMPARISON_NUM_REPS) --time_slot_duration $(SFG_COMPARISON_TIME_SLOT_DURATION) $(SUFFIX); \
+	pipenv run python3 eval_sh_sfg_comparison.py --sfg_csv_file $(SFG_COMPARISON_SFG_CSV_FILE_2) --dir simresults/$(SFG_COMPARISON_CONFIGNAME) --filename sfg_comparison --n $(SFG_COMPARISON_NUM_USERS_2) --num_reps $(SFG_COMPARISON_NUM_REPS) --time_slot_duration $(SFG_COMPARISON_TIME_SLOT_DURATION) $(SUFFIX)
+
+sh-sfg-comparison: sh-sfg-comparison_sim sh-sfg-comparison_parse sh-sfg-comparison_plot
+
+sh-sfg-comparison_clean:
+	rm simresults/$(SFG_COMPARISON_CONFIGNAME)/*
