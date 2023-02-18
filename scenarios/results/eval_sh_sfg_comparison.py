@@ -31,8 +31,7 @@ def parse(dir, num_users, num_reps, json_filename):
 	bar_i = 0
 	print('parsing ' + str(bar_max_i) + ' result files')
 	bar = progressbar.ProgressBar(max_value=bar_max_i, widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
-	bar.start()		
-	# for each number of transmitters
+	bar.start()			
 	for rep in range(num_reps):		
 		try:
 			filename = dir + '/n=' + str(num_users) + '-#' + str(rep)
@@ -52,7 +51,7 @@ def parse(dir, num_users, num_reps, json_filename):
 			print(err)
 	bar.finish()		
 
-	# Save to JSON.
+	# save to JSON
 	json_data = {}
 	json_data[json_label_n_users] = num_users
 	json_data[json_label_reps] = num_reps
@@ -69,7 +68,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_distribution, time
 	Reads 'json_filename' and plots the values to 'graph_filename'.
 	"""
 	with open(json_filename) as json_file:		
-		# Load JSON
+		# load JSON
 		json_data = json.load(json_file)
 		num_users = np.array(json_data[json_label_n_users])
 		num_reps = np.array(json_data[json_label_reps])
@@ -77,8 +76,10 @@ def plot(json_filename, graph_filename_delays, graph_filename_distribution, time
 		beacon_rx_vals_mat = []
 		beacon_rx_mean = []
 		for rep in range(num_reps):
-			beacon_rx_times_mat.append(np.array(json_data[json_label_beacon_rx_times + '_' + str(rep)]))			
+			# the lists are of uneven length, because users transmit different numbers of times per simulation repetition
+			beacon_rx_times_mat.append(np.array(json_data[json_label_beacon_rx_times + '_' + str(rep)]))
 			beacon_rx_vals_mat.append(np.array(json_data[json_label_beacon_rx_vals + '_' + str(rep)]))
+			# so we need this awkward mean computation, too
 			beacon_rx_mean.append(np.mean(beacon_rx_vals_mat[rep]))
 		beacon_rx_mean = np.mean(beacon_rx_mean) * time_slot_duration
    				
@@ -113,8 +114,10 @@ def plot(json_filename, graph_filename_delays, graph_filename_distribution, time
 			x = [float(s) for s in next(reader)]
 			y = [float(s) for s in next(reader)]
 		fig = plt.figure()
+		# aggregate all values of all repetitions into a flat list
 		all_vals = [value*time_slot_duration for sublist in beacon_rx_vals_mat for value in sublist]
 		bin_width = 50
+		# compute empirical CDF from simulation data
 		plt.hist(all_vals, density=True, cumulative=True, histtype='step', label='empirical', bins=range(0, int(max(all_vals)), bin_width))
 		plt.plot(x, y, '--', label='analytical')
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='lower center')
@@ -137,16 +140,9 @@ if __name__ == "__main__":
 	parser.add_argument('--n', type=int, help='Number of transmitters.', default=5)
 	parser.add_argument('--num_reps', type=int, help='Number of repetitions that should be considered.', default=1)
 	parser.add_argument('--time_slot_duration', type=int, help='Duration of a time slot in milliseconds.', default=24)
-	parser.add_argument('--sfg_csv_file', type=str, help='Filename of Matlab-generated CSV that contains the output of the Signal Flow Grpah (SFG) model.', default='unspecified')
-	# parser.add_argument('--target_reception_rates', nargs='+', type=int, help='Target reception rate as an integer between 0 and 100.', default=[95])	
-	# parser.add_argument('--ylim1', type=int, help='Minimum y-limit for delay plots.', default=None)	
-	# parser.add_argument('--ylim2', type=int, help='Maximum y-limit for delay plots.', default=None)	
+	parser.add_argument('--sfg_csv_file', type=str, help='Filename of Matlab-generated CSV that contains the output of the Signal Flow Grpah (SFG) model.', default='unspecified')	
 
 	args = parser.parse_args()	
-
-	# if ((args.ylim1 is not None and args.ylim2 is None) or (args.ylim2 is not None and args.ylim1 is None)):
-	# 	raise RuntimeError('If you set one ylim, you have to set the other, too!')
-	# 	exit(1)
  
 	expected_dirs = ['_imgs', '_data']
 	for dir in expected_dirs:
@@ -156,8 +152,7 @@ if __name__ == "__main__":
 	output_filename_base = args.filename + "_n-" + str(args.n) + "-rep" + str(args.num_reps)
 	json_filename = "_data/" + output_filename_base + ".json"
 	graph_filename_delays = "_imgs/" + output_filename_base + "_delay.pdf"
-	graph_filename_distribution = "_imgs/" + output_filename_base + "_dist.pdf"	
-	# graph_filename_reception = "_imgs/" + output_filename_base + "_reception-rate.pdf"		
+	graph_filename_distribution = "_imgs/" + output_filename_base + "_dist.pdf"		
 	if not args.no_parse:		
 		parse(args.dir, args.n, args.num_reps, json_filename)
 	if not args.no_plot:
