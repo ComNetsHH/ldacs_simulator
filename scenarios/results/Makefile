@@ -110,6 +110,13 @@ SH_MAC_RA_TIME_SLOT_DURATION = 24 #ms
 SH_MAC_RA_CONFIGNAME = RandomizedSlottedAloha
 SH_MAC_YLIM1 = 20
 SH_MAC_YLIM2 = 20000
+
+mcsotdma-paper:
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c General $(INCL) 
+
+mcsotdma-paper-qtenv:
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c General $(INCL) -u Qtenv 
+	
 sh-mac-aloha_sim:	
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(SH_MAC_RA_CONFIGNAME) $(INCL)
 
