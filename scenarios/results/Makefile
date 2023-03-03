@@ -381,3 +381,12 @@ sh-sfg-comparison: sh-sfg-comparison_sim sh-sfg-comparison_parse sh-sfg-comparis
 
 sh-sfg-comparison_clean:
 	rm simresults/$(SFG_COMPARISON_CONFIGNAME)/*
+
+
+# MOBILITY SCENARIO
+MOBILITY_NUM_REPS = 1
+MOBILITY_NUM_USERS_GROUP_1 = 15
+MOBILITY_NUM_USERS_GROUP_2 = 15
+MOBILITY_CONFIGNAME = Mobility
+mobility_sim:
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c $(MOBILITY_CONFIGNAME) $(INCL)
