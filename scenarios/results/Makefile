@@ -110,12 +110,6 @@ SH_MAC_RA_TIME_SLOT_DURATION = 24 #ms
 SH_MAC_RA_CONFIGNAME = RandomizedSlottedAloha
 SH_MAC_YLIM1 = 20
 SH_MAC_YLIM2 = 20000
-
-mcsotdma-paper:
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c General $(INCL) 
-
-mcsotdma-paper-qtenv:
-	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c General $(INCL) -u Qtenv 
 	
 sh-mac-aloha_sim:	
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(SH_MAC_RA_CONFIGNAME) $(INCL)
@@ -389,11 +383,13 @@ sh-sfg-comparison: sh-sfg-comparison_sim sh-sfg-comparison_parse sh-sfg-comparis
 sh-sfg-comparison_clean:
 	rm simresults/$(SFG_COMPARISON_CONFIGNAME)/*
 
-
 # MOBILITY SCENARIO
 MOBILITY_NUM_REPS = 1
 MOBILITY_NUM_USERS_GROUP_1 = 15
 MOBILITY_NUM_USERS_GROUP_2 = 15
-MOBILITY_CONFIGNAME = Mobility
+MOBILITY_CONFIGNAME = NoApps
 mobility_sim:
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c $(MOBILITY_CONFIGNAME) $(INCL)
+
+mobility_sim-qtenv:
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c $(MOBILITY_CONFIGNAME) $(INCL) -u Qtenv 

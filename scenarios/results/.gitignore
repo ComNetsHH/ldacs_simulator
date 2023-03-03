@@ -3,3 +3,5 @@ _data/
 slurm*.out
 Makefile.*
 __pycache__/
+*.out
+
