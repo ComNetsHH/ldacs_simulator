@@ -16,6 +16,13 @@ json_label_n_users = 'n_users'
 json_label_beacon_rx_vals = 'beacon_rx_time_vals'
 json_label_beacon_rx_times = 'beacon_rx_time_times'
 
+# from https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array/2566508#2566508
+def find_nearest(array, value):
+	array = np.asarray(array)
+	idx = (np.abs(array - value)).argmin()
+	return idx
+
+
 def calculate_confidence_interval(data, confidence):
 	n = len(data)
 	m = np.mean(data)
@@ -63,7 +70,7 @@ def parse(dir, num_users, num_reps, json_filename):
 	print("Saved parsed results in '" + json_filename + "'.")    	
 
 
-def plot(json_filename, graph_filename_delays, graph_filename_distribution, time_slot_duration, sfg_csv_file):
+def plot(json_filename, graph_filename_delays, graph_filename_distribution, graph_filename_comparison, time_slot_duration, sfg_csv_file):
 	"""
 	Reads 'json_filename' and plots the values to 'graph_filename'.
 	"""
@@ -90,12 +97,15 @@ def plot(json_filename, graph_filename_delays, graph_filename_distribution, time
 			'text.usetex': True,
 			'pgf.rcfonts': False
 		})
-		# 1st graph: delay
+		# empirical delay graph
 		fig = plt.figure()
+		max_y = 0
 		for rep in range(num_reps):
-			plt.scatter(beacon_rx_times_mat[rep], beacon_rx_vals_mat[rep]*time_slot_duration, s=.25)
-		plt.axhline(beacon_rx_mean, linestyle='--', color='k', linewidth=1, label='mean delay')
-		plt.yticks([0, 100, int(beacon_rx_mean), 400, 600])
+			plt.scatter(beacon_rx_times_mat[rep], np.multiply(beacon_rx_vals_mat[rep], time_slot_duration), s=.25, color='k')
+			if np.max(np.multiply(beacon_rx_vals_mat[rep], time_slot_duration)) > max_y:
+				max_y = np.max(np.multiply(beacon_rx_vals_mat[rep], time_slot_duration))
+		plt.axhline(beacon_rx_mean, linestyle='--', color='lightgray', linewidth=1, label='empirical mean')
+		plt.yticks([0, int(beacon_rx_mean), (max_y + int(beacon_rx_mean)) / 2 , max_y])
 		plt.ylabel('Delay until reception [ms]')
 		plt.xlabel('Simulation time $t$ [s]')
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center')
@@ -106,28 +116,47 @@ def plot(json_filename, graph_filename_delays, graph_filename_distribution, time
 		print("Graph saved to " + graph_filename_delays)    
 		plt.close()
 
-		# 2nd graph: comparison with Matlab-generated Signal Flow Graph model output
+		# analytical CDF graph
 		x = None
 		y = None
+		# read CDF from Matlab output file
 		with open(sfg_csv_file) as csvfile:
 			reader = csv.reader(csvfile, delimiter=',')
 			x = [float(s) for s in next(reader)]
 			y = [float(s) for s in next(reader)]
-		fig = plt.figure()
-		# aggregate all values of all repetitions into a flat list
-		all_vals = [value*time_slot_duration for sublist in beacon_rx_vals_mat for value in sublist]
+		distribution_mean = np.sum(np.multiply(x, y)) * time_slot_duration  # compute mean from the SFG's distrubtion
+		nearest_99_index = find_nearest(np.cumsum(y), 0.99)  # find nearest index to 99% in CDF
+		fig = plt.figure()		
+		plt.plot(np.multiply(x, time_slot_duration), np.cumsum(y), label='analytical', linestyle='--', color='gray')
+		plt.axvline(distribution_mean, linestyle='--', color='gray', linewidth=.5, label='analytical mean')
+		plt.axvline(np.multiply(x, time_slot_duration)[nearest_99_index], linestyle='-.', color='gray', linewidth=.5, label='99\%')
+		plt.xlabel('Delay $x$ [ms]')
+		plt.ylabel('$P(X \leq x)$')
+		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.25), ncol=2)
+		plt.xticks([distribution_mean, np.multiply(x, time_slot_duration)[nearest_99_index], np.max(np.multiply(x, time_slot_duration))])
+		fig.tight_layout()
+		settings.init()
+		fig.set_size_inches((settings.fig_width, settings.fig_height*1.12), forward=False)
+		fig.savefig(graph_filename_distribution, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
+		print("Graph saved to " + graph_filename_distribution)    
+		# comparison with Matlab-generated Signal Flow Graph model output	
+				
+		all_vals = [value*time_slot_duration for sublist in beacon_rx_vals_mat for value in sublist]  # flat list from repetitions-array
 		bin_width = 50
+		fig = plt.figure()		
 		# compute empirical CDF from simulation data
-		plt.hist(all_vals, density=True, cumulative=True, histtype='step', label='empirical', bins=range(0, int(max(all_vals)), bin_width))
-		plt.plot(x, y, '--', label='analytical')
+		plt.plot(np.multiply(x, time_slot_duration), np.cumsum(y), label='analytical', linestyle='--', color='gray')
+		plt.axvline(distribution_mean, linestyle='--', color='gray', linewidth=.5, label='analytical mean')
+		plt.hist(all_vals, density=True, cumulative=True, histtype='step', color='k', label='empirical', bins=range(0, int(max(all_vals)), bin_width))
+		plt.xticks([distribution_mean, np.max(all_vals)])
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='lower center')
 		plt.xlabel('Delay $x$ [ms]')
 		plt.ylabel('$P(X \leq x)$')
 		fig.tight_layout()
 		settings.init()
 		fig.set_size_inches((settings.fig_width, settings.fig_height*1.12), forward=False)
-		fig.savefig(graph_filename_distribution, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
-		print("Graph saved to " + graph_filename_distribution)    
+		fig.savefig(graph_filename_comparison, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
+		print("Graph saved to " + graph_filename_comparison)    
 		plt.close()
 
 
@@ -153,8 +182,9 @@ if __name__ == "__main__":
 	json_filename = "_data/" + output_filename_base + ".json"
 	graph_filename_delays = "_imgs/" + output_filename_base + "_delay.pdf"
 	graph_filename_distribution = "_imgs/" + output_filename_base + "_dist.pdf"		
+	graph_filename_comparison = "_imgs/" + output_filename_base + "_comparison.pdf"		
 	if not args.no_parse:		
 		parse(args.dir, args.n, args.num_reps, json_filename)
 	if not args.no_plot:
-		plot(json_filename, graph_filename_delays, graph_filename_distribution, args.time_slot_duration, args.sfg_csv_file) 
+		plot(json_filename, graph_filename_delays, graph_filename_distribution, graph_filename_comparison, args.time_slot_duration, args.sfg_csv_file) 
     

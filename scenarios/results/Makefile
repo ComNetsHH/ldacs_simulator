@@ -355,9 +355,9 @@ broadcast-voice_clean:
 
 
 # SIGNAL FLOW GRAPH COMPARISON
-SFG_COMPARISON_NUM_REPS = 40
-SFG_COMPARISON_NUM_USERS_1 = 5
-SFG_COMPARISON_SFG_CSV_FILE_1 = sfg_mat_5.csv
+SFG_COMPARISON_NUM_REPS = 10
+SFG_COMPARISON_NUM_USERS_1 = 10
+SFG_COMPARISON_SFG_CSV_FILE_1 = sfg_mat_10.csv
 SFG_COMPARISON_NUM_USERS_2 = 30
 SFG_COMPARISON_SFG_CSV_FILE_2 = sfg_mat_30.csv
 SFG_COMPARISON_TIME_SLOT_DURATION = 24 #ms
@@ -369,11 +369,15 @@ sh-sfg-comparison_parse:
 	./convert-omnet-csv.sh simresults/$(SFG_COMPARISON_CONFIGNAME); \
 	./convert-vec-omnet-csv.sh simresults/$(SFG_COMPARISON_CONFIGNAME)
 
-sh-sfg-comparison_plot:
-	pipenv run python3 eval_sh_sfg_comparison.py --sfg_csv_file $(SFG_COMPARISON_SFG_CSV_FILE_1) --dir simresults/$(SFG_COMPARISON_CONFIGNAME) --filename sfg_comparison --n $(SFG_COMPARISON_NUM_USERS_1) --num_reps $(SFG_COMPARISON_NUM_REPS) --time_slot_duration $(SFG_COMPARISON_TIME_SLOT_DURATION) $(SUFFIX); \
+sh-sfg-comparison_plot_1:
+	echo "Run Matlab script generate_plot__sh_channel_access_1.m in Matlab to generate the CSV files for analytical Signal Flow Graph evaluation if it doesn't exist."; \
+	pipenv run python3 eval_sh_sfg_comparison.py --sfg_csv_file $(SFG_COMPARISON_SFG_CSV_FILE_1) --dir simresults/$(SFG_COMPARISON_CONFIGNAME) --filename sfg_comparison --n $(SFG_COMPARISON_NUM_USERS_1) --num_reps $(SFG_COMPARISON_NUM_REPS) --time_slot_duration $(SFG_COMPARISON_TIME_SLOT_DURATION) $(SUFFIX)
+
+sh-sfg-comparison_plot_2:
+	echo "Run Matlab script generate_plot__sh_channel_access_2.m in Matlab to generate the CSV files for analytical Signal Flow Graph evaluation if it doesn't exist."; \
 	pipenv run python3 eval_sh_sfg_comparison.py --sfg_csv_file $(SFG_COMPARISON_SFG_CSV_FILE_2) --dir simresults/$(SFG_COMPARISON_CONFIGNAME) --filename sfg_comparison --n $(SFG_COMPARISON_NUM_USERS_2) --num_reps $(SFG_COMPARISON_NUM_REPS) --time_slot_duration $(SFG_COMPARISON_TIME_SLOT_DURATION) $(SUFFIX)
 
-sh-sfg-comparison: sh-sfg-comparison_sim sh-sfg-comparison_parse sh-sfg-comparison_plot
+sh-sfg-comparison: sh-sfg-comparison_sim sh-sfg-comparison_parse sh-sfg-comparison_plot_1 sh-sfg-comparison_plot_2 sh-sfg-comparison_plot_3
 
 sh-sfg-comparison_clean:
 	rm simresults/$(SFG_COMPARISON_CONFIGNAME)/*

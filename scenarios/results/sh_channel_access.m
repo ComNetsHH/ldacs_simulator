@@ -1,4 +1,4 @@
-function [x, y] = sh_channel_access(p_1, p_2, err_1, err_2, n_contenders, n_max_tx_attempts, q, max_evaluation_time)
+function [x, y] = sh_channel_access(p_1, p_2, err_1, err_2, n_contenders, n_max_tx_attempts, q, max_evaluation_time, convolute)
 %UNICAST_REQUEST__FUNCTION_OF_X 
 %   p_1 -- Gilbert-Elliot transition probability good->bad state.
 %   p_2 -- Gilbert-Elliot transition probability bad->good state.
@@ -8,12 +8,13 @@ function [x, y] = sh_channel_access(p_1, p_2, err_1, err_2, n_contenders, n_max_
 %   n_max_tx_attempts -- Maximum number of transmission attempts
 %   q -- Target error probability
 %   max_evaluation_time -- Number of slots to evaluate up to.
+%   convolute -- Whether to convolute the PGF with itself to model two channel accesses (and thus link establishment).
     %% Gilbert-Elliot channel model parameters.
     P = [1-p_1 p_1; p_2 1-p_2]; % Transition probability matrix.
     I = eye(size(P));
     epsilon = [err_1 err_2]; % Error probability vector.
-    P0 = P*diag(1-epsilon); % Success probability matrix.
-    L = P*diag(epsilon); % Failure probability matrix.
+    P0 = I*diag(1-epsilon); % Success probability matrix.
+    L = I*diag(epsilon); % Failure probability matrix.
     pi1 = p_2 / (p_1 + p_2); % Steady state distribution: P(good state).
     pi2 = p_1 / (p_2 + p_1); % Steady state distribution: P(bad state).
     pi = [pi1 pi2]; % Steady state distribution.    
@@ -46,6 +47,12 @@ function [x, y] = sh_channel_access(p_1, p_2, err_1, err_2, n_contenders, n_max_
 
     %% Evaluate.
     use_taylor = 1; % Whether to use the Taylor power series, which is much faster than finding the derivatives directly.
-    [x,y] = evaluate_pgf(G, pi, P, use_taylor, max_evaluation_time, 1);
+    pgf_to_evaluate = pi_mat;
+    if convolute == 0
+        pgf_to_evaluate = pgf_to_evaluate * G_success;
+    else
+        pgf_to_evaluate = pgf_to_evaluate * (G_success * G_success);  % multiplication in the z-domain is convolution in discrete-time-domain
+    end
+    [x,y] = evaluate_pgf(pgf_to_evaluate , pi, P, use_taylor, max_evaluation_time, 1);
 end
 
