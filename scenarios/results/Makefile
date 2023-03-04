@@ -387,9 +387,23 @@ sh-sfg-comparison_clean:
 MOBILITY_NUM_REPS = 1
 MOBILITY_NUM_USERS_GROUP_1 = 15
 MOBILITY_NUM_USERS_GROUP_2 = 15
+MOBILITY_NUM_REPS = 1
+MOBILITY_TIME_SLOT_DURATION = 24
 MOBILITY_CONFIGNAME = NoApps
 mobility_sim:
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c $(MOBILITY_CONFIGNAME) $(INCL)
 
 mobility_sim-qtenv:
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c $(MOBILITY_CONFIGNAME) $(INCL) -u Qtenv 
+
+mobility_parse:
+	./convert-omnet-csv.sh simresults/$(MOBILITY_CONFIGNAME); \
+	./convert-vec-omnet-csv.sh simresults/$(MOBILITY_CONFIGNAME)
+
+mobility_plot:	
+	pipenv run python3 eval_mobility.py --dir simresults/$(MOBILITY_CONFIGNAME) --filename mobility --num_reps $(MOBILITY_NUM_REPS) --time_slot_duration $(MOBILITY_TIME_SLOT_DURATION) $(SUFFIX)
+
+mobility: mobility_sim mobility_parse mobility_plot
+
+mobility_clean:
+	rm simresults/$(MOBILITY_CONFIGNAME)/*

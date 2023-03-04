@@ -29,8 +29,8 @@ import ned.DatarateChannel;
 network mobility
 {	
     parameters:
-        int numAircraftsGroup1 = default(15);
-        int numAircraftsGroup2 = default(15);
+        int numAircraftsGroup1 = default(0);
+        int numAircraftsGroup2 = default(0);
         @display("bgb=10000000,10000000;bgl=2");
         @figure[title](type=label; pos=0,-1; anchor=sw; color=darkblue);
     submodules:
