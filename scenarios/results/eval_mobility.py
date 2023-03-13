@@ -3,6 +3,7 @@ from datetime import time
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from operator import sub
 import argparse
 import json
 import scipy.stats
@@ -176,8 +177,29 @@ def parse(dir, num_reps, num_users_per_swarm, json_filename):
 				
 	with open(json_filename, 'w') as outfile:
 		json.dump(json_data, outfile)
-	print("Saved parsed results in '" + json_filename + "'.")    	
+	print("Saved parsed results in '" + json_filename + "'.")  
 
+def get_aspect(ax):
+    # Total figure size
+    figW, figH = ax.get_figure().get_size_inches()
+    # Axis size on figure
+    _, _, w, h = ax.get_position().bounds
+    # Ratio of display units
+    disp_ratio = (figH * h) / (figW * w)
+    # Ratio of data units
+    # Negative over negative because of the order of subtraction
+    data_ratio = sub(*ax.get_ylim()) / sub(*ax.get_xlim())
+
+    return disp_ratio / data_ratio  	
+
+def plot_inset(ax, center, t, x=[20, 0], y=[20, 0], R=10):
+		inset_width = 200
+		inset_height = 7
+		aspect = get_aspect(ax)
+		ax.plot([center[0] - inset_width/2 , center[0] + inset_width/2, center[0] + inset_width/2, center[0] - inset_width/2, center[0] - inset_width/2],[center[1] - inset_height/2, center[1] - inset_height/2, center[1] + inset_height/2, center[1] + inset_height/2, center[1] - inset_height/2, ], color= '#333', lw=0.7)
+
+		ax.scatter(center[0] + np.array(x), center[1] + np.array(y) / aspect, s=2, zorder=10, color='#333')
+		ax.plot([center[0], t],[center[1]- inset_height / 2, -1], color='#333', lw=0.5)
 
 def plot(json_filename, graph_filename_active_neighbors, time_slot_duration, graph_filename_delays):
 	"""
@@ -249,12 +271,25 @@ def plot(json_filename, graph_filename_active_neighbors, time_slot_duration, gra
 			'text.usetex': True,
 			'pgf.rcfonts': False
 		})
+
 		# plot no of neighbors over simulation time
 		fig, ax1 = plt.subplots()
 		ax1.plot(times_vec, avg_neighbors_both[0,:], color='tab:blue', linewidth=.75, alpha=1, linestyle=':')
 		ax1.fill_between(times_vec, avg_neighbors_both[1,:], avg_neighbors_both[2,:], color='tab:blue', alpha=.5)
 		ax1.tick_params(axis='y', colors='tab:blue')
 		ax1.set_ylabel('avg no. of neighbors')
+
+		inset_center = (120, 8.5)
+		plot_inset(ax1, inset_center, 0)
+
+		inset_center = (350, 8.5)
+		plot_inset(ax1, inset_center, 300)
+
+		inset_center = (600, 8.5)
+		plot_inset(ax1, inset_center, 520)
+
+		ax1.set_ylim([-1, 30])
+		
 		plt.xlabel('Simulation time $t$ [s]')
 		# and the no. of dropped packets on a second y-axis
 		ax2 = ax1.twinx()
@@ -319,8 +354,8 @@ if __name__ == "__main__":
 		
 	output_filename_base = args.filename + "-rep" + str(args.num_reps)
 	json_filename = "_data/" + output_filename_base + ".json"
-	graph_filename_num_active_neighbors = "_imgs/" + output_filename_base + "_num_active_neighbors.pdf"	
-	graph_filename_delays = "_imgs/" + output_filename_base + "_delays.pdf"	
+	graph_filename_num_active_neighbors = "_imgs/" + output_filename_base + "_num_active_neighbors.png"	
+	graph_filename_delays = "_imgs/" + output_filename_base + "_delays.png"	
 	if not args.no_parse:		
 		parse(args.dir, args.num_reps, args.num_users_per_swarm, json_filename)
 	if not args.no_plot:
