@@ -9,6 +9,7 @@ import scipy.stats
 import os
 import progressbar
 import csv
+from utils import calculate_confidence_interval
 
 
 json_label_num_users_per_swarm = 'num_users_group1'
@@ -18,10 +19,8 @@ json_label_num_active_neighbors_times_swarm_1 = 'num_active_neighbors_times_swar
 json_label_num_active_neighbors_vals_swarm_2 = 'num_active_neighbors_vals_swarm_2'
 json_label_num_active_neighbors_times_swarm_2 = 'num_active_neighbors_times_swarm_2'
 
-json_label_num_collisions_vals_swarm_1 = 'num_collisions_vals_swarm_1'
-json_label_num_collisions_times_swarm_1 = 'num_collisions_times_swarm_1'
-json_label_num_collisions_vals_swarm_2 = 'num_collisions_vals_swarm_2'
-json_label_num_collisions_times_swarm_2 = 'num_collisions_times_swarm_2'
+json_label_num_collisions_vals = 'num_collisions_vals_swarm_1'
+json_label_num_collisions_times = 'num_collisions_times_swarm_1'
 
 json_label_mac_delay_vals_1 = 'mac_delays_swarm_1'
 json_label_mac_delay_vals_2 = 'mac_delays_swarm_2'
@@ -32,14 +31,6 @@ def find_nearest(array, value):
 	array = np.asarray(array)
 	idx = (np.abs(array - value)).argmin()
 	return idx
-
-
-def calculate_confidence_interval(data, confidence):
-	n = len(data)
-	m = np.mean(data)
-	std_dev = scipy.stats.sem(data)
-	h = std_dev * scipy.stats.t.ppf((1 + confidence) / 2, n - 1)
-	return [m, m - h, m + h]
 
 
 def parse(dir, num_reps, num_users_per_swarm, json_filename):	
@@ -63,59 +54,65 @@ def parse(dir, num_reps, num_users_per_swarm, json_filename):
 	print('parsing ' + str(bar_max_i) + ' result files')
 	bar = progressbar.ProgressBar(max_value=bar_max_i, widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
 	bar.start()			
-	for rep in range(num_reps):		
+	for rep in range(num_reps):
+		# append a new list for this repetition
+		num_active_neighbors_times_mat_1.append([])
+		num_active_neighbors_vals_mat_1.append([])
+		num_active_neighbors_times_mat_2.append([])
+		num_active_neighbors_vals_mat_2.append([])
+		avg_collision_vals.append([])
+		avg_mac_delay_1.append([])
+		avg_mac_delay_2.append([])
 		try:
 			filename = dir + '/#' + str(rep)
 			filename_sca = filename + '.sca.csv'
 			filename_vec = filename + '.vec.csv'
 			results_vec = pd.read_csv(filename_vec)			
 			
-			tmp_avg_collisions = []
-			mean_mac_delay_swarm_1 = []
-			mean_mac_delay_swarm_2 = []
-			mac_vals_swarm_1 = []
-			mac_times_swarm_1 = []
-			mac_vals_swarm_2 = []
-			mac_times_swarm_2 = []
+			this_rep_avg_collisions = []			
+			this_rep_mac_vals_swarm_1 = []
+			this_rep_mac_times_swarm_1 = []
+			this_rep_mac_vals_swarm_2 = []
+			this_rep_mac_times_swarm_2 = []
 			max_simulation_time = 0
 			for i in range(num_users_per_swarm):
-				tmp_avg_collisions.append([])
-				mac_vals_swarm_1.append([])
-				mac_times_swarm_1.append([])
-				mac_vals_swarm_2.append([])
-				mac_times_swarm_2.append([])
+				this_rep_avg_collisions.append([])
+				this_rep_mac_vals_swarm_1.append([])
+				this_rep_mac_times_swarm_1.append([])
+				this_rep_mac_vals_swarm_2.append([])
+				this_rep_mac_times_swarm_2.append([])
 				# no of neighbors
 				num_active_neighbors_results_1 = results_vec[(results_vec.type=='vector') & (results_vec.name=='mcsotdma_statistic_num_active_neighbors:vector') & (results_vec.module=='mobility.aircraft_group1[' + str(i) + '].wlan[0].linkLayer')]
 				num_active_neighbors_results_2 = results_vec[(results_vec.type=='vector') & (results_vec.name=='mcsotdma_statistic_num_active_neighbors:vector') & (results_vec.module=='mobility.aircraft_group2[' + str(i) + '].wlan[0].linkLayer')]				
-				num_active_neighbors_times_mat_1.append([float(s) for s in num_active_neighbors_results_1['vectime'].values[0].split(' ')])
-				num_active_neighbors_times_mat_2.append([float(s) for s in num_active_neighbors_results_2['vectime'].values[0].split(' ')])
-				num_active_neighbors_vals_mat_1.append([float(s) for s in num_active_neighbors_results_1['vecvalue'].values[0].split(' ')])
-				num_active_neighbors_vals_mat_2.append([float(s) for s in num_active_neighbors_results_2['vecvalue'].values[0].split(' ')])
+				num_active_neighbors_times_mat_1[rep].append([float(s) for s in num_active_neighbors_results_1['vectime'].values[0].split(' ')])
+				num_active_neighbors_times_mat_2[rep].append([float(s) for s in num_active_neighbors_results_2['vectime'].values[0].split(' ')])
+				num_active_neighbors_vals_mat_1[rep].append([float(s) for s in num_active_neighbors_results_1['vecvalue'].values[0].split(' ')])
+				num_active_neighbors_vals_mat_2[rep].append([float(s) for s in num_active_neighbors_results_2['vecvalue'].values[0].split(' ')])
 
 				# packet collisions
 				collision_results_1 = results_vec[(results_vec.type=='vector') & (results_vec.name=='mcsotdma_statistic_dropped_packets_over_last_ten_time_slots:vector') & (results_vec.module=='mobility.aircraft_group1[' + str(i) + '].wlan[0].linkLayer')]
 				collision_results_2 = results_vec[(results_vec.type=='vector') & (results_vec.name=='mcsotdma_statistic_dropped_packets_over_last_ten_time_slots:vector') & (results_vec.module=='mobility.aircraft_group2[' + str(i) + '].wlan[0].linkLayer')]				
 								
-				collision_vals_1 = np.array([float(s) for s in collision_results_1['vecvalue'].values[0].split(' ')])
-				collision_vals_2 = np.array([float(s) for s in collision_results_2['vecvalue'].values[0].split(' ')])								
-				tmp_avg_collisions[-1].append(np.add(collision_vals_1, collision_vals_2))
-				if i == 0:
+				this_rep_collision_vals_1 = np.array([float(s) for s in collision_results_1['vecvalue'].values[0].split(' ')])
+				this_rep_collision_vals_2 = np.array([float(s) for s in collision_results_2['vecvalue'].values[0].split(' ')])								
+				this_rep_avg_collisions[-1].append(np.add(this_rep_collision_vals_1, this_rep_collision_vals_2))
+				if rep==0 and i==0:
 					avg_collision_times = [float(s) for s in collision_results_1['vectime'].values[0].split(' ')]
 
 				# MAC delays
 				mac_results_1 = results_vec[(results_vec.type=='vector') & (results_vec.name=='mcsotdma_statistic_broadcast_mac_delay:vector') & (results_vec.module=='mobility.aircraft_group1[' + str(i) + '].wlan[0].linkLayer')]				
-				mac_vals_swarm_1[-1].extend(np.array([float(s) for s in mac_results_1['vecvalue'].values[0].split(' ')]))
-				mac_times_swarm_1[-1] = [float(s) for s in mac_results_1['vectime'].values[0].split(' ')]
-				if np.max(mac_times_swarm_1[-1]) > max_simulation_time:
-					max_simulation_time = np.max(mac_times_swarm_1[-1])
+				this_rep_mac_vals_swarm_1[-1].extend(np.array([float(s) for s in mac_results_1['vecvalue'].values[0].split(' ')]))
+				this_rep_mac_times_swarm_1[-1] = [float(s) for s in mac_results_1['vectime'].values[0].split(' ')]
+				if np.max(this_rep_mac_times_swarm_1[-1]) > max_simulation_time:
+					max_simulation_time = np.max(this_rep_mac_times_swarm_1[-1])
 
 				mac_results_2 = results_vec[(results_vec.type=='vector') & (results_vec.name=='mcsotdma_statistic_broadcast_mac_delay:vector') & (results_vec.module=='mobility.aircraft_group2[' + str(i) + '].wlan[0].linkLayer')]				
-				mac_vals_swarm_2[-1].extend(np.array([float(s) for s in mac_results_2['vecvalue'].values[0].split(' ')]))
-				mac_times_swarm_2[-1] = [float(s) for s in mac_results_2['vectime'].values[0].split(' ')]
+				this_rep_mac_vals_swarm_2[-1].extend(np.array([float(s) for s in mac_results_2['vecvalue'].values[0].split(' ')]))
+				this_rep_mac_times_swarm_2[-1] = [float(s) for s in mac_results_2['vectime'].values[0].split(' ')]
 					
-			tmp_avg_collisions = np.array(tmp_avg_collisions)
-			for t in range(len(tmp_avg_collisions[0][0])):
-				avg_collision_vals.append(np.sum(tmp_avg_collisions[:,0,t]))
+			this_rep_avg_collisions = np.array(this_rep_avg_collisions)
+			for t in range(len(this_rep_avg_collisions[0][0])):
+				avg_collision_vals[rep].append(np.sum(this_rep_avg_collisions[:,0,t]))
 
 			# captured MAC delays are saved for each user 
 			# now get mean delay over all users in a swarm as sliding window over simulation time
@@ -125,8 +122,8 @@ def parse(dir, num_reps, num_users_per_swarm, json_filename):
 			mean_mac_delays_per_user_2 = []
 			for n in range(num_users_per_swarm):
 				# swarm 1
-				user_mac_times = np.array(mac_times_swarm_1[n])				
-				user_mac_vals = np.array(mac_vals_swarm_1[n])
+				user_mac_times = np.array(this_rep_mac_times_swarm_1[n])				
+				user_mac_vals = np.array(this_rep_mac_vals_swarm_1[n])
 				mean_mac_delays_per_user_1.append([])
 				last_i = 0
 				for t in range(5, max_simulation_time, 5):					
@@ -136,8 +133,8 @@ def parse(dir, num_reps, num_users_per_swarm, json_filename):
 					last_i = i
 
 				# swarm 2
-				user_mac_times = np.array(mac_times_swarm_2[n])
-				user_mac_vals = np.array(mac_vals_swarm_2[n])
+				user_mac_times = np.array(this_rep_mac_times_swarm_2[n])
+				user_mac_vals = np.array(this_rep_mac_vals_swarm_2[n])
 				mean_mac_delays_per_user_2.append([])
 				last_i = 0
 				for t in range(5, max_simulation_time, 5):
@@ -149,10 +146,11 @@ def parse(dir, num_reps, num_users_per_swarm, json_filename):
 			mean_mac_delays_per_user_2 = np.array(mean_mac_delays_per_user_2)
 			for i in range(len(mean_mac_delays_per_user_1[0])):
 				# compute mean at this window over all users
-				avg_mac_delay_1.append(np.mean(mean_mac_delays_per_user_1[:,i]))
-				avg_mac_delay_2.append(np.mean(mean_mac_delays_per_user_2[:,i]))
-			for t in range(5, max_simulation_time, 5):
-				avg_mac_times.append(t)
+				avg_mac_delay_1[rep].append(np.mean(mean_mac_delays_per_user_1[:,i]))
+				avg_mac_delay_2[rep].append(np.mean(mean_mac_delays_per_user_2[:,i]))
+			if rep == 0:
+				for t in range(5, max_simulation_time, 5):
+					avg_mac_times.append(t)
 
 			bar_i += 1
 			bar.update(bar_i)
@@ -169,8 +167,8 @@ def parse(dir, num_reps, num_users_per_swarm, json_filename):
 	json_data[json_label_num_active_neighbors_times_swarm_2] = np.array(num_active_neighbors_times_mat_2).tolist()
 	json_data[json_label_num_active_neighbors_vals_swarm_2] = np.array(num_active_neighbors_vals_mat_2).tolist()
 
-	json_data[json_label_num_collisions_times_swarm_1] = np.array(avg_collision_times).tolist()
-	json_data[json_label_num_collisions_vals_swarm_1] = np.array(avg_collision_vals).tolist()
+	json_data[json_label_num_collisions_times] = np.array(avg_collision_times).tolist()
+	json_data[json_label_num_collisions_vals] = np.array(avg_collision_vals).tolist()
 
 	json_data[json_label_mac_delay_vals_1] = np.array(avg_mac_delay_1).tolist()
 	json_data[json_label_mac_delay_vals_2] = np.array(avg_mac_delay_2).tolist()
@@ -190,32 +188,59 @@ def plot(json_filename, graph_filename_active_neighbors, time_slot_duration, gra
 		json_data = json.load(json_file)	
 		num_users_per_swarm = json_data[json_label_num_users_per_swarm]		
 		num_reps = np.array(json_data[json_label_reps])		
-		num_active_neighbors_times_mat_1 = np.array(json_data[json_label_num_active_neighbors_times_swarm_1])
+		
+		num_active_neighbors_times_mat_1 = np.array(json_data[json_label_num_active_neighbors_times_swarm_1])		
 		num_active_neighbors_vals_mat_1 = np.array(json_data[json_label_num_active_neighbors_vals_swarm_1])
 		num_active_neighbors_times_mat_2 = np.array(json_data[json_label_num_active_neighbors_times_swarm_2])
-		num_active_neighbors_vals_mat_2 = np.array(json_data[json_label_num_active_neighbors_vals_swarm_2])
+		num_active_neighbors_vals_mat_2 = np.array(json_data[json_label_num_active_neighbors_vals_swarm_2])		
 
-		avg_collision_times = np.array(json_data[json_label_num_collisions_times_swarm_1])
-		avg_collision_vals = np.array(json_data[json_label_num_collisions_vals_swarm_1]) * 10  # each value is the average no. of packet collisions over the last 10 time slots, so multiplying by 10 is the no. of packet collisions
-
-		avg_mac_delay_1 = np.array(json_data[json_label_mac_delay_vals_1])
-		avg_mac_delay_2 = np.array(json_data[json_label_mac_delay_vals_2])
-		avg_mac_times = np.array(json_data[json_label_mac_window_times])		
+		avg_collision_times = np.array(json_data[json_label_num_collisions_times])
+		avg_collision_vals = np.array(json_data[json_label_num_collisions_vals])
 
 		max_simulation_time = int(np.max(num_active_neighbors_times_mat_1))
 		# find average number of neighbors in half-a-second steps until maximum simulation time
-		avg_neighbors_1 = np.zeros(max_simulation_time*2)
-		avg_neighbors_2 = np.zeros(max_simulation_time*2)
-		avg_neighbors_both = np.zeros(max_simulation_time*2)
+		# no. of active users has shape (num_reps, num_users, time_steps)ev
+		# so we'll compute the three-valued confidence interval (mean, minus, plus) for every point in time
+		avg_neighbors_1 = np.zeros((3, max_simulation_time*2))
+		avg_neighbors_2 = np.zeros((3, max_simulation_time*2))
+		avg_neighbors_both = np.zeros((3, max_simulation_time*2))
 		times_vec = np.zeros(max_simulation_time*2)
+		mean_collisions = np.zeros((3, len(times_vec)))
+		last_i_collisions = 0
+		# for each point in time
 		for i in range(max_simulation_time*2):
 			t = 0 + i*0.5
 			times_vec[i] = t
-			idx_1 = find_nearest(num_active_neighbors_times_mat_1, t)
-			avg_neighbors_1[i] = np.mean(num_active_neighbors_vals_mat_1[:, idx_1])
-			idx_2 = find_nearest(num_active_neighbors_times_mat_2, t)
-			avg_neighbors_2[i] = np.mean(num_active_neighbors_vals_mat_2[:, idx_2])		
-			avg_neighbors_both[i] = np.mean([avg_neighbors_1[i], avg_neighbors_2[i]])
+			# swarm 1
+			# for every rep
+			mean_avg_neighbors_per_rep = []
+			for rep in range(num_reps):
+				# find the index that is closest to the current moment in time t
+				idx_1 = find_nearest(num_active_neighbors_times_mat_1[rep, 0], t)
+				# compute the mean no. of neighbors for this repetition over all users at this moment in time
+				mean_avg_neighbors_per_rep.append(np.mean(num_active_neighbors_vals_mat_1[rep, :, idx_1]))
+			avg_neighbors_1[:,i] = calculate_confidence_interval(mean_avg_neighbors_per_rep)
+			
+			# swarm 2
+			# for every rep
+			mean_avg_neighbors_per_rep = []
+			for rep in range(num_reps):
+				# find the index that is closest to the current moment in time t
+				idx_2 = find_nearest(num_active_neighbors_times_mat_2[rep, 0], t)
+				# compute the mean no. of neighbors for this repetition over all users at this moment in time
+				mean_avg_neighbors_per_rep.append(np.mean(num_active_neighbors_vals_mat_2[rep, :, idx_1]))
+			avg_neighbors_2[:,i] = calculate_confidence_interval(mean_avg_neighbors_per_rep)
+
+			# mean over both swarms
+			avg_neighbors_both[:,i] = np.mean([avg_neighbors_1[:,i], avg_neighbors_2[:,i]])
+
+			# and also for collision values
+			id_3 = find_nearest(avg_collision_times, t)
+			sum_of_reps = np.zeros(num_reps)
+			for rep in range(num_reps):
+				sum_of_reps[rep] = np.sum(avg_collision_vals[rep,last_i_collisions:id_3])
+			mean_collisions[:,i] = calculate_confidence_interval(sum_of_reps)
+			last_i_collisions = id_3
 
 		plt.rcParams.update({
 			'font.family': 'serif',
@@ -226,33 +251,46 @@ def plot(json_filename, graph_filename_active_neighbors, time_slot_duration, gra
 		})
 		# plot no of neighbors over simulation time
 		fig, ax1 = plt.subplots()
-		ax1.plot(times_vec, avg_neighbors_both, color='tab:blue', linewidth=.75)
+		ax1.plot(times_vec, avg_neighbors_both[0,:], color='tab:blue', linewidth=.75, alpha=1, linestyle=':')
+		ax1.fill_between(times_vec, avg_neighbors_both[1,:], avg_neighbors_both[2,:], color='tab:blue', alpha=.5)
 		ax1.tick_params(axis='y', colors='tab:blue')
 		ax1.set_ylabel('avg no. of neighbors')
 		plt.xlabel('Simulation time $t$ [s]')
+		# and the no. of dropped packets on a second y-axis
 		ax2 = ax1.twinx()
-		ax2.bar(avg_collision_times, avg_collision_vals, color='tab:orange', width=4.0)
-		ax2.set_ylabel('packet drops over last 10 time slots')		
+		ax2.plot(times_vec, mean_collisions[0,:], color='tab:orange', linewidth=.75, alpha=1, linestyle=':')
+		ax2.fill_between(times_vec, mean_collisions[1,:], mean_collisions[2,:], color='tab:orange', alpha=.5)
+		ax2.set_ylabel('sliding window over packet drops')		
 		ax2.tick_params(axis='y', colors='tab:orange')		
 		fig.tight_layout()
 		settings.init()
 		fig.set_size_inches((settings.fig_width*2, settings.fig_height*1.12), forward=False)
 		fig.savefig(graph_filename_active_neighbors, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
-		print("Graph saved to " + graph_filename_active_neighbors)    
+		print("Graph saved to " + graph_filename_active_neighbors)
 		plt.close()
 
+
 		# plot average MAC delay over simulation time
-		avg_mac_delay_both_swarms = []
-		for i in range(len(avg_mac_delay_1)):
-			avg_mac_delay_both_swarms.append(np.mean([avg_mac_delay_1[i], avg_mac_delay_2[i]]) * time_slot_duration)
+		avg_mac_delay_1 = np.array(json_data[json_label_mac_delay_vals_1])
+		avg_mac_delay_2 = np.array(json_data[json_label_mac_delay_vals_2])
+		avg_mac_times = np.array(json_data[json_label_mac_window_times])
+		# compute confidence interval over all delay values
+		avg_mac_delay_both_swarms = np.zeros((3, len(avg_mac_times)))
+		for t in range(len(avg_mac_times)):
+			ci_1 = calculate_confidence_interval(avg_mac_delay_1[:,t])
+			ci_2 = calculate_confidence_interval(avg_mac_delay_2[:,t])
+			avg_mac_delay_both_swarms[:,t] = np.mean([ci_1, ci_2], axis=0)
+
 		fig, ax1 = plt.subplots()
-		ax1.plot(times_vec, avg_neighbors_both, color='tab:blue', linewidth=.75)
+		ax1.plot(times_vec, avg_neighbors_both[0,:], color='tab:blue', linewidth=.75, alpha=1, linestyle=':')
+		ax1.fill_between(times_vec, avg_neighbors_both[1,:], avg_neighbors_both[2,:], color='tab:blue', alpha=.5)
 		ax1.tick_params(axis='y', colors='tab:blue')
 		ax1.set_ylabel('avg no. of neighbors')
 		plt.xlabel('Simulation time $t$ [s]')
 		ax2 = ax1.twinx()		
-		ax2.plot(avg_mac_times, avg_mac_delay_both_swarms, color='tab:orange', linewidth=.75)
-		ax2.set_ylabel('avg MAC delay over last $5s$ [ms]')
+		ax2.plot(avg_mac_times, avg_mac_delay_both_swarms[0,:] * time_slot_duration, color='tab:orange', linewidth=.75, alpha=1, linestyle='-')
+		ax2.fill_between(avg_mac_times, avg_mac_delay_both_swarms[1,:] * time_slot_duration, avg_mac_delay_both_swarms[2,:] * time_slot_duration, color='tab:orange', alpha=.5)
+		ax2.set_ylabel('sliding window over MAC delay [ms]', fontsize=7)
 		ax2.tick_params(axis='y', colors='tab:orange')		
 		fig.tight_layout()
 		settings.init()
