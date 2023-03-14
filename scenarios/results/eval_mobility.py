@@ -10,6 +10,7 @@ import scipy.stats
 import os
 import progressbar
 import csv
+import math
 from utils import calculate_confidence_interval
 
 
@@ -179,6 +180,72 @@ def parse(dir, num_reps, num_users_per_swarm, json_filename):
 		json.dump(json_data, outfile)
 	print("Saved parsed results in '" + json_filename + "'.")  
 
+def get_trajectories(t_max = 9999999):
+	trajectories = []
+	lines = []
+	with open('../mobility_data/mobility_group1.txt') as f:
+		lines += f.readlines()
+
+	with open('../mobility_data/mobility_group2.txt') as f:
+		lines += f.readlines()
+
+	for ac, l in enumerate(lines):
+		path = []
+		entries = l.split(' ')
+		i = 0
+		while i < len(entries):
+			t = float(entries[i])
+			x = float(entries[i + 1])
+			y = float(entries[i + 2])
+			z = float(entries[i + 3])
+			if t <= t_max:
+				path.append({
+					'id': f"ac_{ac}",
+					't': t,
+					'x': x,
+					'y': y,
+					'z': z
+				})
+
+			i += 4
+
+		trajectories.append(path)
+	return trajectories
+
+def get_ac_position_at_time(trajectory, time):
+	for i in range(1, len(trajectory)):
+		if trajectory[i]['t'] >= time:
+			prev = trajectory[i-1]
+			nxt = trajectory[i]
+			x = prev['x'] + (nxt['x']- prev['x'])  * (time - prev['t']) / (nxt['t']- prev['t'])
+			y = prev['y'] + (nxt['y']- prev['y'])  * (time - prev['t']) / (nxt['t']- prev['t'])
+			z = prev['z'] + (nxt['z']- prev['z'])  * (time - prev['t']) / (nxt['t']- prev['t'])
+			return (x,y,z)
+
+def get_topology_at_time(trajectories, t=0, scale = 5/10000):
+	x = []
+	y = []
+
+	for trajectory in trajectories:
+		(xi, yi, _) = get_ac_position_at_time(trajectory, t)
+		x.append(xi)
+		y.append(yi)
+
+	x = np.array(x)
+	y = np.array(y)
+
+	x_range = x.max() - x.min()
+	y_range = y.max() - y.min()
+
+	x_center = x.min() + x_range / 2
+	y_center = y.min() + y_range / 2
+
+	x = (x-x_center) * scale
+	y = (y-y_center) * scale
+
+	return (x, y)
+
+
 def get_aspect(ax):
     # Total figure size
     figW, figH = ax.get_figure().get_size_inches()
@@ -192,14 +259,28 @@ def get_aspect(ax):
 
     return disp_ratio / data_ratio  	
 
-def plot_inset(ax, center, t, x=[20, 0], y=[20, 0], R=10):
-		inset_width = 200
+def plot_inset(ax, center, t, x=[], y=[], R=0, inset_width = 240):
 		inset_height = 7
 		aspect = get_aspect(ax)
 		ax.plot([center[0] - inset_width/2 , center[0] + inset_width/2, center[0] + inset_width/2, center[0] - inset_width/2, center[0] - inset_width/2],[center[1] - inset_height/2, center[1] - inset_height/2, center[1] + inset_height/2, center[1] + inset_height/2, center[1] - inset_height/2, ], color= '#333', lw=0.7)
 
-		ax.scatter(center[0] + np.array(x), center[1] + np.array(y) / aspect, s=2, zorder=10, color='#333')
 		ax.plot([center[0], t],[center[1]- inset_height / 2, -1], color='#333', lw=0.5)
+		ax.plot([t, t],[center[1]- inset_height / 2, -1], color='#333', lw=0.5)
+		ax.plot([t, t],[center[1]+ inset_height / 2, 30], color='#333', lw=0.5)
+
+		for i in range(len(x)):
+			for j in range(len(x)):
+				if i!=j:
+					x1 = x[i]
+					x2 = x[j]
+					y1 = y[i]
+					y2 = y[j]
+					dist = math.sqrt(math.pow(x1-x2,2) + math.pow(y1-y2,2))
+					if(dist <= R):
+						ax.plot([center[0] + x1, center[0] + x2],[center[1] + y1 / aspect,center[1] + y2 / aspect], color='#808080', alpha=0.5, lw=0.05)
+
+		ax.scatter(center[0] + np.array(x), center[1] + np.array(y) / aspect, s=0.2, zorder=20, color='#333')
+
 
 def plot(json_filename, graph_filename_active_neighbors, time_slot_duration, graph_filename_delays):
 	"""
@@ -279,18 +360,31 @@ def plot(json_filename, graph_filename_active_neighbors, time_slot_duration, gra
 		ax1.tick_params(axis='y', colors='tab:blue')
 		ax1.set_ylabel('avg no. of neighbors')
 
-		inset_center = (120, 8.5)
-		plot_inset(ax1, inset_center, 0)
+		scale = 6/10000
+		R = 277800 * scale
 
-		inset_center = (350, 8.5)
-		plot_inset(ax1, inset_center, 300)
+		trajectories = get_trajectories()
+		t0 = 140
+		(x,y) = get_topology_at_time(trajectories, t0, scale)
+		inset_center = (180, 9)
+		plot_inset(ax1, inset_center, t0, x, y, R, 320)
 
-		inset_center = (600, 8.5)
-		plot_inset(ax1, inset_center, 520)
+		t1 = 270.55
+		(x,y) = get_topology_at_time(trajectories, t1, scale)
+		inset_center = (500, 9)
+		plot_inset(ax1, inset_center, t1, x, y, R, 300)
+
+		t2 = 564
+		(x,y) = get_topology_at_time(trajectories, t2, scale)
+		inset_center = (760, 9)
+		plot_inset(ax1, inset_center, t2, x, y, R, 200)
+
 
 		ax1.set_ylim([-1, 30])
 		
 		plt.xlabel('Simulation time $t$ [s]')
+		ax1.set_xticks([0, t0, 200, t1, 400, t2, 600, 800])
+		ax1.set_xticklabels(['0', '$t_0$', '', '$t_1$', '400', '$t_2$', '', '800'])
 		# and the no. of dropped packets on a second y-axis
 		ax2 = ax1.twinx()
 		ax2.plot(times_vec, mean_collisions[0,:], color='tab:orange', linewidth=.75, alpha=1, linestyle=':')
