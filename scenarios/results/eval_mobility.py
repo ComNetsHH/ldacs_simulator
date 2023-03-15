@@ -250,7 +250,6 @@ def get_topology_3():
 	(x2, y2) = get_right_cluster()
 
 	x = np.concatenate((np.array(x1) + 70, np.array(x2) -70))
-	print(x)
 	return (x, np.array(y1+y2))
 
 def get_aspect(ax):
@@ -374,18 +373,18 @@ def plot(json_filename, graph_filename_active_neighbors, time_slot_duration, gra
 		trajectories = get_trajectories()
 		t0 = 140
 		(x,y) = get_topology_1()
-		inset_center = (180, 8.5)
-		plot_inset(ax1, inset_center, t0, x, y, R, 320, 'Disconnected')
+		inset_center = (160, 8.5)
+		plot_inset(ax1, inset_center, t0, x, y, R, 280, 'Disconnected')
 
 		t1 = 270.55
 		(x,y) = get_topology_2()
-		inset_center = (500, 8.5)
-		plot_inset(ax1, inset_center, t1, x, y, R, 300, 'First contact')
+		inset_center = (460, 8.5)
+		plot_inset(ax1, inset_center, t1, x, y, R, 260, 'First contact')
 
 		t2 = 564
 		(x,y) = get_topology_3()
-		inset_center = (760, 8.5)
-		plot_inset(ax1, inset_center, t2, x, y, R, 200, 'Full mesh')
+		inset_center = (700, 8.5)
+		plot_inset(ax1, inset_center, t2, x, y, R, 160, 'Full mesh')
 
 
 		ax1.set_ylim([-1, 30])
