@@ -222,29 +222,36 @@ def get_ac_position_at_time(trajectory, time):
 			z = prev['z'] + (nxt['z']- prev['z'])  * (time - prev['t']) / (nxt['t']- prev['t'])
 			return (x,y,z)
 
-def get_topology_at_time(trajectories, t=0, scale = 5/10000):
-	x = []
-	y = []
+def get_left_cluster():
+	x = list(np.array([-100, -90, -80, -51, -110]))
+	y = list(np.array([-40, 50, -10, 10, 0]) * 0.9 -14)
+	return (x,y)
 
-	for trajectory in trajectories:
-		(xi, yi, _) = get_ac_position_at_time(trajectory, t)
-		x.append(xi)
-		y.append(yi)
+def get_right_cluster():
+	x = list(np.array([60, 70, 110, 120, 50]))
+	y = list(np.array([-40, 50, -30, 10, 0]) * 0.9 -14)
+	return (x,y)
 
-	x = np.array(x)
-	y = np.array(y)
 
-	x_range = x.max() - x.min()
-	y_range = y.max() - y.min()
+def get_topology_1():
+	(x1, y1) = get_left_cluster()
+	(x2, y2) = get_right_cluster()
+	return (x1+x2, y1+y1)
 
-	x_center = x.min() + x_range / 2
-	y_center = y.min() + y_range / 2
+def get_topology_2():
+	(x1, y1) = get_left_cluster()
+	(x2, y2) = get_right_cluster()
 
-	x = (x-x_center) * scale
-	y = (y-y_center) * scale
+	x = np.concatenate((np.array(x1) + 10, np.array(x2) -10))
+	return (x, np.array(y1+y2))
 
-	return (x, y)
+def get_topology_3():
+	(x1, y1) = get_left_cluster()
+	(x2, y2) = get_right_cluster()
 
+	x = np.concatenate((np.array(x1) + 70, np.array(x2) -70))
+	print(x)
+	return (x, np.array(y1+y2))
 
 def get_aspect(ax):
     # Total figure size
@@ -259,7 +266,7 @@ def get_aspect(ax):
 
     return disp_ratio / data_ratio  	
 
-def plot_inset(ax, center, t, x=[], y=[], R=0, inset_width = 240):
+def plot_inset(ax, center, t, x=[], y=[], R=0, inset_width = 240, name=''):
 		inset_height = 7
 		aspect = get_aspect(ax)
 		ax.plot([center[0] - inset_width/2 , center[0] + inset_width/2, center[0] + inset_width/2, center[0] - inset_width/2, center[0] - inset_width/2],[center[1] - inset_height/2, center[1] - inset_height/2, center[1] + inset_height/2, center[1] + inset_height/2, center[1] - inset_height/2, ], color= '#333', lw=0.7)
@@ -277,9 +284,10 @@ def plot_inset(ax, center, t, x=[], y=[], R=0, inset_width = 240):
 					y2 = y[j]
 					dist = math.sqrt(math.pow(x1-x2,2) + math.pow(y1-y2,2))
 					if(dist <= R):
-						ax.plot([center[0] + x1, center[0] + x2],[center[1] + y1 / aspect,center[1] + y2 / aspect], color='#808080', alpha=0.5, lw=0.05)
+						ax.plot([center[0] + x1, center[0] + x2],[center[1] + y1 / aspect,center[1] + y2 / aspect], color='#333', lw=0.2)
 
-		ax.scatter(center[0] + np.array(x), center[1] + np.array(y) / aspect, s=0.2, zorder=20, color='#333')
+		ax.scatter(center[0] + np.array(x), center[1] + np.array(y) / aspect, s=1.5, zorder=20, color='#333')
+		ax.text(center[0], center[1]+ inset_height / 2, name, ha='center', va='center', fontsize=5, bbox=dict(pad=2, lw=0.5, fc='#fff', color='#333'))
 
 
 def plot(json_filename, graph_filename_active_neighbors, time_slot_duration, graph_filename_delays):
@@ -361,23 +369,23 @@ def plot(json_filename, graph_filename_active_neighbors, time_slot_duration, gra
 		ax1.set_ylabel('avg no. of neighbors')
 
 		scale = 6/10000
-		R = 277800 * scale
+		R = 100
 
 		trajectories = get_trajectories()
 		t0 = 140
-		(x,y) = get_topology_at_time(trajectories, t0, scale)
-		inset_center = (180, 9)
-		plot_inset(ax1, inset_center, t0, x, y, R, 320)
+		(x,y) = get_topology_1()
+		inset_center = (180, 8.5)
+		plot_inset(ax1, inset_center, t0, x, y, R, 320, 'Disconnected')
 
 		t1 = 270.55
-		(x,y) = get_topology_at_time(trajectories, t1, scale)
-		inset_center = (500, 9)
-		plot_inset(ax1, inset_center, t1, x, y, R, 300)
+		(x,y) = get_topology_2()
+		inset_center = (500, 8.5)
+		plot_inset(ax1, inset_center, t1, x, y, R, 300, 'First contact')
 
 		t2 = 564
-		(x,y) = get_topology_at_time(trajectories, t2, scale)
-		inset_center = (760, 9)
-		plot_inset(ax1, inset_center, t2, x, y, R, 200)
+		(x,y) = get_topology_3()
+		inset_center = (760, 8.5)
+		plot_inset(ax1, inset_center, t2, x, y, R, 200, 'Full mesh')
 
 
 		ax1.set_ylim([-1, 30])
@@ -448,8 +456,8 @@ if __name__ == "__main__":
 		
 	output_filename_base = args.filename + "-rep" + str(args.num_reps)
 	json_filename = "_data/" + output_filename_base + ".json"
-	graph_filename_num_active_neighbors = "_imgs/" + output_filename_base + "_num_active_neighbors.png"	
-	graph_filename_delays = "_imgs/" + output_filename_base + "_delays.png"	
+	graph_filename_num_active_neighbors = "_imgs/" + output_filename_base + "_num_active_neighbors.pdf"	
+	graph_filename_delays = "_imgs/" + output_filename_base + "_delays.pdf"	
 	if not args.no_parse:		
 		parse(args.dir, args.num_reps, args.num_users_per_swarm, json_filename)
 	if not args.no_plot:
