@@ -110,6 +110,7 @@ SH_MAC_RA_TIME_SLOT_DURATION = 24 #ms
 SH_MAC_RA_CONFIGNAME = RandomizedSlottedAloha
 SH_MAC_YLIM1 = 20
 SH_MAC_YLIM2 = 20000
+	
 sh-mac-aloha_sim:	
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../shared_channel.ini -c $(SH_MAC_RA_CONFIGNAME) $(INCL)
 
@@ -381,3 +382,27 @@ sh-sfg-comparison: sh-sfg-comparison_sim sh-sfg-comparison_parse sh-sfg-comparis
 
 sh-sfg-comparison_clean:
 	rm simresults/$(SFG_COMPARISON_CONFIGNAME)/*
+
+# MOBILITY SCENARIO
+MOBILITY_NUM_REPS = 20
+MOBILITY_NUM_USERS_GROUP_1 = 15
+MOBILITY_NUM_USERS_GROUP_2 = 15
+MOBILITY_TIME_SLOT_DURATION = 24
+MOBILITY_CONFIGNAME = NoApps
+mobility_sim:
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c $(MOBILITY_CONFIGNAME) $(INCL)
+
+mobility_sim-qtenv:
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c $(MOBILITY_CONFIGNAME) $(INCL) -u Qtenv 
+
+mobility_parse:
+	./convert-omnet-csv.sh simresults/$(MOBILITY_CONFIGNAME); \
+	./convert-vec-omnet-csv.sh simresults/$(MOBILITY_CONFIGNAME)
+
+mobility_plot:	
+	pipenv run python3 eval_mobility.py --dir simresults/$(MOBILITY_CONFIGNAME) --filename mobility --num_reps $(MOBILITY_NUM_REPS) --time_slot_duration $(MOBILITY_TIME_SLOT_DURATION) $(SUFFIX)
+
+mobility: mobility_sim mobility_parse mobility_plot
+
+mobility_clean:
+	rm simresults/$(MOBILITY_CONFIGNAME)/*
