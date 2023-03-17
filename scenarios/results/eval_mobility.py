@@ -286,7 +286,7 @@ def plot_inset(ax, center, t, x=[], y=[], R=0, inset_width = 240, name=''):
 						ax.plot([center[0] + x1, center[0] + x2],[center[1] + y1 / aspect,center[1] + y2 / aspect], color='#333', lw=0.2)
 
 		ax.scatter(center[0] + np.array(x), center[1] + np.array(y) / aspect, s=1.5, zorder=20, color='#333')
-		ax.text(center[0], center[1]+ inset_height / 2, name, ha='center', va='center', fontsize=5, bbox=dict(pad=2, lw=0.5, fc='#fff', color='#333'))
+		ax.text(center[0], center[1]+ inset_height / 2, name, ha='center', va='center', fontsize=8, bbox=dict(pad=2, lw=0.5, fc='#fff', color='#333'))
 
 
 def plot(json_filename, graph_filename_active_neighbors, time_slot_duration, graph_filename_delays):
@@ -428,6 +428,11 @@ def plot(json_filename, graph_filename_active_neighbors, time_slot_duration, gra
 		ax2.fill_between(avg_mac_times, avg_mac_delay_both_swarms[1,:] * time_slot_duration, avg_mac_delay_both_swarms[2,:] * time_slot_duration, color='tab:orange', alpha=.5)
 		ax2.set_ylabel('sliding window over MAC delay [ms]', fontsize=7)
 		ax2.tick_params(axis='y', colors='tab:orange')		
+		ax1.set_xticks([0, t0, 200, t1, 400, t2, 600, 800])
+		ax1.set_xticklabels(['0', '$t_0$', '', '$t_1$', '400', '$t_2$', '', '800'])
+		for t in [t0, t1, t2]:
+			ax1.axvline(t, linestyle='--', color='k', linewidth=.5)
+
 		fig.tight_layout()
 		settings.init()
 		fig.set_size_inches((settings.fig_width*2, settings.fig_height*1.12), forward=False)
