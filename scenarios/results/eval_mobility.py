@@ -455,8 +455,8 @@ if __name__ == "__main__":
 		
 	output_filename_base = args.filename + "-rep" + str(args.num_reps)
 	json_filename = "_data/" + output_filename_base + ".json"
-	graph_filename_num_active_neighbors = "_imgs/" + output_filename_base + "_num_active_neighbors.png"	
-	graph_filename_delays = "_imgs/" + output_filename_base + "_delays.png"	
+	graph_filename_num_active_neighbors = "_imgs/" + output_filename_base + "_num_active_neighbors.pdf"	
+	graph_filename_delays = "_imgs/" + output_filename_base + "_delays.pdf"	
 	if not args.no_parse:		
 		parse(args.dir, args.num_reps, args.num_users_per_swarm, json_filename)
 	if not args.no_plot:
