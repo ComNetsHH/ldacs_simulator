@@ -114,7 +114,7 @@ def parse(dir, num_reps, num_users_per_swarm, json_filename, time_slot_duration)
 				this_rep_mac_vals_swarm_2[-1].extend(np.array([float(s) for s in mac_results_2['vecvalue'].values[0].split(' ')]))
 				this_rep_mac_times_swarm_2[-1] = [float(s) for s in mac_results_2['vectime'].values[0].split(' ')]
 									
-			# in a sliding window over ten time slots, go over the no. of sent and received packets			
+			# in a sliding window over ten time slots, go over the no. of dropped packets
 			sum_dropped_packets = np.zeros(int(num_time_slots/10))			
 			i = 0
 			for t in range(10, num_time_slots, 10):
@@ -137,7 +137,7 @@ def parse(dir, num_reps, num_users_per_swarm, json_filename, time_slot_duration)
 				user_mac_vals = np.array(this_rep_mac_vals_swarm_1[n])
 				mean_mac_delays_per_user_1.append([])
 				last_i = 0
-				for t in range(5, max_simulation_time, 5):					
+				for t in range(5, max_simulation_time, 5):
 					# find index closest to this simulation time
 					i = find_nearest(user_mac_times, t)
 					mean_mac_delays_per_user_1[-1].append(np.mean(user_mac_vals[last_i:i]))
@@ -395,8 +395,8 @@ def plot(json_filename, graph_filename_active_neighbors, time_slot_duration, gra
 		ax1.set_ylim([-1, 30])
 		
 		plt.xlabel('Simulation time $t$ [s]')
-		ax1.set_xticks([0, t0, 200, t1, 400, t2, 600, 800])
-		ax1.set_xticklabels(['0', '$t_0$', '', '$t_1$', '400', '$t_2$', '', '800'])
+		ax1.set_xticks([0, t0, t1, 400, t2, 800])
+		ax1.set_xticklabels(['0', '$t_0$', '$t_1$', '400', '$t_2$', '800'])
 		# and the no. of dropped packets on a second y-axis
 		ax2 = ax1.twinx()		
 		ax2.plot(intervals_dropped_packets*time_slot_duration/1000, avg_dropped_packets[0,:], color='tab:orange', linewidth=.75, alpha=1, linestyle=':')
@@ -433,8 +433,8 @@ def plot(json_filename, graph_filename_active_neighbors, time_slot_duration, gra
 		ax2.fill_between(avg_mac_times, avg_mac_delay_both_swarms[1,:] * time_slot_duration, avg_mac_delay_both_swarms[2,:] * time_slot_duration, color='tab:orange', alpha=.5)
 		ax2.set_ylabel('sliding window over MAC delay [ms]', fontsize=7)
 		ax2.tick_params(axis='y', colors='tab:orange')		
-		ax1.set_xticks([0, t0, 200, t1, 400, t2, 600, 800])
-		ax1.set_xticklabels(['0', '$t_0$', '', '$t_1$', '400', '$t_2$', '', '800'])
+		ax1.set_xticks([0, t0, t1, 400, t2, 800])
+		ax1.set_xticklabels(['0', '$t_0$', '$t_1$', '400', '$t_2$', '800'])
 		for t in [t0, t1, t2]:
 			ax1.axvline(t, linestyle='--', color='k', linewidth=.5)
 
