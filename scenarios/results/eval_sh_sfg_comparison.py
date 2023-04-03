@@ -136,7 +136,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_distribution, grap
 		plt.xticks([distribution_mean, np.multiply(x, time_slot_duration)[nearest_99_index], np.max(np.multiply(x, time_slot_duration))])
 		fig.tight_layout()
 		settings.init()
-		fig.set_size_inches((settings.fig_width, settings.fig_height*1.12), forward=False)
+		fig.set_size_inches((settings.fig_width, settings.fig_height*.8), forward=False)
 		fig.savefig(graph_filename_distribution, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
 		print("Graph saved to " + graph_filename_distribution)    
 		# comparison with Matlab-generated Signal Flow Graph model output	
@@ -154,7 +154,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_distribution, grap
 		plt.ylabel('$P(X \leq x)$')
 		fig.tight_layout()
 		settings.init()
-		fig.set_size_inches((settings.fig_width, settings.fig_height*1.12), forward=False)
+		fig.set_size_inches((settings.fig_width, settings.fig_height*.8), forward=False)
 		fig.savefig(graph_filename_comparison, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
 		print("Graph saved to " + graph_filename_comparison)    
 		plt.close()

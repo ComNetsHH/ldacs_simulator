@@ -130,10 +130,23 @@ def plot(json_filename, time_slot_duration, graph_filename_delay):
 		# 1st graph: delay
 		fig = plt.figure()		
 		for k in range(len(max_num_pp_links)):
-			line = plt.errorbar(num_broadcast_nodes_vec, link_estbl_time_means[0, :, k]*time_slot_duration, link_estbl_time_err[0, :, k]*time_slot_duration, alpha=0.75, fmt='o', label='$l=' + str(max_num_pp_links[k]) + '$')
+			line = plt.errorbar(num_broadcast_nodes_vec, link_estbl_time_means[0, :, k]*time_slot_duration, link_estbl_time_err[0, :, k]*time_slot_duration, alpha=0.75, markersize=2, fmt='o', label='$l=' + str(max_num_pp_links[k]) + '$')
 			plt.plot(num_broadcast_nodes_vec, link_estbl_time_means[0, :, k]*time_slot_duration, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.75)
 		plt.ylabel('Link establishment time [ms]')		
-		plt.xlabel('Number of users $n$')
+		plt.xlabel('Number of neighbors $n$')		
+		if num_broadcast_nodes_vec[-1] == 60:
+			xticklabels = ['' for _ in range(0, num_broadcast_nodes_vec[-1], 5)]
+			xticklabels[2] = '10'
+			xticklabels[6] = '30'
+			xticklabels[-1] = '60'
+			plt.xticks(range(0, num_broadcast_nodes_vec[-1], 5), xticklabels)			
+			plt.axhline(link_estbl_time_means[0, 2, 0]*time_slot_duration, linestyle='--', color='k', linewidth=.75)
+			plt.axvline(10, linestyle='--', color='k', linewidth=.75)
+			plt.axvline(30, linestyle='--', color='k', linewidth=.75)
+			plt.axhline(link_estbl_time_means[0, 6, 0]*time_slot_duration, linestyle='--', color='k', linewidth=.75)
+			ymax_val = link_estbl_time_means[0, -1, -1]*time_slot_duration
+			
+			plt.yticks([link_estbl_time_means[0, 2, 0]*time_slot_duration, link_estbl_time_means[0, 6, 0]*time_slot_duration, ymax_val])
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
 		fig.tight_layout()
 		settings.init()

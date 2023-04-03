@@ -142,8 +142,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 		plt.gca().grid(which='minor', alpha=.5, linewidth=.25, linestyle='-')		
 		if ylim1 is not None and ylim2 is not None:
 			plt.ylim([ylim1, ylim2])
-		plt.xticks(num_users_vec)	
-		plt.axhline(y=10**3, color='gray', linestyle='--', alpha=0.75, linewidth=.5)
+		plt.xticks(num_users_vec)			
 		fig.tight_layout()
 		settings.init()
 		fig.set_size_inches((settings.fig_width, settings.fig_height*1.33), forward=False)
@@ -156,7 +155,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 		for j in range(n):			
 			line = plt.errorbar(num_users_vec, broadcast_reception_rate_means[j]*100, broadcast_reception_rate_err[j]*100, alpha=0.75 if target_reception_rates[j] != 37 else 1.0, markersize=2, fmt='o', label=('$q=' + str((100-target_reception_rates[j])/100) + '$' if target_reception_rates[j] != 37 else '$q=1-\\frac{1}{e}$'), color=colors[j])
 			plt.plot(num_users_vec, broadcast_reception_rate_means[j]*100, linestyle='--' , linewidth=.5 if target_reception_rates[j] != 37 else .75, color=line[0].get_color(), alpha=0.75 if target_reception_rates[j] != 37 else 1.0)
-			plt.axhline(y=target_reception_rates[j], linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=0.75)
+			plt.axhline(y=target_reception_rates[j], linestyle='--', linewidth=.75, color=line[0].get_color(), alpha=0.75)
 		plt.ylabel('Reception rate [\%]')				
 		plt.yticks(target_reception_rates)		
 		plt.xticks(num_users_vec)	

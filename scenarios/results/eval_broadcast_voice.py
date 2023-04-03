@@ -125,15 +125,15 @@ def plot(json_filename, graph_filename_reception_rate, graph_filename_delay, tar
 		# 1st graph: reception rate
 		fig = plt.figure()		
 		for i in range(len(channel_err_vec)):
-			line = plt.errorbar(num_users_vec, broadcast_reception_rate_means[:,i]*100, broadcast_reception_rate_err[:,i]*100, alpha=0.5, fmt='o', label='$r=' + str(channel_err_vec[i]) + '$')
+			line = plt.errorbar(num_users_vec, broadcast_reception_rate_means[:,i]*100, broadcast_reception_rate_err[:,i]*100, alpha=0.5, markersize=2, fmt='o', label='$r=' + str(channel_err_vec[i]) + '$')
 			plt.plot(num_users_vec, broadcast_reception_rate_means[:,i]*100, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=0.5)
-			plt.axhline((1.0-channel_err_vec[i])*100, linestyle='--', linewidth=.5, color='k')
+			plt.axhline((1.0-channel_err_vec[i])*100, linestyle='--', linewidth=.75, color='k')
 		plt.ylabel('Reception rate [\%]')				
 		plt.ylim([0, 105])
 		plt.xlabel('No. of neighbors $n$')		
 		plt.xticks(num_users_vec)
 		if target_reception_rate is not None:
-			plt.axhline(target_reception_rate*100, linestyle='--', linewidth=.5, color='k')
+			plt.axhline(target_reception_rate*100, linestyle='--', linewidth=.75, color='k')
 			plt.yticks([0, target_reception_rate*100, 100])
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
 		fig.tight_layout()
@@ -147,12 +147,12 @@ def plot(json_filename, graph_filename_reception_rate, graph_filename_delay, tar
 		fig = plt.figure()		
 		colors = []
 		for i in range(len(channel_err_vec)):
-			line = plt.errorbar(num_users_vec, delay_means[:,i]*time_slot_duration, delay_err[:,i]*time_slot_duration, alpha=0.5, fmt='o', label='$r=' + str(channel_err_vec[i]) + '$')
-			plt.plot(num_users_vec, delay_means[:,i]*time_slot_duration, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=0.5)
+			line = plt.errorbar(num_users_vec, delay_means[:,i]*time_slot_duration, delay_err[:,i]*time_slot_duration, alpha=0.5, markersize=2, fmt='o', label='$r=' + str(channel_err_vec[i]) + '$')
+			plt.plot(num_users_vec, delay_means[:,i]*time_slot_duration, linestyle='-', linewidth=.5, color=line[0].get_color(), alpha=0.5)
 			colors.append(line[0].get_color())				
 		for i in range(len(channel_err_vec)):
-			line = plt.errorbar(num_users_vec, avg_beacon_rx_mat_means[:,i]*time_slot_duration, avg_beacon_rx_mat_err[:,i]*time_slot_duration, color=colors[i], fmt='x', alpha=.75)
-			plt.plot(num_users_vec, avg_beacon_rx_mat_means[:,i]*time_slot_duration, linestyle=':', linewidth=1, color=line[0].get_color(), alpha=.75)
+			line = plt.errorbar(num_users_vec, avg_beacon_rx_mat_means[:,i]*time_slot_duration, avg_beacon_rx_mat_err[:,i]*time_slot_duration, color=colors[i], markersize=3 , fmt='x', alpha=.75)
+			plt.plot(num_users_vec, avg_beacon_rx_mat_means[:,i]*time_slot_duration, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.5)
 		# two fake data points to add entries to the legend
 		line = plt.errorbar(min(num_users_vec), min(avg_beacon_rx_mat_means[:,0]*time_slot_duration), 0, label='MAC Delay', color='k', fmt='o', alpha=.5)
 		line.remove()
@@ -161,9 +161,9 @@ def plot(json_filename, graph_filename_reception_rate, graph_filename_delay, tar
 		plt.ylabel('Delay [ms]')				
 		plt.xlabel('No. of neighbors $n$')		
 		plt.xticks(num_users_vec)
-		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=3, columnspacing=0.5)				
+		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.5), ncol=2, columnspacing=0.5)				
 		fig.tight_layout()
-		fig.set_size_inches((settings.fig_width, settings.fig_height*1.15), forward=False)
+		fig.set_size_inches((settings.fig_width, settings.fig_height*1.25), forward=False)
 		fig.savefig(graph_filename_delay, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
 		print("Graph saved to " + graph_filename_delay)    
 		plt.close()
