@@ -139,22 +139,22 @@ def plot(json_filename, graph_filename_delays, graph_filename_distribution, grap
 		fig.set_size_inches((settings.fig_width, settings.fig_height*.8), forward=False)
 		fig.savefig(graph_filename_distribution, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
 		print("Graph saved to " + graph_filename_distribution)    
-		# comparison with Matlab-generated Signal Flow Graph model output	
-				
+
+		# comparison with Matlab-generated Signal Flow Graph model output					
 		all_vals = [value*time_slot_duration for sublist in beacon_rx_vals_mat for value in sublist]  # flat list from repetitions-array
 		bin_width = 50
 		fig = plt.figure()		
 		# compute empirical CDF from simulation data
-		plt.plot(np.multiply(x, time_slot_duration), np.cumsum(y), label='analytical', linestyle='--', color='gray')
-		plt.axvline(distribution_mean, linestyle='--', color='gray', linewidth=.5, label='analytical mean')
-		plt.hist(all_vals, density=True, cumulative=True, histtype='step', color='k', label='empirical', bins=range(0, int(max(all_vals)), bin_width))
+		plt.plot(np.multiply(x, time_slot_duration), np.cumsum(y), label='analytical', linestyle='--', color='tab:blue')
+		plt.axvline(distribution_mean, linestyle='--', color='k', linewidth=.75, label='analytical mean')
+		plt.hist(all_vals, density=True, cumulative=True, histtype='step', color='tab:orange', label='empirical', bins=range(0, int(max(all_vals)), bin_width))
 		plt.xticks([distribution_mean, np.max(all_vals)])
-		plt.legend(framealpha=0.0, prop={'size': 7}, loc='lower center')
+		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.55), ncol=1)		
 		plt.xlabel('Delay $x$ [ms]')
 		plt.ylabel('$P(X \leq x)$')
 		fig.tight_layout()
 		settings.init()
-		fig.set_size_inches((settings.fig_width, settings.fig_height*.8), forward=False)
+		fig.set_size_inches((settings.fig_width, settings.fig_height*1.15), forward=False)
 		fig.savefig(graph_filename_comparison, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
 		print("Graph saved to " + graph_filename_comparison)    
 		plt.close()
