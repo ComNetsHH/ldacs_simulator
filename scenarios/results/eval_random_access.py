@@ -131,7 +131,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, graph_f
 		# 1st graph: delay		
 		fig = plt.figure()
 		for i in range(len(num_candidate_slots_vec)):
-			line = plt.errorbar(num_users_vec, broadcast_delays_means[:,i]*time_slot_duration, broadcast_delays_err[:,i], fmt='o', label='$k=' + str(num_candidate_slots_vec[i]) + '$', alpha=.75)
+			line = plt.errorbar(num_users_vec, broadcast_delays_means[:,i]*time_slot_duration, broadcast_delays_err[:,i], markersize=2, fmt='o', label='$k=' + str(num_candidate_slots_vec[i]) + '$', alpha=.75)
 			plt.plot(num_users_vec, broadcast_delays_means[:,i]*time_slot_duration, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.75)		
 		plt.ylabel('MAC delays [ms]')		
 		plt.xlabel('Number of users $n$')		
@@ -154,7 +154,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, graph_f
 		# 2nd graph: reception rate		
 		fig = plt.figure()		
 		for i in range(len(num_candidate_slots_vec)):
-			line = plt.errorbar(num_users_vec, broadcast_reception_rate_means[:,i]*100, broadcast_reception_rate_err[:,i]*100, fmt='o', label='$k=' + str(num_candidate_slots_vec[i]) + '$', alpha=.75)
+			line = plt.errorbar(num_users_vec, broadcast_reception_rate_means[:,i]*100, broadcast_reception_rate_err[:,i]*100, markersize=2, fmt='o', label='$k=' + str(num_candidate_slots_vec[i]) + '$', alpha=.75)
 			plt.plot(num_users_vec, broadcast_reception_rate_means[:,i]*100, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.75)
 		plt.ylabel('Reception rate [\%]')		
 		plt.ylim([0, 105])
@@ -173,7 +173,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, graph_f
 		# 3rd graph: no. of candidate slots
 		fig = plt.figure()		
 		for i in range(len(num_candidate_slots_vec)):
-			line = plt.errorbar(num_users_vec, broadcast_mean_num_candidate_slots_mat_means[:,i], broadcast_mean_num_candidate_slots_mat_err[:,i],  fmt='o', label='$k=' + str(num_candidate_slots_vec[i]) + '$', alpha=.75)
+			line = plt.errorbar(num_users_vec, broadcast_mean_num_candidate_slots_mat_means[:,i], broadcast_mean_num_candidate_slots_mat_err[:,i], markersize=2, fmt='o', label='$k=' + str(num_candidate_slots_vec[i]) + '$', alpha=.75)
 			plt.plot(num_users_vec, broadcast_mean_num_candidate_slots_mat_means[:,i], linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.75)
 		plt.ylabel('No. of candidate slots')		
 		plt.xlabel('Number of users $n$')		
@@ -191,7 +191,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, graph_f
 		# 4th graph: selected slots
 		fig = plt.figure()		
 		for i in range(len(num_candidate_slots_vec)):
-			line = plt.errorbar(num_users_vec, broadcast_mean_selected_slots_mat_means[:,i], broadcast_mean_selected_slots_mat_err[:,i],  fmt='o', label='$k=' + str(num_candidate_slots_vec[i]) + '$', alpha=.75)
+			line = plt.errorbar(num_users_vec, broadcast_mean_selected_slots_mat_means[:,i], broadcast_mean_selected_slots_mat_err[:,i], markersize=2, fmt='o', label='$k=' + str(num_candidate_slots_vec[i]) + '$', alpha=.75)
 			plt.plot(num_users_vec, broadcast_mean_selected_slots_mat_means[:,i], linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.75)
 		plt.ylabel('Mean selected slot')		
 		plt.xlabel('Number of users $n$')		

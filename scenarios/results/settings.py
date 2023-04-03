@@ -1,5 +1,5 @@
 def init():
 	global fig_width 
-	fig_width = 4.7*.35
+	fig_width = 4.7*.27
 	global fig_height 
-	fig_height = 3.5*.5
+	fig_height = 3.5*.45
