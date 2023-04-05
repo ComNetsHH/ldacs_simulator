@@ -123,9 +123,9 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 		fig = plt.figure()				
 		colors = ['tab:purple', 'tab:brown', 'tab:cyan', 'tab:olive']
 		# two fake data points to add entries to the legend
-		line = plt.errorbar(min(num_users_vec), 0, 0, label='MAC Delay', color='k', fmt='o', alpha=.5)
+		line = plt.errorbar(min(num_users_vec), 0, 0, label='MAC Delay', color='k', markersize=2, fmt='o', alpha=.5)
 		line.remove()
-		line = plt.errorbar(min(num_users_vec), 0, 0, label='E2E Delay', color='k', fmt='x', alpha=.5)
+		line = plt.errorbar(min(num_users_vec), 0, 0, label='E2E Delay', color='k', markersize=2, fmt='x', alpha=.5)
 		line.remove()
 		for j in range(n):
 			line = plt.errorbar(num_users_vec, broadcast_delays_means[j]*time_slot_duration, broadcast_delays_err[j]*time_slot_duration, alpha=0.75 if target_reception_rates[j] != 37 else 1.0, markersize=2, fmt='o', color=colors[j])			
@@ -160,7 +160,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 		plt.yticks(target_reception_rates)		
 		plt.xticks(num_users_vec)	
 		plt.xlabel('Number of users $n$')						
-		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.4), ncol=2)		
+		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.3), ncol=2)		
 		plt.ylim([0, 105])
 		fig.tight_layout()
 		fig.set_size_inches((settings.fig_width, settings.fig_height*1.25), forward=False)
