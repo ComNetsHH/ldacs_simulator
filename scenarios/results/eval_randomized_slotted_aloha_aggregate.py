@@ -123,15 +123,15 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 		fig = plt.figure()				
 		colors = ['tab:purple', 'tab:brown', 'tab:cyan', 'tab:olive']
 		# two fake data points to add entries to the legend
-		line = plt.errorbar(min(num_users_vec), 0, 0, label='MAC Delay', color='k', markersize=2, fmt='o', alpha=.5)
+		line = plt.errorbar(min(num_users_vec), 0, 0, label='MAC Delay', color='k', markersize=2, fmt='o', alpha=.75)
 		line.remove()
-		line = plt.errorbar(min(num_users_vec), 0, 0, label='E2E Delay', color='k', markersize=2, fmt='x', alpha=.5)
+		line = plt.errorbar(min(num_users_vec), 0, 0, label='E2E Delay', color='k', markersize=6, fmt='x', alpha=.75)
 		line.remove()
 		for j in range(n):
 			line = plt.errorbar(num_users_vec, broadcast_delays_means[j]*time_slot_duration, broadcast_delays_err[j]*time_slot_duration, alpha=0.75 if target_reception_rates[j] != 37 else 1.0, markersize=2, fmt='o', color=colors[j])			
 			plt.plot(num_users_vec, broadcast_delays_means[j]*time_slot_duration, linestyle='--', linewidth=.5 if target_reception_rates[j] != 37 else .75, color=line[0].get_color(), alpha=0.75 if target_reception_rates[j] != 37 else 1.0, label=('$q=' + str((100-target_reception_rates[j])/100) + '$' if target_reception_rates[j] != 37 else '$q=1-\\frac{1}{e}$'))							
 		for j in range(n):
-			line = plt.errorbar(num_users_vec, avg_beacon_rx_mat_means[j]*time_slot_duration, avg_beacon_rx_mat_err[j]*time_slot_duration, alpha=0.75 if target_reception_rates[j] != 37 else 1.0, markersize=2, fmt='x', color=colors[j])
+			line = plt.errorbar(num_users_vec, avg_beacon_rx_mat_means[j]*time_slot_duration, avg_beacon_rx_mat_err[j]*time_slot_duration, alpha=0.75 if target_reception_rates[j] != 37 else 1.0, markersize=4, fmt='x', color=colors[j])
 			plt.plot(num_users_vec, avg_beacon_rx_mat_means[j]*time_slot_duration, linestyle=':', linewidth=.5 if target_reception_rates[j] != 37 else .75, color=line[0].get_color(), alpha=0.75 if target_reception_rates[j] != 37 else 1.0)		
 		plt.ylabel('Delays [ms]')				
 		plt.xlabel('Number of users $n$')		
