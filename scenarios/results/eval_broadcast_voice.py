@@ -154,9 +154,9 @@ def plot(json_filename, graph_filename_reception_rate, graph_filename_delay, tar
 			line = plt.errorbar(num_users_vec, avg_beacon_rx_mat_means[:,i]*time_slot_duration, avg_beacon_rx_mat_err[:,i]*time_slot_duration, color=colors[i], markersize=3 , fmt='x', alpha=.75)
 			plt.plot(num_users_vec, avg_beacon_rx_mat_means[:,i]*time_slot_duration, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.75)
 		# two fake data points to add entries to the legend
-		line = plt.errorbar(min(num_users_vec), min(avg_beacon_rx_mat_means[:,0]*time_slot_duration), 0, label='MAC Delay', color='k', fmt='o', alpha=.75)
+		line = plt.errorbar(min(num_users_vec), min(avg_beacon_rx_mat_means[:,0]*time_slot_duration), 0, label='MAC Delay', color='k', markersize=2, fmt='o', alpha=.75)
 		line.remove()
-		line = plt.errorbar(min(num_users_vec), min(avg_beacon_rx_mat_means[:,0]*time_slot_duration), 0, label='E2E Delay', color='k', fmt='x', alpha=.75)
+		line = plt.errorbar(min(num_users_vec), min(avg_beacon_rx_mat_means[:,0]*time_slot_duration), 0, label='E2E Delay', color='k', markersize=2, fmt='x', alpha=.75)
 		line.remove()				
 		plt.ylabel('Delay [ms]')				
 		plt.xlabel('No. of neighbors $n$')		
