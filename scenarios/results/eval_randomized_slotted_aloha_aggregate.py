@@ -142,7 +142,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 		plt.gca().grid(which='minor', alpha=.5, linewidth=.25, linestyle='-')		
 		if ylim1 is not None and ylim2 is not None:
 			plt.ylim([ylim1, ylim2])
-		plt.xticks(num_users_vec)			
+		plt.xticks(num_users_vec, [str(num_users_vec[i]) if num_users_vec[i] != 5 else '' for i in range(len(num_users_vec))])	
 		fig.tight_layout()
 		settings.init()
 		fig.set_size_inches((settings.fig_width, settings.fig_height*1.33), forward=False)
@@ -158,7 +158,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 			plt.axhline(y=target_reception_rates[j], linestyle='--', linewidth=.75, color=line[0].get_color(), alpha=0.75)
 		plt.ylabel('Reception rate [\%]')				
 		plt.yticks(target_reception_rates)		
-		plt.xticks(num_users_vec)	
+		plt.xticks(num_users_vec, [str(num_users_vec[i]) if num_users_vec[i] != 5 else '' for i in range(len(num_users_vec))])	
 		plt.xlabel('Number of users $n$')						
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.3), ncol=2)		
 		plt.ylim([0, 105])
