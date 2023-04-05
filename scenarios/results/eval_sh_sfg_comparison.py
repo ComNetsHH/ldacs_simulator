@@ -2,6 +2,7 @@ import settings
 from datetime import time
 import pandas as pd
 import numpy as np
+from statsmodels.distributions.empirical_distribution import ECDF
 import matplotlib.pyplot as plt
 import argparse
 import json
@@ -141,13 +142,18 @@ def plot(json_filename, graph_filename_delays, graph_filename_distribution, grap
 		print("Graph saved to " + graph_filename_distribution)    
 
 		# comparison with Matlab-generated Signal Flow Graph model output					
-		all_vals = [value*time_slot_duration for sublist in beacon_rx_vals_mat for value in sublist]  # flat list from repetitions-array
+		all_vals = [value*time_slot_duration for sublist in beacon_rx_vals_mat for value in sublist]  # flat list from repetitions-array		
 		bin_width = 50
 		fig = plt.figure()		
 		# compute empirical CDF from simulation data
-		plt.plot(np.multiply(x, time_slot_duration), np.cumsum(y), label='analytical', linestyle='--', color='tab:blue')
-		plt.axvline(distribution_mean, linestyle='--', color='k', linewidth=.75, label='analytical mean')
-		plt.hist(all_vals, density=True, cumulative=True, histtype='step', color='tab:orange', label='empirical', bins=range(0, int(max(all_vals)), bin_width))
+		x_shaped = np.multiply(x, time_slot_duration)
+		y_shaped = np.cumsum(y)
+		max_i = find_nearest(x_shaped, np.max(all_vals) * 1.15)		
+		plt.plot(x_shaped[0:max_i], y_shaped[0:max_i], label='analytical', linestyle='--', color='tab:blue')
+		plt.axvline(distribution_mean, linestyle='--', color='tab:blue', linewidth=.75)
+		plt.axvline(np.mean(all_vals), linestyle='--', color='tab:orange', linewidth=.75)		
+		plt.plot(np.sort(all_vals), np.linspace(0, 1, len(all_vals)), color='tab:orange', label='empirical')
+		plt.axvline(0, ymin=0, ymax=0, linestyle='--', color='k', linewidth=.75, label='means')		
 		plt.xticks([distribution_mean, np.max(all_vals)])
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.55), ncol=1)		
 		plt.xlabel('Delay $x$ [ms]')
