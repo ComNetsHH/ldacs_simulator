@@ -288,7 +288,7 @@ sh-mac-mcsotdma-all_clean: sh-mac-mcsotdma-95_clean sh-mac-mcsotdma-75_clean sh-
 
 # OPTIMAL COLLISION PROBABILITY
 sh-mac-opt: 
-	python optimize_target_collsion_rate.py 
+	pipenv run python optimize_target_collsion_rate.py 
 
 
 # LINK ESTABLISHMENT TIMES
