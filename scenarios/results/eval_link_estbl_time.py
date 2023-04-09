@@ -135,11 +135,11 @@ def plot(json_filename, time_slot_duration, graph_filename_delay):
 		plt.ylabel('Link establishment time [ms]')		
 		plt.xlabel('Number of neighbors $n$')		
 		if num_broadcast_nodes_vec[-1] == 60:
-			xticklabels = ['' for _ in range(0, num_broadcast_nodes_vec[-1], 5)]
+			xticklabels = ['' for _ in range(0, num_broadcast_nodes_vec[-1] + 5, 5)]
 			xticklabels[2] = '10'
 			xticklabels[6] = '30'
 			xticklabels[-1] = '60'
-			plt.xticks(range(0, num_broadcast_nodes_vec[-1], 5), xticklabels)			
+			plt.xticks(range(0, num_broadcast_nodes_vec[-1] + 5, 5), xticklabels)			
 			plt.axhline(link_estbl_time_means[0, 2, 0]*time_slot_duration, linestyle='--', color='k', linewidth=.75)
 			plt.axvline(10, linestyle='--', color='k', linewidth=.75)
 			plt.axvline(30, linestyle='--', color='k', linewidth=.75)
