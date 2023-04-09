@@ -406,3 +406,7 @@ mobility: mobility_sim mobility_parse mobility_plot
 
 mobility_clean:
 	rm simresults/$(MOBILITY_CONFIGNAME)/*
+
+# NUMERICAL "PROOF" OF DELAY-OPTIMAL CONFIGURATION
+delay_optimal_plot:
+	pipenv run python3 plot_delay_optimal_fn.py
