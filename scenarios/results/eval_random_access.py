@@ -131,8 +131,8 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, graph_f
 		# 1st graph: delay		
 		fig = plt.figure()
 		for i in range(len(num_candidate_slots_vec)):
-			line = plt.errorbar(num_users_vec, broadcast_delays_means[:,i]*time_slot_duration, broadcast_delays_err[:,i], markersize=2, fmt='o', label='$k=' + str(num_candidate_slots_vec[i]) + '$', alpha=.75)
-			plt.plot(num_users_vec, broadcast_delays_means[:,i]*time_slot_duration, linestyle='--', linewidth=.5, color=line[0].get_color(), alpha=.75)		
+			line = plt.errorbar(num_users_vec, broadcast_delays_means[:,i]*time_slot_duration, broadcast_delays_err[:,i], markersize=2, fmt='o', label='$k=' + str(num_candidate_slots_vec[i]) + '$')
+			plt.plot(num_users_vec, broadcast_delays_means[:,i]*time_slot_duration, linestyle='--', linewidth=.5, color=line[0].get_color())		
 		plt.ylabel('MAC delays [ms]')		
 		plt.xlabel('Number of users $n$')		
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		

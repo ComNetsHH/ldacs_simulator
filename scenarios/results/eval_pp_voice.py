@@ -101,8 +101,8 @@ def plot(json_filename, graph_filename, time_slot_duration):
 			l = max_num_pp_links[i]
 			delay_mat = np.array(json_data[json_label_unicast_delay_vecs[i]])		
 			delay_time = np.array(json_data[json_label_unicast_delay_vec_times[i]])		
-			plt.scatter(delay_time, delay_mat*time_slot_duration, alpha=.75, label='$l=' + str(l) + '$', s=5)
-			plt.axhline(max(set(delay_mat), key=list(delay_mat).count)*time_slot_duration, color='k', linestyle='--', linewidth=0.75)
+			plt.scatter(delay_time[1:], delay_mat[1:]*time_slot_duration, label='$l=' + str(l) + '$', s=5, zorder=1)  # due to the way statistic capturing is implemented in MCSOTDMA, the first value is zero and should be discarded
+			plt.axhline(max(set(delay_mat), key=list(delay_mat).count)*time_slot_duration, color='k', linestyle='--', linewidth=0.75, zorder=0)
 			yticks.append(max(set(delay_mat), key=list(delay_mat).count)*time_slot_duration)
 			if i == len(max_num_pp_links) - 1:
 				yticks.append(max(delay_mat)/2*time_slot_duration)

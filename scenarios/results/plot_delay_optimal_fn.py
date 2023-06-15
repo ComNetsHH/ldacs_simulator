@@ -31,7 +31,7 @@ if __name__ == "__main__":
 		plt.rcParams.update({
 			'font.family': 'serif',
 			"font.serif": 'Times',
-			'font.size': 9,
+			'font.size': 8,
 			'text.usetex': True,
 			'pgf.rcfonts': False
 		})
@@ -45,10 +45,10 @@ if __name__ == "__main__":
 		plt.ylabel('slots')
 		ax.set_yticklabels([])
 		ax.set_yticks([])
-		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.3), ncol=1)
+		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.25), ncol=1)
 		fig.tight_layout()
 		settings.init()
-		fig.set_size_inches((.8*settings.fig_width, .8*settings.fig_height), forward=False)
+		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
 		fig.savefig(graph_filename_d, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
 		print("Graph saved to " + graph_filename_d)
 
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 		plt.rcParams.update({
 			'font.family': 'serif',
 			"font.serif": 'Times',
-			'font.size': 9,
+			'font.size': 8,
 			'text.usetex': True,
 			'pgf.rcfonts': False
 		})
@@ -68,10 +68,10 @@ if __name__ == "__main__":
 		plt.plot(x, y, label='$\\frac{\\partial{}}{\\partial{q}} d(n,q) = 0$')
 		plt.axhline(1.-1./math.exp(1), linestyle='--', color='black', linewidth=.75)
 		plt.xlabel('number of neighbors $n$')
-		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.3), ncol=1)		
+		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.25), ncol=1)		
 		plt.yticks([0.5, 1.-1./math.exp(1)], [0.5, '$1-\\frac{1}{e}$'])		
 		fig.tight_layout()
 		settings.init()
-		fig.set_size_inches((.8*settings.fig_width, .8*settings.fig_height), forward=False)
+		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
 		fig.savefig(graph_filename_derivative_d, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
 		print("Graph saved to " + graph_filename_derivative_d)

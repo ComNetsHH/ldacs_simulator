@@ -123,16 +123,16 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 		fig = plt.figure()				
 		colors = ['tab:purple', 'tab:brown', 'tab:cyan', 'tab:olive']
 		# two fake data points to add entries to the legend
-		line = plt.errorbar(min(num_users_vec), 0, 0, label='MAC Delay', color='k', markersize=2, fmt='o', alpha=.75)
+		line = plt.errorbar(min(num_users_vec), 0, 0, label='MAC Delay', color='k', markersize=2, fmt='o')
 		line.remove()
-		line = plt.errorbar(min(num_users_vec), 0, 0, label='E2E Delay', color='k', markersize=6, fmt='x', alpha=.75)
+		line = plt.errorbar(min(num_users_vec), 0, 0, label='E2E Delay', color='k', markersize=6, fmt='x')
 		line.remove()
 		for j in range(n):
-			line = plt.errorbar(num_users_vec, broadcast_delays_means[j]*time_slot_duration, broadcast_delays_err[j]*time_slot_duration, alpha=0.75 if target_reception_rates[j] != 37 else 1.0, markersize=2, fmt='o', color=colors[j])			
-			plt.plot(num_users_vec, broadcast_delays_means[j]*time_slot_duration, linestyle='--', linewidth=.5 if target_reception_rates[j] != 37 else .75, color=line[0].get_color(), alpha=0.75 if target_reception_rates[j] != 37 else 1.0, label=('$q=' + str((100-target_reception_rates[j])/100) + '$' if target_reception_rates[j] != 37 else '$q=1-\\frac{1}{e}$'))							
+			line = plt.errorbar(num_users_vec, broadcast_delays_means[j]*time_slot_duration, broadcast_delays_err[j]*time_slot_duration, markersize=2, fmt='o', color=colors[j])			
+			plt.plot(num_users_vec, broadcast_delays_means[j]*time_slot_duration, linestyle='--', linewidth=.5 if target_reception_rates[j] != 37 else .75, color=line[0].get_color(), label=('$q=' + str((100-target_reception_rates[j])/100) + '$' if target_reception_rates[j] != 37 else '$q=1-\\frac{1}{e}$'))							
 		for j in range(n):
-			line = plt.errorbar(num_users_vec, avg_beacon_rx_mat_means[j]*time_slot_duration, avg_beacon_rx_mat_err[j]*time_slot_duration, alpha=0.75 if target_reception_rates[j] != 37 else 1.0, markersize=4, fmt='x', color=colors[j])
-			plt.plot(num_users_vec, avg_beacon_rx_mat_means[j]*time_slot_duration, linestyle=':', linewidth=.5 if target_reception_rates[j] != 37 else .75, color=line[0].get_color(), alpha=0.75 if target_reception_rates[j] != 37 else 1.0)		
+			line = plt.errorbar(num_users_vec, avg_beacon_rx_mat_means[j]*time_slot_duration, avg_beacon_rx_mat_err[j]*time_slot_duration, markersize=4, fmt='x', color=colors[j])
+			plt.plot(num_users_vec, avg_beacon_rx_mat_means[j]*time_slot_duration, linestyle=':', linewidth=.5 if target_reception_rates[j] != 37 else .75, color=line[0].get_color())		
 		plt.ylabel('Delays [ms]')				
 		plt.xlabel('Number of users $n$')		
 		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.4, 1.5), ncol=2, columnspacing=0.5)				
@@ -153,9 +153,9 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 		# 2nd graph: reception rate		
 		fig = plt.figure()				
 		for j in range(n):			
-			line = plt.errorbar(num_users_vec, broadcast_reception_rate_means[j]*100, broadcast_reception_rate_err[j]*100, alpha=0.75 if target_reception_rates[j] != 37 else 1.0, markersize=2, fmt='o', label=('$q=' + str((100-target_reception_rates[j])/100) + '$' if target_reception_rates[j] != 37 else '$q=1-\\frac{1}{e}$'), color=colors[j])
-			plt.plot(num_users_vec, broadcast_reception_rate_means[j]*100, linestyle='--' , linewidth=.5 if target_reception_rates[j] != 37 else .75, color=line[0].get_color(), alpha=0.75 if target_reception_rates[j] != 37 else 1.0)
-			plt.axhline(y=target_reception_rates[j], linestyle='--', linewidth=.75, color=line[0].get_color(), alpha=0.75)
+			line = plt.errorbar(num_users_vec, broadcast_reception_rate_means[j]*100, broadcast_reception_rate_err[j]*100, markersize=2, fmt='o', label=('$q=' + str((100-target_reception_rates[j])/100) + '$' if target_reception_rates[j] != 37 else '$q=1-\\frac{1}{e}$'), color=colors[j])
+			plt.plot(num_users_vec, broadcast_reception_rate_means[j]*100, linestyle='--' , linewidth=.5 if target_reception_rates[j] != 37 else .75, color=line[0].get_color(), zorder=1)
+			plt.axhline(y=target_reception_rates[j], linestyle='--', linewidth=.75, color=line[0].get_color(), zorder=0)
 		plt.ylabel('Reception rate [\%]')				
 		plt.yticks(target_reception_rates)		
 		plt.xticks(num_users_vec, [str(num_users_vec[i]) if num_users_vec[i] != 5 else '' for i in range(len(num_users_vec))])	
