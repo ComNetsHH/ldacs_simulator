@@ -1,15 +1,32 @@
 #!/bin/bash
+
+# The L-Band Digital Aeronautical Communications System (LDACS) simulator provides an installation script for the simulator that downloads the other simulator components, defines simulation scenarios and provides result evaluation and graph creation.
+# Copyright (C) 2023  Sebastian Lindner, Konrad Fuger, Musab Ahmed Eltayeb Ahmed, Andreas Timm-Giel, Institute of Communication Networks, Hamburg University of Technology, Hamburg, Germany
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 NUM_CPUS=10  # set to your no. of cores
 
 LOC_OMNET=https://github.com/omnetpp/omnetpp/releases/download/omnetpp-5.6.2/omnetpp-5.6.2-src-macosx.tgz
 LOC_INET=https://github.com/eltayebmusab/inet/archive/refs/tags/v4.2.5.tar.gz
-LOC_GLUE=git@collaborating.tuhh.de:e-4/research-projects/intairnet-collection/intairnet-linklayer-glue.git
-LOC_RLC=git@collaborating.tuhh.de:e-4/research-projects/intairnet-collection/avionic-rlc.git
-LOC_ARQ=git@collaborating.tuhh.de:e-4/research-projects/intairnet-collection/avionic-arq.git
-LOC_MCSOTDMA=git@collaborating.tuhh.de:e-4/research-projects/intairnet-collection/mc-sotdma.git
-LOC_RADIO=git@collaborating.tuhh.de:e-4/research-projects/intairnet-collection/intairnet-radio.git
-LOC_APP=git@collaborating.tuhh.de:e-4/research-projects/intairnet-collection/intairnet-tracebasedapp.git
-LOC_WRAPPER=git@collaborating.tuhh.de:e-4/research-projects/intairnet-collection/intairnet-omnet-wrapper.git
+LOC_GLUE=git@github.com:ComNetsHH/ldacs_glue.git
+LOC_RLC=git@github.com:ComNetsHH/ldacs_rlc.git
+LOC_ARQ=git@github.com:ComNetsHH/ldacs_arq.git
+LOC_MCSOTDMA=git@github.com:ComNetsHH/ldacs_mcsotdma.git
+LOC_RADIO=git@github.com:ComNetsHH/ldacs_tracebased_channel_model.git
+LOC_APP=git@github.com:ComNetsHH/ldacs_tracebased_app.git
+LOC_WRAPPER=git@github.com:ComNetsHH/ldacs_wrapper.git
 
 # Download OMNeT++ v5.6.2, unpack and go to directory.
 echo "Downloading OMNeT++"
