@@ -25,7 +25,7 @@ You'll find that simulation scenarios are defined in OMNeT++ `.ini` files, which
 These are passed into the OMNeT++ executable to simulate.
 Also one folder above, you'll find `.ned` network configuration files.
 
-To parse simulation result files that are generated under `simuresults/<configname>/` folders, we convert to CSV using `convert-omnet-csv.sh` for scalar and `convert-vec-omnet-csv.sh` for vector result files.
+To parse simulation result files that are generated under `simresults/<configname>/` folders, we convert to CSV using `convert-omnet-csv.sh` for scalar and `convert-vec-omnet-csv.sh` for vector result files.
 Parsed CSV files will have the original name with a `.csv` suffix.
 
 To parse CSV files, we rely on Python.
@@ -53,5 +53,6 @@ When each target is run by 14 cores in parallel (where applicable), allow a simu
 Scale according to the hardware that you have available, and bring a lot of coffee (or let it run over night).
 
 # tl;dr (too long; didn't read)
-The ten graphs in the paper are associated to ten SLURM files.
-Open each file, copy&paste the `make` commands therein, and execute them to generate all graphs in the paper.
+The graphs in the paper are associated to make targets.
+Run all targets in the `Makefile` and wait for things to finish.
+You'll find the generated PDF graphs in the `_imgs` folder.
