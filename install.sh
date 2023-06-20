@@ -176,7 +176,7 @@ make MODE=release -j$NUM_CPUS
 
 cd ../../..
 
-# cd ../../scenarios/results
-# echo -e "\n\nInstall python packages into local pipenv environment"
-# make install-python-env
+cd ../../scenarios/results
+echo -e "\n\nInstall python packages into local pipenv environment"
+make install-python-env
 echo -e "\n\nAll done! Try it by running the following commands:\ncd scenarios/results\nmake sanity-check\nThis should start simulations and create graphs in the scenarios/results/_imgs/ directory."

@@ -29,7 +29,7 @@ LOC_APP=git@github.com:ComNetsHH/ldacs_tracebased_app.git
 LOC_WRAPPER=git@github.com:ComNetsHH/ldacs_wrapper.git
 LOC_GPSR=git@github.com:ComNetsHH/ldacs_gpsr.git
 
-Download OMNeT++ v5.6.2, unpack and go to directory.
+# Download OMNeT++ v5.6.2, unpack and go to directory.
 echo "Downloading OMNeT++"
 wget $LOC_OMNET
 echo -e "\n\nUnpacking OMNeT++"
@@ -176,7 +176,7 @@ make MODE=release -j$NUM_CPUS
 
 cd ../../..
 
-# cd ../../scenarios/results
-# echo -e "\n\nInstall python packages into local pipenv environment"
-# make install-python-env
+cd ../../scenarios/results
+echo -e "\n\nInstall python packages into local pipenv environment"
+make install-python-env
 echo -e "\n\nAll done! Try it by running the following commands:\ncd scenarios/results\nmake sanity-check\nThis should start simulations and create graphs in the scenarios/results/_imgs/ directory."
