@@ -29,122 +29,120 @@ LOC_APP=git@github.com:ComNetsHH/ldacs_tracebased_app.git
 LOC_WRAPPER=git@github.com:ComNetsHH/ldacs_wrapper.git
 LOC_GPSR=git@github.com:ComNetsHH/ldacs_gpsr.git
 
-# Download OMNeT++ v5.6.2, unpack and go to directory.
-# echo "Downloading OMNeT++"
-# wget $LOC_OMNET
-# echo -e "\n\nUnpacking OMNeT++"
-# tar -xvzf omnetpp-5.6.2-src-macosx.tgz
-# rm omnetpp-5.6.2-src-macosx.tgz
-# echo -e "\n\nCompiling OMNeT++"
-# cd omnetpp-5.6.2/
-# # Set PATH, configure and build.
-# WORKDIR=$(pwd)
-# export PATH=${WORKDIR}/bin:$PATH
-# ./configure CC=gcc CXX=g++ WITH_OSG=no WITH_OSGEARTH=no WITH_QTENV=no
-# make -j$NUM_CPUS MODE=release base
-# #make -j$NUM_CPUS MODE=debug base
+Download OMNeT++ v5.6.2, unpack and go to directory.
+echo "Downloading OMNeT++"
+wget $LOC_OMNET
+echo -e "\n\nUnpacking OMNeT++"
+tar -xvzf omnetpp-5.6.2-src-macosx.tgz
+rm omnetpp-5.6.2-src-macosx.tgz
+echo -e "\n\nCompiling OMNeT++"
+cd omnetpp-5.6.2/
+# Set PATH, configure and build.
+WORKDIR=$(pwd)
+export PATH=${WORKDIR}/bin:$PATH
+./configure CC=gcc CXX=g++ WITH_OSG=no WITH_OSGEARTH=no WITH_QTENV=no
+make -j$NUM_CPUS MODE=release base
+#make -j$NUM_CPUS MODE=debug base
 
-# # Download INET, unpack and go to directory.
-# echo -e "\n\nDownloading INET"
-# mkdir workspace
-# cd workspace
-# wget $LOC_INET
-# echo -e "\n\nUnpacking INET"
-# tar -xvzf v4.2.5.tar.gz 
-# rm -R v4.2.5.tar.gz
-# mv inet-4.2.5/ inet4
-# cd inet4/
-# # Build.
-# echo -e "\n\nCompiling INET"
-# make makefiles
-# make -j$NUM_CPUS MODE=release
-# #make -j$NUM_CPUS MODE=debug
+# Download INET, unpack and go to directory.
+echo -e "\n\nDownloading INET"
+mkdir workspace
+cd workspace
+wget $LOC_INET
+echo -e "\n\nUnpacking INET"
+tar -xvzf v4.2.5.tar.gz 
+rm -R v4.2.5.tar.gz
+mv inet-4.2.5/ inet4
+cd inet4/
+# Build.
+echo -e "\n\nCompiling INET"
+make makefiles
+make -j$NUM_CPUS MODE=release
+#make -j$NUM_CPUS MODE=debug
+cd ..
+
+# Compile GLUE
+echo -e "\n\nDownloading GLUE lib"
+git clone $LOC_GLUE ldacs_glue
+cd ldacs_glue
+git pull
+mkdir cmake-build-release
+cd cmake-build-release
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j$NUM_CPUS intairnet_linklayer_glue
 # cd ..
-
-# # Compile GLUE
-# echo -e "\n\nDownloading GLUE lib"
-# git clone $LOC_GLUE ldacs_glue
-# cd ldacs_glue
-# git pull
-# mkdir cmake-build-release
-# cd cmake-build-release
-# cmake -DCMAKE_BUILD_TYPE=Release ..
+# mkdir cmake-build-debug
+# cd cmake-build-debug
+# cmake -DCMAKE_BUILD_TYPE=Debug ..
 # make -j$NUM_CPUS intairnet_linklayer_glue
-# # cd ..
-# # mkdir cmake-build-debug
-# # cd cmake-build-debug
-# # cmake -DCMAKE_BUILD_TYPE=Debug ..
-# # make -j$NUM_CPUS intairnet_linklayer_glue
-# cd ../..
+cd ../..
 
-# # Compile RLC
-# echo -e "\n\nDownloading and compiling RLC lib"
-# git clone $LOC_RLC ldacs_rlc
-# cd ldacs_rlc
-# ln -s ../ldacs_glue/ glue-lib-headers
-# mkdir cmake-build-release
-# cd cmake-build-release
-# cmake -DCMAKE_BUILD_TYPE=Release ..
+# Compile RLC
+echo -e "\n\nDownloading and compiling RLC lib"
+git clone $LOC_RLC ldacs_rlc
+cd ldacs_rlc
+ln -s ../ldacs_glue/ glue-lib-headers
+mkdir cmake-build-release
+cd cmake-build-release
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j$NUM_CPUS tuhh_intairnet_rlc
+# cd ..
+# mkdir cmake-build-debug
+# cd cmake-build-debug
+# cmake -DCMAKE_BUILD_TYPE=Debug ..
 # make -j$NUM_CPUS tuhh_intairnet_rlc
-# # cd ..
-# # mkdir cmake-build-debug
-# # cd cmake-build-debug
-# # cmake -DCMAKE_BUILD_TYPE=Debug ..
-# # make -j$NUM_CPUS tuhh_intairnet_rlc
-# cd ../..
+cd ../..
 
-# # Compile ARQ
-# echo -e "\n\nDownloading and compiling ARQ lib"
-# git clone $LOC_ARQ ldacs_arq
-# cd ldacs_arq/dev
-# ln -s ../../ldacs_glue/ glue-lib-headers
-# mkdir cmake-build-release
-# cd cmake-build-release
-# cmake -DCMAKE_BUILD_TYPE=Release ..
+# Compile ARQ
+echo -e "\n\nDownloading and compiling ARQ lib"
+git clone $LOC_ARQ ldacs_arq
+cd ldacs_arq/dev
+ln -s ../../ldacs_glue/ glue-lib-headers
+mkdir cmake-build-release
+cd cmake-build-release
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j$NUM_CPUS tuhh_intairnet_arq
+# cd ..
+# mkdir cmake-build-debug
+# cd cmake-build-debug
+# cmake -DCMAKE_BUILD_TYPE=Debug ..
 # make -j$NUM_CPUS tuhh_intairnet_arq
-# # cd ..
-# # mkdir cmake-build-debug
-# # cd cmake-build-debug
-# # cmake -DCMAKE_BUILD_TYPE=Debug ..
-# # make -j$NUM_CPUS tuhh_intairnet_arq
-# cd ../../..
+cd ../../..
 
-# # Compile MCSOTDMA
-# echo -e "\n\nDownloading and compiling MCSOTDMA lib"
-# git clone $LOC_MCSOTDMA ldacs_mcsotdma
-# cd ldacs_mcsotdma
-# ln -s ../ldacs_glue/ glue-lib-headers
-# mkdir cmake-build-release
-# cd cmake-build-release
-# cmake -DCMAKE_BUILD_TYPE=Release ..
+# Compile MCSOTDMA
+echo -e "\n\nDownloading and compiling MCSOTDMA lib"
+git clone $LOC_MCSOTDMA ldacs_mcsotdma
+cd ldacs_mcsotdma
+ln -s ../ldacs_glue/ glue-lib-headers
+mkdir cmake-build-release
+cd cmake-build-release
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j$NUM_CPUS tuhh_intairnet_mc-sotdma
+# cd ..
+# mkdir cmake-build-debug
+# cd cmake-build-debug
+# cmake -DCMAKE_BUILD_TYPE=Debug ..
 # make -j$NUM_CPUS tuhh_intairnet_mc-sotdma
-# # cd ..
-# # mkdir cmake-build-debug
-# # cd cmake-build-debug
-# # cmake -DCMAKE_BUILD_TYPE=Debug ..
-# # make -j$NUM_CPUS tuhh_intairnet_mc-sotdma
-# cd ../..
+cd ../..
 
-# # Clone radio
-# echo -e "\n\nDownloading channel model"
-# git clone $LOC_RADIO ldacs_tracebased_channel_model
-# cd ldacs_tracebased_channel_model/src
-# opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET
-# #opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET_dbg
-# # make MODE=debug -j$NUM_CPUS
-# make MODE=release -j$NUM_CPUS
-# cd ../..
+# Clone radio
+echo -e "\n\nDownloading channel model"
+git clone $LOC_RADIO ldacs_tracebased_channel_model
+cd ldacs_tracebased_channel_model/src
+opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET
+#opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET_dbg
+# make MODE=debug -j$NUM_CPUS
+make MODE=release -j$NUM_CPUS
+cd ../..
 
-# # Clone traceBacedApp
-# echo -e "\n\nDownloading UdpTracedBasedApp"
-# git clone $LOC_APP ldacs_tracebased_app
-# cd ldacs_tracebased_app/src
-# opp_makemake --make-so -f --deep -KINET_PROJ=../../inet4 -DINET_IMPORT -I../../inet4/src -L../../inet4/src -lINET
-# make MODE=release -j$NUM_CPUS
+# Clone traceBacedApp
+echo -e "\n\nDownloading UdpTracedBasedApp"
+git clone $LOC_APP ldacs_tracebased_app
+cd ldacs_tracebased_app/src
+opp_makemake --make-so -f --deep -KINET_PROJ=../../inet4 -DINET_IMPORT -I../../inet4/src -L../../inet4/src -lINET
+make MODE=release -j$NUM_CPUS
 
-# cd ../..
-
-cd omnetpp-5.6.2/workspace/
+cd ../..
 
 # Clone gpsr
 echo -e "\n\nDownloading GPSR modified"
