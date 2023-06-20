@@ -15,37 +15,34 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 update-arq:
-	cd ../../omnetpp-5.6.2/workspace/avionic-arq; git pull
+	cd ../../omnetpp-5.6.2/workspace/ldacs_arq; git pull
 
 update-rlc:
-	cd ../../omnetpp-5.6.2/workspace/avionic-rlc; git pull
+	cd ../../omnetpp-5.6.2/workspace/ldacs_rlc; git pull
 
 update-glue:
-	cd ../../omnetpp-5.6.2/workspace/intairnet-linklayer-glue; git pull
+	cd ../../omnetpp-5.6.2/workspace/ldacs_glue; git pull
 
 update-wrapper:
-	cd ../../omnetpp-5.6.2/workspace/intairnet-omnet-wrapper; git pull
+	cd ../../omnetpp-5.6.2/workspace/ldacs_wrapper; git pull
 
 update-radio:
-	cd ../../omnetpp-5.6.2/workspace/intairnet-radio; git pull
+	cd ../../omnetpp-5.6.2/workspace/ldacs_tracebased_channel_model; git pull
 
 update-mcsotdma:
-	cd ../../omnetpp-5.6.2/workspace/mc-sotdma; git pull
+	cd ../../omnetpp-5.6.2/workspace/ldacs_mcsotdma; git pull
 
-update-intairnet-gpsr:
-	cd ../../omnetpp-5.6.2/workspace/intairnet-gpsr; git pull
-	
-update-abstract-tdma:
-	cd ../../omnetpp-5.6.2/workspace/tdma; git pull
+update-ldacs_gpsr:
+	cd ../../omnetpp-5.6.2/workspace/ldacs_gpsr; git pull
 	
 update-traceBasedUdpApp:
-	cd ../../omnetpp-5.6.2/workspace/intairnet-tracebasedapp; git pull
+	cd ../../omnetpp-5.6.2/workspace/ldacs_tracebased_app; git pull
 
 update-sim-model:
 	git pull
 
 # UPDATE pulls all changes from the currently selected branches of all repositories
-update: update-arq update-rlc update-glue update-wrapper update-radio update-mcsotdma update-intairnet-gpsr update-traceBasedUdpApp update-sim-model
+update: update-arq update-rlc update-glue update-wrapper update-radio update-mcsotdma update-ldacs_gpsr update-traceBasedUdpApp update-sim-model
 
 # create a virtual Python environment to install all packages that are required for plotting results
 install-python-env:
@@ -58,51 +55,51 @@ SUFFIX =
 build-debug:	
 	cd ../../omnetpp-5.6.2/workspace/; \
 	echo -e "\nARQ"; \
-	cd avionic-arq/dev/cmake-build-debug; cmake -DCMAKE_BUILD_TYPE=Debug ..; make -j$(NUM_CPUS) tuhh_intairnet_arq; cd ../../..; \
+	cd ldacs_arq/dev/cmake-build-debug; cmake -DCMAKE_BUILD_TYPE=Debug ..; make -j$(NUM_CPUS) tuhh_intairnet_arq; cd ../../..; \
 	echo -e "\nRLC"; \
-	cd avionic-rlc/cmake-build-debug; cmake -DCMAKE_BUILD_TYPE=Debug ..; make -j$(NUM_CPUS) tuhh_intairnet_rlc; cd ../..; \
+	cd ldacs_rlc/cmake-build-debug; cmake -DCMAKE_BUILD_TYPE=Debug ..; make -j$(NUM_CPUS) tuhh_intairnet_rlc; cd ../..; \
 	echo -e "\nGLUE"; \
-	cd intairnet-linklayer-glue/cmake-build-debug; cmake -DCMAKE_BUILD_TYPE=Debug ..; make -j$(NUM_CPUS) intairnet_linklayer_glue; cd ../..; \
+	cd ldacs_glue/cmake-build-debug; cmake -DCMAKE_BUILD_TYPE=Debug ..; make -j$(NUM_CPUS) intairnet_linklayer_glue; cd ../..; \
 	echo -e "\nMCSOTDMA"; \
-	cd mc-sotdma/cmake-build-debug; cmake -DCMAKE_BUILD_TYPE=Debug ..; make -j$(NUM_CPUS) tuhh_intairnet_mc-sotdma; cd ../..; \
+	cd ldacs_mcsotdma/cmake-build-debug; cmake -DCMAKE_BUILD_TYPE=Debug ..; make -j$(NUM_CPUS) tuhh_intairnet_ldacs_mcsotdma; cd ../..; \
 	echo -e "\ntracebasedapp"; \
-	cd intairnet-tracebasedapp/src; opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET_dbg; make -j8 MODE=debug; cd ../..; \
+	cd ldacs_tracebased_app/src; opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET_dbg; make -j8 MODE=debug; cd ../..; \
 	echo -e "\nRADIO"; \
-	cd intairnet-radio/src; opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET_dbg; make -j8 MODE=debug; cd ../..; \
+	cd ldacs_tracebased_channel_model/src; opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET_dbg; make -j8 MODE=debug; cd ../..; \
 	echo -e "\nGPSR"; \
-	cd intairnet-gpsr/src; opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET_dbg; make -j8 MODE=debug; cd ../..; \	
+	cd ldacs_gpsr/src; opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET_dbg; make -j8 MODE=debug; cd ../..; \	
 	echo -e "\nSIMULATION BINARY"; \
-	cd intairnet-omnet-wrapper/intairnet-link-layer/src; opp_makemake -f --deep -O out -KINET4_PROJ=../../../inet4 -DINET_IMPORT -I../../../inet4 -I../../../intairnet-tracebasedapp/src -I../../../intairnet-radio/src -I../../../intairnet-gpsr/src -I../glue-lib-headers -I../avionic-rlc-headers -I../avionic-arq-headers -I../mc-sotdma-headers -I. -I../../../inet4/src -L../../../inet4/src -L../../../intairnet-tracebasedapp/out/gcc-debug/src/ -L../../../intairnet-radio/out/gcc-debug/src/ -L../../../intairnet-gpsr/out/gcc-debug/src/ -L../glue-lib -L../avionic-rlc -L../avionic-arq -L../mc-sotdma -lINET_dbg -lintairnet-tracebasedapp_dbg -lintairnet-radio_dbg -lintairnet-gpsr_dbg -lintairnet_linklayer_glue -ltuhh_intairnet_rlc -ltuhh_intairnet_arq -ltuhh_intairnet_mc-sotdma; make -j$(NUM_CPUS) MODE=debug; \
+	cd ldacs_wrapper/intairnet-link-layer/src; opp_makemake -f --deep -O out -KINET4_PROJ=../../../inet4 -DINET_IMPORT -I../../../inet4 -I../../../ldacs_tracebased_app/src -I../../../ldacs_tracebased_channel_model/src -I../../../ldacs_gpsr/src -I../glue-lib-headers -I../ldacs_rlc-headers -I../ldacs_arq-headers -I../ldacs_mcsotdma-headers -I. -I../../../inet4/src -L../../../inet4/src -L../../../ldacs_tracebased_app/out/gcc-debug/src/ -L../../../ldacs_tracebased_channel_model/out/gcc-debug/src/ -L../../../ldacs_gpsr/out/gcc-debug/src/ -L../glue-lib -L../ldacs_rlc -L../ldacs_arq -L../ldacs_mcsotdma -lINET_dbg -lldacs_tracebased_app_dbg -lldacs_tracebased_channel_model_dbg -lldacs_gpsr_dbg -lintairnet_linklayer_glue -ltuhh_intairnet_rlc -ltuhh_intairnet_arq -ltuhh_intairnet_mc-sotdma; make -j$(NUM_CPUS) MODE=debug; \
 	echo -e "\nDon't forget to compile OMNeT++ itself and INET in debug mode, too! This target only compiles the LDACS libraries."
 
 # BUILD-RELEASE compiles all libraries and then the simulation binary in RELEASE mode
 build-release:
 	cd ../../omnetpp-5.6.2/workspace/; \
 	echo -e "\nARQ"; \
-	cd avionic-arq/dev/cmake-build-release; cmake -DCMAKE_BUILD_TYPE=Release ..; make -j$(NUM_CPUS) tuhh_intairnet_arq; cd ../../..; \
+	cd ldacs_arq/dev/cmake-build-release; cmake -DCMAKE_BUILD_TYPE=Release ..; make -j$(NUM_CPUS) tuhh_intairnet_arq; cd ../../..; \
 	echo -e "\nRLC"; \
-	cd avionic-rlc/cmake-build-release; cmake -DCMAKE_BUILD_TYPE=Release ..; make -j$(NUM_CPUS) tuhh_intairnet_rlc; cd ../..; \
+	cd ldacs_rlc/cmake-build-release; cmake -DCMAKE_BUILD_TYPE=Release ..; make -j$(NUM_CPUS) tuhh_intairnet_rlc; cd ../..; \
 	echo -e "\nGLUE"; \
-	cd intairnet-linklayer-glue/cmake-build-release; cmake -DCMAKE_BUILD_TYPE=Release ..; make -j$(NUM_CPUS) intairnet_linklayer_glue; cd ../..; \
+	cd ldacs_glue/cmake-build-release; cmake -DCMAKE_BUILD_TYPE=Release ..; make -j$(NUM_CPUS) intairnet_linklayer_glue; cd ../..; \
 	echo -e "\nMCSOTDMA"; \
-	cd mc-sotdma/cmake-build-release; cmake -DCMAKE_BUILD_TYPE=Release ..; make -j$(NUM_CPUS) tuhh_intairnet_mc-sotdma; cd ../..; \
+	cd ldacs_mcsotdma/cmake-build-release; cmake -DCMAKE_BUILD_TYPE=Release ..; make -j$(NUM_CPUS) tuhh_intairnet_ldacs_mcsotdma; cd ../..; \
 	echo -e "\ntracebasedapp"; \
-	cd intairnet-tracebasedapp/src; opp_makemake --make-so -f --deep -KINET_PROJ=../../inet4 -DINET_IMPORT -I../../inet4/src -L../../inet4/src -lINET; make -j$(NUM_CPUS) MODE=release; cd ../..; \
+	cd ldacs_tracebased_app/src; opp_makemake --make-so -f --deep -KINET_PROJ=../../inet4 -DINET_IMPORT -I../../inet4/src -L../../inet4/src -lINET; make -j$(NUM_CPUS) MODE=release; cd ../..; \
 	echo -e "\nRADIO"; \
-	cd intairnet-radio/src; opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET; make -j$(NUM_CPUS) MODE=release; cd ../..; \
+	cd ldacs_tracebased_channel_model/src; opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET; make -j$(NUM_CPUS) MODE=release; cd ../..; \
 	echo -e "\nGPSR"; \
-	cd intairnet-gpsr/src; opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET; make -j$(NUM_CPUS) MODE=release; cd ../..; \
+	cd ldacs_gpsr/src; opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET; make -j$(NUM_CPUS) MODE=release; cd ../..; \
 	echo -e "\nSIMULATION BINARY"; \
-	cd intairnet-omnet-wrapper/intairnet-link-layer/src; opp_makemake -f --deep -O out -KINET4_PROJ=../../../inet4 -DINET_IMPORT -I../../../inet4 -I../../../intairnet-tracebasedapp/src -I../../../intairnet-radio/src -I../../../intairnet-gpsr/src -I../glue-lib-headers -I../avionic-rlc-headers -I../avionic-arq-headers -I../mc-sotdma-headers -I. -I../../../inet4/src -L../../../inet4/src -L../../../intairnet-tracebasedapp/out/gcc-release/src/ -L../../../intairnet-radio/out/gcc-release/src/ -L../../../intairnet-gpsr/out/gcc-release/src/ -L../glue-lib -L../avionic-rlc -L../avionic-arq -L../mc-sotdma -lINET -lintairnet-tracebasedapp -lintairnet-radio -lintairnet-gpsr -lintairnet_linklayer_glue -ltuhh_intairnet_rlc -ltuhh_intairnet_arq -ltuhh_intairnet_mc-sotdma; make -j$(NUM_CPUS) MODE=release
+	cd ldacs_wrapper/intairnet-link-layer/src; opp_makemake -f --deep -O out -KINET4_PROJ=../../../inet4 -DINET_IMPORT -I../../../inet4 -I../../../ldacs_tracebased_app/src -I../../../ldacs_tracebased_channel_model/src -I../../../ldacs_gpsr/src -I../glue-lib-headers -I../ldacs_rlc-headers -I../ldacs_arq-headers -I../ldacs_mcsotdma-headers -I. -I../../../inet4/src -L../../../inet4/src -L../../../ldacs_tracebased_app/out/gcc-release/src/ -L../../../ldacs_tracebased_channel_model/out/gcc-release/src/ -L../../../ldacs_gpsr/out/gcc-release/src/ -L../glue-lib -L../ldacs_rlc -L../ldacs_arq -L../ldacs_mcsotdma -lINET -lldacs_tracebased_app -lldacs_tracebased_channel_model -lldacs_gpsr -lintairnet_linklayer_glue -ltuhh_intairnet_rlc -ltuhh_intairnet_arq -ltuhh_intairnet_mc-sotdma; make -j$(NUM_CPUS) MODE=release
 
 # GLOBAL VARIABLES  can be shared among all targets
 # default binary in RELEASE mode
-SIM_BINARY = ../../omnetpp-5.6.2/workspace/intairnet-omnet-wrapper/intairnet-link-layer/out/gcc-release/src/intairnet-link-layer
+SIM_BINARY = ../../omnetpp-5.6.2/workspace/ldacs_wrapper/intairnet-link-layer/out/gcc-release/src/intairnet-link-layer
 # debug binary
-SIM_BINARY_DBG = ../../omnetpp-5.6.2/workspace/intairnet-omnet-wrapper/intairnet-link-layer/out/gcc-debug/src/intairnet-link-layer_dbg
+SIM_BINARY_DBG = ../../omnetpp-5.6.2/workspace/ldacs_wrapper/intairnet-link-layer/out/gcc-debug/src/intairnet-link-layer_dbg
 
 # include .ned files
-INCL = -n ../:./:../../omnetpp-5.6.2/workspace/inet4/src/:../../omnetpp-5.6.2/workspace/intairnet-omnet-wrapper/intairnet-link-layer/src/:../../omnetpp-5.6.2/workspace/intairnet-radio/src:../../omnetpp-5.6.2/workspace/intairnet-tracebasedapp/src:../../omnetpp-5.6.2/workspace/intairnet-gpsr/src
+INCL = -n ../:./:../../omnetpp-5.6.2/workspace/inet4/src/:../../omnetpp-5.6.2/workspace/ldacs_wrapper/intairnet-link-layer/src/:../../omnetpp-5.6.2/workspace/ldacs_tracebased_channel_model/src:../../omnetpp-5.6.2/workspace/ldacs_tracebased_app/src:../../omnetpp-5.6.2/workspace/ldacs_gpsr/src
 
 # QUICK SANITY CHECK SIMULATION
 # This should quickly finish and tests the toolchain.
