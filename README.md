@@ -56,3 +56,36 @@ At first, you won't want to touch these files, but to see the nitty and gritty o
 
 All results are generated from the `scenarios/results` folder.
 Please go there and read its readme after installation!
+
+# Simulator Components
+The LDACS MCSOTDMA Simulator is composed of the following parts, which the `install.sh` downloads:
+
+## The OMNeT++ Simulator
+v5.6.2 is downloaded from [GitHub.com](https://github.com/omnetpp/omnetpp/releases).
+
+## The INET Framework
+v4.2.5 in a slightly modified version is downloaded from [GitHub.com](https://github.com/eltayebmusab/inet).
+
+## The glue Library
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082659).
+
+## The RLC Library
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082851).
+
+## The ARQ Library
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082899).
+
+## The MCSOTDMA Library
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082927).
+
+## The Channel Model
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082925).
+
+## The Trace-Based App
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082929).
+
+## The Wrapper Library
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082931).
+
+## The modified GPSR Protocol
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082919).
