@@ -19,22 +19,31 @@
 NUM_CPUS=10  # set to your no. of cores
 
 LOC_OMNET=https://github.com/omnetpp/omnetpp/releases/download/omnetpp-5.6.2/omnetpp-5.6.2-src-linux.tgz
+LOC_OMNET_MAC=https://github.com/omnetpp/omnetpp/releases/download/omnetpp-5.6.2/omnetpp-5.6.2-src-macosx.tgz
 LOC_INET=https://github.com/eltayebmusab/inet/archive/refs/tags/v4.2.5.tar.gz
-LOC_GLUE=git@github.com:ComNetsHH/ldacs_glue.git
-LOC_RLC=git@github.com:ComNetsHH/ldacs_rlc.git
-LOC_ARQ=git@github.com:ComNetsHH/ldacs_arq.git
-LOC_MCSOTDMA=git@github.com:ComNetsHH/ldacs_mcsotdma.git
-LOC_RADIO=git@github.com:ComNetsHH/ldacs_tracebased_channel_model.git
-LOC_APP=git@github.com:ComNetsHH/ldacs_tracebased_app.git
-LOC_WRAPPER=git@github.com:ComNetsHH/ldacs_wrapper.git
-LOC_GPSR=git@github.com:ComNetsHH/ldacs_gpsr.git
-
+LOC_GLUE=https://zenodo.org/record/8082659/files/ComNetsHH/ldacs_glue-v1.0.zip
+LOC_RLC=https://zenodo.org/record/8082851/files/ComNetsHH/ldacs_rlc-v1.0.zip
+LOC_ARQ=https://zenodo.org/record/8082899/files/ComNetsHH/ldacs_arq-v1.0.zip
+LOC_MCSOTDMA=https://zenodo.org/record/8082927/files/ComNetsHH/ldacs_mcsotdma-v1.0.zip
+LOC_RADIO=https://zenodo.org/record/8082925/files/ComNetsHH/ldacs_tracebased_channel_model-v1.0.zip
+LOC_APP=https://zenodo.org/record/8082929/files/ComNetsHH/ldacs_tracebased_app-v1.0.zip
+LOC_WRAPPER=https://zenodo.org/record/8082931/files/ComNetsHH/ldacs_wrapper-v1.0.zip
+LOC_GPSR=https://zenodo.org/record/8082919/files/ComNetsHH/ldacs_gpsr-v1.0.zip
 # Download OMNeT++ v5.6.2, unpack and go to directory.
-echo "Downloading OMNeT++"
-wget $LOC_OMNET
-echo -e "\n\nUnpacking OMNeT++"
-tar -xvzf omnetpp-5.6.2-src-linux.tgz
-rm omnetpp-5.6.2-src-linux.tgz
+echo -n "Downloading OMNeT++ "
+if [ $1 = "mac" ]; then
+	echo "for Mac"
+	wget $LOC_OMNET_MAC
+	echo -e "\n\nUnpacking OMNeT++"
+	tar -xvzf omnetpp-5.6.2-src-macosx.tgz
+	rm omnetpp-5.6.2-src-macosx.tgz
+else
+	echo "for Linux"
+	wget $LOC_OMNET
+	echo -e "\n\nUnpacking OMNeT++"
+	tar -xvzf omnetpp-5.6.2-src-linux.tgz
+	rm omnetpp-5.6.2-src-linux.tgz
+fi
 echo -e "\n\nCompiling OMNeT++"
 cd omnetpp-5.6.2/
 # Set PATH, configure and build.
@@ -63,9 +72,10 @@ cd ..
 
 # Compile GLUE
 echo -e "\n\nDownloading GLUE lib"
-git clone $LOC_GLUE ldacs_glue
+mkdir ldacs_glue
+wget $LOC_GLUE
+tar -xvzf ldacs_glue-v1.0.zip -C ldacs_glue --strip-components=1
 cd ldacs_glue
-git pull
 mkdir cmake-build-release
 cd cmake-build-release
 cmake -DCMAKE_BUILD_TYPE=Release ..
@@ -79,7 +89,9 @@ cd ../..
 
 # Compile RLC
 echo -e "\n\nDownloading and compiling RLC lib"
-git clone $LOC_RLC ldacs_rlc
+mkdir ldacs_rlc
+wget $LOC_RLC
+tar -xvzf ldacs_rlc-v1.0.zip -C ldacs_rlc --strip-components=1
 cd ldacs_rlc
 ln -s ../ldacs_glue/ glue-lib-headers
 mkdir cmake-build-release
@@ -95,7 +107,9 @@ cd ../..
 
 # Compile ARQ
 echo -e "\n\nDownloading and compiling ARQ lib"
-git clone $LOC_ARQ ldacs_arq
+mkdir ldacs_arq
+wget $LOC_ARQ
+tar -xvzf ldacs_arq-v1.0.zip -C ldacs_arq --strip-components=1
 cd ldacs_arq/dev
 ln -s ../../ldacs_glue/ glue-lib-headers
 mkdir cmake-build-release
@@ -111,7 +125,10 @@ cd ../../..
 
 # Compile MCSOTDMA
 echo -e "\n\nDownloading and compiling MCSOTDMA lib"
-git clone $LOC_MCSOTDMA ldacs_mcsotdma
+ldacs_mcsotdma-v1.0.zip
+mkdir ldacs_mcsotdma
+wget $LOC_MCSOTDMA
+tar -xvzf ldacs_mcsotdma-v1.0.zip -C ldacs_mcsotdma --strip-components=1
 cd ldacs_mcsotdma
 ln -s ../ldacs_glue/ glue-lib-headers
 mkdir cmake-build-release
@@ -127,7 +144,9 @@ cd ../..
 
 # Clone radio
 echo -e "\n\nDownloading channel model"
-git clone $LOC_RADIO ldacs_tracebased_channel_model
+mkdir ldacs_tracebased_channel_model
+wget $LOC_RADIO
+tar -xvzf ldacs_tracebased_channel_model-v1.0.zip -C ldacs_tracebased_channel_model --strip-components=1
 cd ldacs_tracebased_channel_model/src
 opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET
 #opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET_dbg
@@ -137,7 +156,9 @@ cd ../..
 
 # Clone traceBacedApp
 echo -e "\n\nDownloading UdpTracedBasedApp"
-git clone $LOC_APP ldacs_tracebased_app
+mkdir ldacs_tracebased_app
+wget $LOC_APP
+tar -xvzf ldacs_tracebased_app-v1.0.zip -C ldacs_tracebased_app --strip-components=1
 cd ldacs_tracebased_app/src
 opp_makemake --make-so -f --deep -KINET_PROJ=../../inet4 -DINET_IMPORT -I../../inet4/src -L../../inet4/src -lINET
 make MODE=release -j$NUM_CPUS
@@ -146,7 +167,9 @@ cd ../..
 
 # Clone gpsr
 echo -e "\n\nDownloading GPSR modified"
-git clone $LOC_GPSR ldacs_gpsr
+mkdir ldacs_gpsr
+wget $LOC_GPSR
+tar -xvzf ldacs_gpsr-v1.0.zip -C ldacs_gpsr --strip-components=1
 cd ldacs_gpsr
 cd src
 opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET
@@ -157,7 +180,9 @@ cd ../..
 
 # Clone wrapper
 echo -e "\n\nDownloading OMNET++ wrapper"
-git clone $LOC_WRAPPER ldacs_wrapper
+mkdir ldacs_wrapper
+wget $LOC_WRAPPER
+tar -xvzf ldacs_wrapper-v1.0.zip -C ldacs_wrapper --strip-components=1
 cd ldacs_wrapper/intairnet-link-layer
 echo "Compiling simulation binary"
 ln -s ../../ldacs_glue/cmake-build-release ./glue-lib

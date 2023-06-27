@@ -29,9 +29,10 @@ A wrapper integrates the different components into OMNeT++.
 All result evaluation and plotting is done with Python.
 
 # Installation
-tl;dr: open `install.sh` or `install_mac.sh` and adjust the number of cores `NUM_CPUS` to use for compiling; then run `./install.sh` or `./install_mac.sh`.
+tl;dr: open `install.sh` and adjust the number of cores `NUM_CPUS` to use for compiling; then run `./install.sh` if you're on Linux or `./install.sh mac` if you're on Mac.
 
-Long version: all simulator components are bundled together into one installation script `install.sh` or `install_mac.sh`. 
+Long version: all simulator components are bundled together into one installation script `install.sh`.
+By passing `mac` as an argument to the install script, it downloads the Mac version of the OMNeT++ simulator instead of the Linux version; this is the only difference between Linux and Mac versions of this simulator.
 Please run it, and pay attention to the output. 
 For example, it downloads the OMNeT++ simulator of the right version from GitHub. 
 If this download via `wget` doesn't succeed, for example because GitHub's servers are beyond their capacity (you'll get a `503` error), then later parts of the script fail. 
