@@ -41,7 +41,8 @@ This is a very simple Bash script, so peek inside, it's easy to understand, and 
 ## Debug mode
 By default, the simulator is compiled in release mode so that simulations run faster.
 To compile in debug mode, respective lines are commented-out in the `install.sh`.
-Comment them in if you need debug more.
+Comment them in if you need debug mode.
+
 If you get errors, chances are high that some component is still in release mode: every LDACS simulator component, the OMNeT++ simulator itself and the inet framework must *all* be in debug mode.
 
 # Navigation
