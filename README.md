@@ -38,6 +38,12 @@ For example, it downloads the OMNeT++ simulator of the right version from GitHub
 If this download via `wget` doesn't succeed, for example because GitHub's servers are beyond their capacity (you'll get a `503` error), then later parts of the script fail. 
 This is a very simple Bash script, so peek inside, it's easy to understand, and there's no error recovery built-in, so please debug using common sense!
 
+## Debug mode
+By default, the simulator is compiled in release mode so that simulations run faster.
+To compile in debug mode, respective lines are commented-out in the `install.sh`.
+Comment them in if you need debug more.
+If you get errors, chances are high that some component is still in release mode: every LDACS simulator component, the OMNeT++ simulator itself and the inet framework must *all* be in debug mode.
+
 # Navigation
 ## Code
 All custom code lives under `omnetpp-5.6.2/workspace/<component>`.
