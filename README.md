@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8085497.svg)](https://doi.org/10.5281/zenodo.8085497)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10073534.svg)](https://doi.org/10.5281/zenodo.10073534)
 
     The L-Band Digital Aeronautical Communications System (LDACS) simulator provides an installation script for the simulator that downloads the other simulator components, defines simulation scenarios and provides result evaluation and graph creation.
     Copyright (C) 2023  Sebastian Lindner, Konrad Fuger, Musab Ahmed Eltayeb Ahmed, Andreas Timm-Giel, Institute of Communication Networks, Hamburg University of Technology, Hamburg, Germany
