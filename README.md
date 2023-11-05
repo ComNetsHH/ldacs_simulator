@@ -73,13 +73,13 @@ v5.6.2 is downloaded from [GitHub.com](https://github.com/omnetpp/omnetpp/releas
 v4.2.5 in a slightly modified version is downloaded from [GitHub.com](https://github.com/eltayebmusab/inet).
 
 ## The glue Library
-v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082659).
+v1.1 is downloaded from [Zenodo.org](https://zenodo.org/record/10073046).
 
 ## The RLC Library
-v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082851).
+v1.1 is downloaded from [Zenodo.org](https://zenodo.org/record/10073044).
 
 ## The ARQ Library
-v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082899).
+v1.1 is downloaded from [Zenodo.org](https://zenodo.org/record/10073043).
 
 ## The MCSOTDMA Library
 v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082927).
@@ -91,7 +91,7 @@ v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082925).
 v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082929).
 
 ## The Wrapper Library
-v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082931).
+v1.1 is downloaded from [Zenodo.org](https://zenodo.org/record/10073049).
 
 ## The modified GPSR Protocol
 v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082919).
