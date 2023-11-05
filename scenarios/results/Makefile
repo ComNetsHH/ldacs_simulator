@@ -404,7 +404,47 @@ MOBILITY_NUM_REPS = 20
 MOBILITY_NUM_USERS_GROUP_1 = 15
 MOBILITY_NUM_USERS_GROUP_2 = 15
 MOBILITY_TIME_SLOT_DURATION = 24
-MOBILITY_CONFIGNAME_MCSTODMA = MobilityMCSOTDMA
+MOBILITY_CONFIGNAME_RSALOHA = MobilityRSALOHA
+mobility-rsaloha_sim:
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c $(MOBILITY_CONFIGNAME_RSALOHA) $(INCL)
+
+mobility-rsaloha_sim-qtenv:
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c $(MOBILITY_CONFIGNAME_RSALOHA) $(INCL) -u Qtenv 
+
+mobility-rsaloha_parse:
+	./convert-omnet-csv.sh simresults/$(MOBILITY_CONFIGNAME_RSALOHA); \
+	./convert-vec-omnet-csv.sh simresults/$(MOBILITY_CONFIGNAME_RSALOHA)
+
+mobility-rsaloha_plot:	
+	pipenv run python3 eval_mobility.py --dir simresults/$(MOBILITY_CONFIGNAME_RSALOHA) --filename $(MOBILITY_CONFIGNAME_RSALOHA) --num_reps $(MOBILITY_NUM_REPS) --time_slot_duration $(MOBILITY_TIME_SLOT_DURATION) $(SUFFIX)
+
+mobility-rsaloha: mobility-rsaloha_sim mobility-rsaloha_parse mobility-rsaloha_plot
+
+mobility-rsaloha_clean:
+	rm simresults/$(MOBILITY_CONFIGNAME_RSALOHA)/*
+
+
+MOBILITY_CONFIGNAME_SOTDMA = MobilitySOTDMA
+mobility-sotdma_sim:
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c $(MOBILITY_CONFIGNAME_SOTDMA) $(INCL)
+
+mobility-sotdma_sim-qtenv:
+	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c $(MOBILITY_CONFIGNAME_SOTDMA) $(INCL) -u Qtenv 
+
+mobility-sotdma_parse:
+	./convert-omnet-csv.sh simresults/$(MOBILITY_CONFIGNAME_SOTDMA); \
+	./convert-vec-omnet-csv.sh simresults/$(MOBILITY_CONFIGNAME_SOTDMA)
+
+mobility-sotdma_plot:	
+	pipenv run python3 eval_mobility.py --dir simresults/$(MOBILITY_CONFIGNAME_SOTDMA) --filename $(MOBILITY_CONFIGNAME_SOTDMA) --num_reps $(MOBILITY_NUM_REPS) --time_slot_duration $(MOBILITY_TIME_SLOT_DURATION) $(SUFFIX)
+
+mobility-sotdma: mobility-sotdma_sim mobility-sotdma_parse mobility-sotdma_plot
+
+mobility-sotdma_clean:
+	rm simresults/$(MOBILITY_CONFIGNAME_SOTDMA)/*
+
+
+MOBILITY_CONFIGNAME_MCSOTDMA = MobilityMCSOTDMA
 mobility-mcsotdma_sim:
 	opp_runall -j$(NUM_CPUS) $(SIM_BINARY) ../mobility.ini -c $(MOBILITY_CONFIGNAME_MCSOTDMA) $(INCL)
 
@@ -416,12 +456,18 @@ mobility-mcsotdma_parse:
 	./convert-vec-omnet-csv.sh simresults/$(MOBILITY_CONFIGNAME_MCSOTDMA)
 
 mobility-mcsotdma_plot:	
-	pipenv run python3 eval_mobility.py --dir simresults/$(MOBILITY_CONFIGNAME_MCSOTDMA) --filename mobility --num_reps $(MOBILITY_NUM_REPS) --time_slot_duration $(MOBILITY_TIME_SLOT_DURATION) $(SUFFIX)
+	pipenv run python3 eval_mobility.py --dir simresults/$(MOBILITY_CONFIGNAME_MCSOTDMA) --filename $(MOBILITY_CONFIGNAME_MCSOTDMA) --num_reps $(MOBILITY_NUM_REPS) --time_slot_duration $(MOBILITY_TIME_SLOT_DURATION) $(SUFFIX)
 
 mobility-mcsotdma: mobility-mcsotdma_sim mobility-mcsotdma_parse mobility-mcsotdma_plot
 
 mobility-mcsotdma_clean:
 	rm simresults/$(MOBILITY_CONFIGNAME_MCSOTDMA)/*
+
+
+mobility-comparison_plot:
+	pipenv run python3 eval_mobility_comparison.py --dir_mcsotdma simresults/$(MOBILITY_CONFIGNAME_MCSOTDMA) --dir_sotdma simresults/$(MOBILITY_CONFIGNAME_SOTDMA) --dir_rsaloha simresults/$(MOBILITY_CONFIGNAME_RSALOHA) --num_reps $(MOBILITY_NUM_REPS) --time_slot_duration $(MOBILITY_TIME_SLOT_DURATION) $(SUFFIX)
+
+
 
 # NUMERICAL "PROOF" OF DELAY-OPTIMAL CONFIGURATION
 delay_optimal_plot:
