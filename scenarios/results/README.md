@@ -52,6 +52,13 @@ The HPC has a large number of servers available, equipped with Intel Xeon E5-268
 When each target is run by 14 cores in parallel (where applicable), allow a simulation time of up to three hours per target.
 Scale according to the hardware that you have available, and bring a lot of coffee (or let it run over night).
 
+# Updates
+Note that this software has been released using Zenodo, which freezes a release made on GitHub.
+The installation script from two folders above downloaded the simulator components from the frozen Zenodo states.
+Later changes to the code will only be reflected on the respective GitHub repositories.
+The Makefile's `update` target attempts to pull changes from those repositories, but they are not set up if you've installed from the zip-archives that are saved on Zenodo.
+So ideally you could check whether any changes have been made since the Zenodo release, and if so, remove the local files and pull the GitHub repository instead; once that has been set up, you can use the convenient `update` target.
+
 # tl;dr (too long; didn't read)
 The graphs in the paper are associated to make targets.
 Run all targets in the `Makefile` and wait for things to finish.

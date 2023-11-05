@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8085497.svg)](https://doi.org/10.5281/zenodo.8085497)
+
     The L-Band Digital Aeronautical Communications System (LDACS) simulator provides an installation script for the simulator that downloads the other simulator components, defines simulation scenarios and provides result evaluation and graph creation.
     Copyright (C) 2023  Sebastian Lindner, Konrad Fuger, Musab Ahmed Eltayeb Ahmed, Andreas Timm-Giel, Institute of Communication Networks, Hamburg University of Technology, Hamburg, Germany
 
@@ -29,13 +31,24 @@ A wrapper integrates the different components into OMNeT++.
 All result evaluation and plotting is done with Python.
 
 # Installation
-tl;dr: open `install.sh` or `install_mac.sh` and adjust the number of cores `NUM_CPUS` to use for compiling; then run `./install.sh` or `./install_mac.sh`.
+tl;dr: install `pipenv` on your system, open `install.sh` and adjust the number of cores `NUM_CPUS` to use for compiling; then run `./install.sh` if you're on Linux or `./install.sh mac` if you're on Mac.
 
-Long version: all simulator components are bundled together into one installation script `install.sh` or `install_mac.sh`. 
+Long version: all simulator components are bundled together into one installation script `install.sh`.
+By passing `mac` as an argument to the install script, it downloads the Mac version of the OMNeT++ simulator instead of the Linux version; this is the only difference between Linux and Mac versions of this simulator.
 Please run it, and pay attention to the output. 
 For example, it downloads the OMNeT++ simulator of the right version from GitHub. 
 If this download via `wget` doesn't succeed, for example because GitHub's servers are beyond their capacity (you'll get a `503` error), then later parts of the script fail. 
 This is a very simple Bash script, so peek inside, it's easy to understand, and there's no error recovery built-in, so please debug using common sense!
+
+Result parsing and graph generation is done using Python in respective scripts in `scenarios/results/`.
+The packages that are required for this are installed in local `pipenv` environments, so make sure that you have `pipenv` available on your system!
+
+## Debug mode
+By default, the simulator is compiled in release mode so that simulations run faster.
+To compile in debug mode, respective lines are commented-out in the `install.sh`.
+Comment them in if you need debug mode.
+
+If you get errors, chances are high that some component is still in release mode: every LDACS simulator component, the OMNeT++ simulator itself and the inet framework must *all* be in debug mode.
 
 # Navigation
 ## Code
@@ -49,3 +62,36 @@ At first, you won't want to touch these files, but to see the nitty and gritty o
 
 All results are generated from the `scenarios/results` folder.
 Please go there and read its readme after installation!
+
+# Simulator Components
+The LDACS MCSOTDMA Simulator is composed of the following parts, which the `install.sh` downloads:
+
+## The OMNeT++ Simulator
+v5.6.2 is downloaded from [GitHub.com](https://github.com/omnetpp/omnetpp/releases).
+
+## The INET Framework
+v4.2.5 in a slightly modified version is downloaded from [GitHub.com](https://github.com/eltayebmusab/inet).
+
+## The glue Library
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082659).
+
+## The RLC Library
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082851).
+
+## The ARQ Library
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082899).
+
+## The MCSOTDMA Library
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082927).
+
+## The Channel Model
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082925).
+
+## The Trace-Based App
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082929).
+
+## The Wrapper Library
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082931).
+
+## The modified GPSR Protocol
+v1.0 is downloaded from [Zenodo.org](https://zenodo.org/record/8082919).

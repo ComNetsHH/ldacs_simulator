@@ -73,11 +73,11 @@ def parse(directory, sending_intervals, num_users_vec, num_reps, json_filename, 
 					results = pd.read_csv(filename)					
 					# Broadcasts & candidate slot set size
 					for transmitter in range(n):
-						broadcast_sent_mat[i][j][rep] += results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_num_broadcasts_sent:last') & (results.module=='NW_TX_RX.txNodes[' + str(transmitter) + '].wlan[0].linkLayer')].value
+						broadcast_sent_mat[i][j][rep] += results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_num_broadcasts_sent:last') & (results.module=='NW_TX_RX.txNodes[' + str(transmitter) + '].wlan[0].linkLayer')].value.iloc[0]
 						# Mean candidate slot set for each user, summed up
-						candidate_slot_set_mat[i][j][rep] += results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_broadcast_candidate_slots:last') & (results.module=='NW_TX_RX.txNodes[' + str(transmitter) + '].wlan[0].linkLayer')].value																			
+						candidate_slot_set_mat[i][j][rep] += results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_broadcast_candidate_slots:last') & (results.module=='NW_TX_RX.txNodes[' + str(transmitter) + '].wlan[0].linkLayer')].value.iloc[0]
 					candidate_slot_set_mat[i][j][rep] /= n  # mean of means					
-					broadcast_rcvd_mat[i][j][rep] = results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_num_broadcasts_received:last') & (results.module=='NW_TX_RX.rxNode.wlan[0].linkLayer')].value																							
+					broadcast_rcvd_mat[i][j][rep] = results[(results.type=='scalar') & (results.name=='mcsotdma_statistic_num_broadcasts_received:last') & (results.module=='NW_TX_RX.rxNode.wlan[0].linkLayer')].value.iloc[0]
 					bar_i += 1
 					bar.update(bar_i)
 					
