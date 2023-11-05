@@ -74,7 +74,7 @@ cd ..
 echo -e "\n\nDownloading GLUE lib"
 mkdir ldacs_glue
 wget $LOC_GLUE
-tar -xvzf ldacs_glue-v1.0.zip -C ldacs_glue --strip-components=1
+tar -xvzf ldacs_glue-v1.1.zip -C ldacs_glue --strip-components=1
 cd ldacs_glue
 mkdir cmake-build-release
 cd cmake-build-release
@@ -91,7 +91,7 @@ cd ../..
 echo -e "\n\nDownloading and compiling RLC lib"
 mkdir ldacs_rlc
 wget $LOC_RLC
-tar -xvzf ldacs_rlc-v1.0.zip -C ldacs_rlc --strip-components=1
+tar -xvzf ldacs_rlc-v1.1.zip -C ldacs_rlc --strip-components=1
 cd ldacs_rlc
 ln -s ../ldacs_glue/ glue-lib-headers
 mkdir cmake-build-release
@@ -109,7 +109,7 @@ cd ../..
 echo -e "\n\nDownloading and compiling ARQ lib"
 mkdir ldacs_arq
 wget $LOC_ARQ
-tar -xvzf ldacs_arq-v1.0.zip -C ldacs_arq --strip-components=1
+tar -xvzf ldacs_arq-v1.1.zip -C ldacs_arq --strip-components=1
 cd ldacs_arq/dev
 ln -s ../../ldacs_glue/ glue-lib-headers
 mkdir cmake-build-release
@@ -182,7 +182,7 @@ cd ../..
 echo -e "\n\nDownloading OMNET++ wrapper"
 mkdir ldacs_wrapper
 wget $LOC_WRAPPER
-tar -xvzf ldacs_wrapper-v1.0.zip -C ldacs_wrapper --strip-components=1
+tar -xvzf ldacs_wrapper-v1.1.zip -C ldacs_wrapper --strip-components=1
 cd ldacs_wrapper/intairnet-link-layer
 echo "Compiling simulation binary"
 ln -s ../../ldacs_glue/cmake-build-release ./glue-lib
