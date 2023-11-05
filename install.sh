@@ -21,14 +21,14 @@ NUM_CPUS=10  # set to your no. of cores
 LOC_OMNET=https://github.com/omnetpp/omnetpp/releases/download/omnetpp-5.6.2/omnetpp-5.6.2-src-linux.tgz
 LOC_OMNET_MAC=https://github.com/omnetpp/omnetpp/releases/download/omnetpp-5.6.2/omnetpp-5.6.2-src-macosx.tgz
 LOC_INET=https://github.com/eltayebmusab/inet/archive/refs/tags/v4.2.5.tar.gz
-LOC_GLUE=https://zenodo.org/record/8082659/files/ComNetsHH/ldacs_glue-v1.0.zip
-LOC_RLC=https://zenodo.org/record/8082851/files/ComNetsHH/ldacs_rlc-v1.0.zip
-LOC_ARQ=https://zenodo.org/record/8082899/files/ComNetsHH/ldacs_arq-v1.0.zip
-LOC_MCSOTDMA=https://zenodo.org/record/8082927/files/ComNetsHH/ldacs_mcsotdma-v1.0.zip
-LOC_RADIO=https://zenodo.org/record/8082925/files/ComNetsHH/ldacs_tracebased_channel_model-v1.0.zip
-LOC_APP=https://zenodo.org/record/8082929/files/ComNetsHH/ldacs_tracebased_app-v1.0.zip
-LOC_WRAPPER=https://zenodo.org/record/8082931/files/ComNetsHH/ldacs_wrapper-v1.0.zip
-LOC_GPSR=https://zenodo.org/record/8082919/files/ComNetsHH/ldacs_gpsr-v1.0.zip
+LOC_GLUE=https://zenodo.org/records/10073046/files/ComNetsHH/ldacs_glue-v1.1.zip
+LOC_RLC=https://zenodo.org/records/10073044/files/ComNetsHH/ldacs_rlc-v1.1.zip
+LOC_ARQ=https://zenodo.org/records/10073043/files/ComNetsHH/ldacs_arq-v1.1.zip
+LOC_MCSOTDMA=https://zenodo.org/records/8082927/files/ComNetsHH/ldacs_mcsotdma-v1.0.zip
+LOC_RADIO=https://zenodo.org/records/8082925/files/ComNetsHH/ldacs_tracebased_channel_model-v1.0.zip
+LOC_APP=https://zenodo.org/records/8082929/files/ComNetsHH/ldacs_tracebased_app-v1.0.zip
+LOC_WRAPPER=https://zenodo.org/records/10073049/files/ComNetsHH/ldacs_wrapper-v1.1.zip
+LOC_GPSR=https://zenodo.org/records/8082919/files/ComNetsHH/ldacs_gpsr-v1.0.zip
 # Download OMNeT++ v5.6.2, unpack and go to directory.
 echo -n "Downloading OMNeT++ "
 if [ $1 = "mac" ]; then
