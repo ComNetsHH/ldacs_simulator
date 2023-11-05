@@ -61,7 +61,7 @@ build-debug:
 	echo -e "\nGLUE"; \
 	cd ldacs_glue/cmake-build-debug; cmake -DCMAKE_BUILD_TYPE=Debug ..; make -j$(NUM_CPUS) intairnet_linklayer_glue; cd ../..; \
 	echo -e "\nMCSOTDMA"; \
-	cd ldacs_mcsotdma/cmake-build-debug; cmake -DCMAKE_BUILD_TYPE=Debug ..; make -j$(NUM_CPUS) tuhh_intairnet_ldacs_mcsotdma; cd ../..; \
+	cd ldacs_mcsotdma/cmake-build-debug; cmake -DCMAKE_BUILD_TYPE=Debug ..; make -j$(NUM_CPUS) tuhh_intairnet_mc-sotdma; cd ../..; \
 	echo -e "\ntracebasedapp"; \
 	cd ldacs_tracebased_app/src; opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET_dbg; make -j8 MODE=debug; cd ../..; \
 	echo -e "\nRADIO"; \
@@ -82,7 +82,7 @@ build-release:
 	echo -e "\nGLUE"; \
 	cd ldacs_glue/cmake-build-release; cmake -DCMAKE_BUILD_TYPE=Release ..; make -j$(NUM_CPUS) intairnet_linklayer_glue; cd ../..; \
 	echo -e "\nMCSOTDMA"; \
-	cd ldacs_mcsotdma/cmake-build-release; cmake -DCMAKE_BUILD_TYPE=Release ..; make -j$(NUM_CPUS) tuhh_intairnet_ldacs_mcsotdma; cd ../..; \
+	cd ldacs_mcsotdma/cmake-build-release; cmake -DCMAKE_BUILD_TYPE=Release ..; make -j$(NUM_CPUS) tuhh_intairnet_mc-sotdma; cd ../..; \
 	echo -e "\ntracebasedapp"; \
 	cd ldacs_tracebased_app/src; opp_makemake --make-so -f --deep -KINET_PROJ=../../inet4 -DINET_IMPORT -I../../inet4/src -L../../inet4/src -lINET; make -j$(NUM_CPUS) MODE=release; cd ../..; \
 	echo -e "\nRADIO"; \
