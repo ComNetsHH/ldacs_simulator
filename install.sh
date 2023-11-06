@@ -74,11 +74,11 @@ cd ..
 echo -e "\n\nDownloading GLUE lib"
 mkdir ldacs_glue
 wget $LOC_GLUE
-if [ $1 = "mac" ]; then
-	tar -xvzf ldacs_glue-v1.1.zip -C ldacs_glue --strip-components=1
-else
-	unzip ldacs_glue-v1.1.zip -d tmp_extract && mv tmp_extract/*/* ldacs_glue/ && rm -r tmp_extract
-fi
+umask 000
+unzip ldacs_glue-v1.1.zip -d tmp_extract
+mv tmp_extract/*/* ldacs_glue/
+mv tmp_extract/*/.* ldacs_glue/
+rm -r tmp_extract
 cd ldacs_glue
 mkdir cmake-build-release
 cd cmake-build-release
@@ -95,11 +95,10 @@ cd ../..
 echo -e "\n\nDownloading and compiling RLC lib"
 mkdir ldacs_rlc
 wget $LOC_RLC
-if [ $1 = "mac" ]; then
-	tar -xvzf ldacs_rlc-v1.1.zip -C ldacs_rlc --strip-components=1
-else
-	unzip ldacs_rlc-v1.1.zip -d tmp_extract && mv tmp_extract/*/* ldacs_rlc/ && rm -r tmp_extract
-fi
+unzip ldacs_rlc-v1.1.zip -d tmp_extract
+mv tmp_extract/*/* ldacs_rlc/
+mv tmp_extract/*/.* ldacs_rlc/
+rm -r tmp_extract
 cd ldacs_rlc
 ln -s ../ldacs_glue/ glue-lib-headers
 mkdir cmake-build-release
@@ -117,11 +116,10 @@ cd ../..
 echo -e "\n\nDownloading and compiling ARQ lib"
 mkdir ldacs_arq
 wget $LOC_ARQ
-if [ $1 = "mac" ]; then
-	tar -xvzf ldacs_arq-v1.1.zip -C ldacs_arq --strip-components=1
-else
-	unzip ldacs_arq-v1.1.zip -d tmp_extract && mv tmp_extract/*/* ldacs_arq/ && rm -r tmp_extract
-fi
+unzip ldacs_arq-v1.1.zip -d tmp_extract
+mv tmp_extract/*/* ldacs_arq/
+mv tmp_extract/*/.* ldacs_arq/
+rm -r tmp_extract
 cd ldacs_arq/dev
 ln -s ../../ldacs_glue/ glue-lib-headers
 mkdir cmake-build-release
@@ -140,11 +138,10 @@ echo -e "\n\nDownloading and compiling MCSOTDMA lib"
 ldacs_mcsotdma-v1.0.zip
 mkdir ldacs_mcsotdma
 wget $LOC_MCSOTDMA
-if [ $1 = "mac" ]; then
-	tar -xvzf ldacs_mcsotdma-v1.0.zip -C ldacs_mcsotdma --strip-components=1
-else
-	unzip ldacs_mcsotdma-v1.0.zip -d tmp_extract && mv tmp_extract/*/* ldacs_mcsotdma/ && rm -r tmp_extract
-fi
+unzip ldacs_mcsotdma-v1.0.zip -d tmp_extract
+mv tmp_extract/*/* ldacs_mcsotdma/
+mv tmp_extract/*/.* ldacs_mcsotdma/
+rm -r tmp_extract
 cd ldacs_mcsotdma
 ln -s ../ldacs_glue/ glue-lib-headers
 mkdir cmake-build-release
@@ -162,11 +159,10 @@ cd ../..
 echo -e "\n\nDownloading channel model"
 mkdir ldacs_tracebased_channel_model
 wget $LOC_RADIO
-if [ $1 = "mac" ]; then
-	tar -xvzf ldacs_tracebased_channel_model-v1.0.zip -C ldacs_tracebased_channel_model --strip-components=1
-else
-	unzip ldacs_tracebased_channel_model-v1.0.zip -d tmp_extract && mv tmp_extract/*/* ldacs_tracebased_channel_model/ && rm -r tmp_extract
-fi
+unzip ldacs_tracebased_channel_model-v1.0.zip -d tmp_extract
+mv tmp_extract/*/* ldacs_tracebased_channel_model/
+mv tmp_extract/*/.* ldacs_tracebased_channel_model/
+rm -r tmp_extract
 cd ldacs_tracebased_channel_model/src
 opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET
 #opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET_dbg
@@ -178,11 +174,10 @@ cd ../..
 echo -e "\n\nDownloading UdpTracedBasedApp"
 mkdir ldacs_tracebased_app
 wget $LOC_APP
-if [ $1 = "mac" ]; then
-	tar -xvzf ldacs_tracebased_app-v1.0.zip -C ldacs_tracebased_app --strip-components=1
-else
-	unzip ldacs_tracebased_app-v1.0.zip -d tmp_extract && mv tmp_extract/*/* ldacs_tracebased_app/ && rm -r tmp_extract
-fi
+unzip ldacs_tracebased_app-v1.0.zip -d tmp_extract
+mv tmp_extract/*/* ldacs_tracebased_app/
+mv tmp_extract/*/.* ldacs_tracebased_app/
+rm -r tmp_extract
 cd ldacs_tracebased_app/src
 opp_makemake --make-so -f --deep -KINET_PROJ=../../inet4 -DINET_IMPORT -I../../inet4/src -L../../inet4/src -lINET
 make MODE=release -j$NUM_CPUS
@@ -193,11 +188,10 @@ cd ../..
 echo -e "\n\nDownloading GPSR modified"
 mkdir ldacs_gpsr
 wget $LOC_GPSR
-if [ $1 = "mac" ]; then
-	tar -xvzf ldacs_gpsr-v1.0.zip -C ldacs_gpsr --strip-components=1
-else
-	unzip ldacs_gpsr-v1.0.zip -d tmp_extract && mv tmp_extract/*/* ldacs_gpsr/ && rm -r tmp_extract
-fi
+unzip ldacs_gpsr-v1.0.zip -d tmp_extract
+mv tmp_extract/*/* ldacs_gpsr/
+mv tmp_extract/*/.* ldacs_gpsr/
+rm -r tmp_extract
 cd ldacs_gpsr
 cd src
 opp_makemake -f -s --deep -O out -KINET4_PROJ=../../inet4 -DINET_IMPORT -I../../inet4 -I. -I../../inet4/src -L../../inet4/src -lINET
@@ -210,11 +204,10 @@ cd ../..
 echo -e "\n\nDownloading OMNET++ wrapper"
 mkdir ldacs_wrapper
 wget $LOC_WRAPPER
-if [ $1 = "mac" ]; then
-	tar -xvzf ldacs_wrapper-v1.1.zip -C ldacs_wrapper --strip-components=1
-else
-	unzip ldacs_wrapper-v1.1.zip -d tmp_extract && mv tmp_extract/*/* ldacs_wrapper/ && rm -r tmp_extract
-fi
+unzip ldacs_wrapper-v1.1.zip -d tmp_extract
+mv tmp_extract/*/* ldacs_wrapper/
+mv tmp_extract/*/.* ldacs_wrapper/
+rm -r tmp_extract
 cd ldacs_wrapper/intairnet-link-layer
 echo "Compiling simulation binary"
 ln -s ../../ldacs_glue/cmake-build-release ./glue-lib
@@ -238,4 +231,3 @@ echo -e "\n\nInstall python packages into local pipenv environment"
 make install-python-env
 echo -e "\n\nAll done! Try it by running the following commands:\ncd scenarios/results\nmake sanity-check\nThis should start simulations and create graphs in the scenarios/results/_imgs/ directory."
 echo -e "Please make sure that omnetpp-5.6.2/bin is in your PATH!"
-
