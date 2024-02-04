@@ -139,7 +139,7 @@ def plot(json_filename, time_slot_duration, graph_filename_delay):
 		plt.rcParams.update({
 			'font.family': 'serif',
 			"font.serif": 'Times',
-			'font.size': 9,
+			'font.size': 7,
 			'text.usetex': True,
 			'pgf.rcfonts': False
 		})
@@ -163,10 +163,10 @@ def plot(json_filename, time_slot_duration, graph_filename_delay):
 			ymax_val = link_estbl_time_means[0, -1, -1]*time_slot_duration
 			
 			plt.yticks([link_estbl_time_means[0, 2, 0]*time_slot_duration, link_estbl_time_means[0, 6, 0]*time_slot_duration, ymax_val])
-		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
+		# plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
 		fig.tight_layout()
 		settings.init()
-		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
+		fig.set_size_inches((settings.fig_width, settings.fig_height*0.8), forward=False)
 		fig.savefig(graph_filename_delay, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
 		print("Graph saved to " + graph_filename_delay)    
 		plt.close()  

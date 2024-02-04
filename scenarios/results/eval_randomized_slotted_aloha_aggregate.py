@@ -103,7 +103,7 @@ def parse(dirs, num_users_vec, num_reps, json_filename):
 	print("Saved parsed results in '" + json_filename + "'.")    	
 
 
-def plot(json_filename, graph_filename_delays, graph_filename_reception, time_slot_duration, target_reception_rates, ylim1, ylim2):
+def plot(json_filename, graph_filename_delays, graph_filename_reception, time_slot_duration, target_reception_rates, ylim1, ylim2, no_legend):
 	"""
 	Reads 'json_filename' and plots the values to 'graph_filename'.
 	"""
@@ -151,7 +151,8 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 			plt.plot(num_users_vec, avg_beacon_rx_mat_means[j]*time_slot_duration, linestyle=':', linewidth=.5 if target_reception_rates[j] != 37 else .75, color=line[0].get_color())		
 		plt.ylabel('Delays [ms]')				
 		plt.xlabel('Number of users $n$')		
-		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.4, 1.5), ncol=2, columnspacing=0.5)				
+		if not no_legend:
+			plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.4, 1.5), ncol=2, columnspacing=0.5)				
 		plt.yscale('log')		
 		plt.gca().yaxis.grid(True)
 		plt.gca().grid(which='major', alpha=.0)
@@ -161,7 +162,7 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 		plt.xticks(num_users_vec, [str(num_users_vec[i]) if num_users_vec[i] != 5 else '' for i in range(len(num_users_vec))])	
 		fig.tight_layout()
 		settings.init()
-		fig.set_size_inches((settings.fig_width, settings.fig_height*1.33), forward=False)
+		fig.set_size_inches((settings.fig_width, settings.fig_height*0.725), forward=False)
 		fig.savefig(graph_filename_delays, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
 		print("Graph saved to " + graph_filename_delays)    
 		plt.close()  
@@ -175,11 +176,12 @@ def plot(json_filename, graph_filename_delays, graph_filename_reception, time_sl
 		plt.ylabel('Reception rate [\%]')				
 		plt.yticks(target_reception_rates)		
 		plt.xticks(num_users_vec, [str(num_users_vec[i]) if num_users_vec[i] != 5 else '' for i in range(len(num_users_vec))])	
-		plt.xlabel('Number of users $n$')						
-		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.4), ncol=2)		
+		plt.xlabel('Number of users $n$')
+		if not no_legend:
+			plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.4), ncol=2)		
 		plt.ylim([0, 105])
 		fig.tight_layout()
-		fig.set_size_inches((settings.fig_width, settings.fig_height*1.2), forward=False)
+		fig.set_size_inches((settings.fig_width, settings.fig_height*0.725), forward=False)
 		fig.savefig(graph_filename_reception, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
 		print("Graph saved to " + graph_filename_reception)    
 		plt.close()  
@@ -190,13 +192,14 @@ if __name__ == "__main__":
 	parser.add_argument('--filename', type=str, help='Base filename for result and graphs files.', default='randomized_aloha_aggregate')
 	parser.add_argument('--dirs', type=str, nargs='+', help='Directory path that contains the result files.', default=['unspecified_directory'])
 	parser.add_argument('--no_parse', action='store_true', help='Whether *not* to parse result files.')		
-	parser.add_argument('--no_plot', action='store_true', help='Whether *not* to plot predictions errors from JSON results.')			
+	parser.add_argument('--no_plot', action='store_true', help='Whether *not* to plot predictions errors from JSON results.')
 	parser.add_argument('--n', type=int, nargs='+', help='Number of transmitters.', default=[5])		
 	parser.add_argument('--num_reps', type=int, help='Number of repetitions that should be considered.', default=1)
 	parser.add_argument('--time_slot_duration', type=int, help='Duration of a time slot in milliseconds.', default=24)	
 	parser.add_argument('--target_reception_rates', nargs='+', type=int, help='Target reception rate as an integer between 0 and 100.', default=[95])	
 	parser.add_argument('--ylim1', type=int, help='Minimum y-limit for delay plots.', default=None)	
 	parser.add_argument('--ylim2', type=int, help='Maximum y-limit for delay plots.', default=None)	
+	parser.add_argument('--no_legend', action='store_true', help='Whether *not* to plot a legend.')
 
 	args = parser.parse_args()	
 
@@ -216,5 +219,5 @@ if __name__ == "__main__":
 	if not args.no_parse:		
 		parse(args.dirs, args.n, args.num_reps, json_filename)
 	if not args.no_plot:
-		plot(json_filename, graph_filename_delays, graph_filename_reception, args.time_slot_duration, args.target_reception_rates, args.ylim1, args.ylim2) 
+		plot(json_filename, graph_filename_delays, graph_filename_reception, args.time_slot_duration, args.target_reception_rates, args.ylim1, args.ylim2, args.no_legend) 
     

@@ -107,7 +107,7 @@ def plot(json_filename, graph_filename, time_slot_duration):
 		plt.rcParams.update({
 			'font.family': 'serif',
 			"font.serif": 'Times',
-			'font.size': 9,
+			'font.size': 7,
 			'text.usetex': True,
 			'pgf.rcfonts': False
 		})
@@ -126,10 +126,10 @@ def plot(json_filename, graph_filename, time_slot_duration):
 		plt.yticks(yticks, fontsize=7)
 		plt.xlabel('Simulation Time [s]')
 		plt.ylabel('MAC Delay [ms]')		
-		plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
+		# plt.legend(framealpha=0.0, prop={'size': 7}, loc='upper center', bbox_to_anchor=(.5, 1.35), ncol=2)		
 		fig.tight_layout()
 		settings.init()
-		fig.set_size_inches((settings.fig_width, settings.fig_height), forward=False)
+		fig.set_size_inches((settings.fig_width, settings.fig_height*0.8), forward=False)
 		fig.savefig(graph_filename, dpi=500, bbox_inches = 'tight', pad_inches = 0.01)		
 		print("Graph saved to " + graph_filename)    
 		plt.close()  
