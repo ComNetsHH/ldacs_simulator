@@ -48,7 +48,7 @@ update: update-arq update-rlc update-glue update-wrapper update-radio update-mcs
 install-python-env:
 	pipenv install
 
-NUM_CPUS = 1 # number of CPUs to allow OMNeT++ to use
+NUM_CPUS = 6 # number of CPUs to allow OMNeT++ to use
 SUFFIX = 
 
 # BUILD-DEBUG compiles all libraries and then the simulation binary in DEBUG mode
